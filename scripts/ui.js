@@ -560,7 +560,7 @@ function openYouTubeSetup(){
 // =============== BOOT ===============
 function boot(){
   document.getElementById('root').innerHTML = HTML_SKELETON + overlayHTML();
-  bindSheetVeil('sheet-recipe'); bindSheetVeil('sheet-shop'); bindSheetVeil('sheet-create'); bindSheetVeil('sheet-pick'); bindSheetVeil('sheet-bio'); bindSheetVeil('sheet-noti'); bindSheetVeil('sheet-aisearch'); bindSheetVeil('sheet-privacy'); bindSheetVeil('sheet-aiconfig'); bindSheetVeil('sheet-ytsetup'); bindSheetVeil('sheet-reset');
+  bindSheetVeil('sheet-recipe'); bindSheetVeil('sheet-rate'); bindSheetVeil('sheet-shop'); bindSheetVeil('sheet-create'); bindSheetVeil('sheet-pick'); bindSheetVeil('sheet-bio'); bindSheetVeil('sheet-noti'); bindSheetVeil('sheet-aisearch'); bindSheetVeil('sheet-privacy'); bindSheetVeil('sheet-aiconfig'); bindSheetVeil('sheet-ytsetup'); bindSheetVeil('sheet-reset');
   bindDiscoverInput();
   const fab=$('#btn-create'); if(fab) fab.addEventListener('click', openCreate);
   const aiBtn=$('#btn-open-ai'); if(aiBtn) aiBtn.addEventListener('click', openAISearch);
@@ -598,6 +598,8 @@ function overlayHTML(){
   return `
   <!-- Recipe sheet -->
   <div class="sheet-wrap" id="sheet-recipe"><div class="sheet-veil"></div><div class="sheet"></div></div>
+  <!-- Rate sheet -->
+  <div class="sheet-wrap" id="sheet-rate"><div class="sheet-veil"></div><div class="sheet"></div></div>
   <!-- Shop sheet -->
   <div class="sheet-wrap" id="sheet-shop"><div class="sheet-veil"></div><div class="sheet"></div></div>
   <!-- Create sheet -->

@@ -12,6 +12,8 @@ const cases = [
   ['/api/recipes/:id/like', '/api/recipes/r1/like/', true],
   ['/api/recipes/:id/like', '/api/recipes/r1/save', false],
   ['/api/recipes/:id/comments', '/api/recipes/r2/comments', true],
+  ['/api/recipes/:id/rate', '/api/recipes/r13/rate', true],
+  ['/api/recipes/:id/rate', '/api/recipes/r13/save', false],
   ['/api/users/:handle/follow', '/api/users/@chef_dex/follow', true],
   ['/api/recipes/:id', '/api/recipes/abc123', true],
   ['/api/recipes/:id', '/api/recipes', false],

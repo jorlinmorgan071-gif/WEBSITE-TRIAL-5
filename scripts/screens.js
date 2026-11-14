@@ -90,6 +90,7 @@ function renderFeed(){
           <div class="fd-title">${esc(r.title)}</div>
           <div class="fd-meta">
             <span class="chip" style="background:rgba(0,0,0,.4)">${r.hashtags.slice(0,2).map(esc).join(' ')}</span>
+            <span class="chip" style="background:rgba(0,0,0,.4)">${r.rating?'★ '+r.rating.toFixed(1)+' <span style="opacity:.55">('+fmtK(r.ratingsCount)+')</span>':''}</span>
             <span class="chip" style="background:rgba(0,0,0,.4)">❤️ <b class="like-count">${fmtK(r.likes)}</b></span>
           </div>
           <div class="fd-creator">
@@ -102,6 +103,7 @@ function renderFeed(){
         <div class="rail">
           <button class="railbtn ${S.liked[r.id]?'liked':''}" onclick="event.stopPropagation();toggleLike('${r.id}',this)"><span class="rb-ico"><span class="heart">❤️</span></span><span class="like-count">${fmtK(r.likes)}</span></button>
           <button class="railbtn" onclick="event.stopPropagation();toggleSave('${r.id}')" data-saved="${r.id}"><span class="rb-ico">${S.saved.includes(r.id)?'🔖':'📕'}</span><span>${S.saved.includes(r.id)?'Saved':'Save'}</span></button>
+          <button class="railbtn ${r.myRating?'rated':''}" onclick="event.stopPropagation();openRateSheet('${r.id}')"><span class="rb-ico">⭐</span><span>${r.myRating?r.myRating+'★':'Rate'}</span></button>
           <button class="railbtn" onclick="event.stopPropagation();openRecipe('${r.id}')"><span class="rb-ico">📋</span><span>Recipe</span></button>
           <button class="railbtn" onclick="event.stopPropagation();openAISheet('recipe',{id:'${r.id}'})"><span class="rb-ico">✨</span><span>AI</span></button>
           <button class="railbtn" onclick="event.stopPropagation();downloadFeedPDF('${r.id}',this)"><span class="rb-ico" id="dl-${r.id}">📄</span><span>PDF</span></button>
@@ -228,6 +230,10 @@ function renderRecipeSheet(){
     <div class="sheet-body">
       ${r.live?`<div class="card" style="border-color:rgba(255,80,80,.4);display:flex;align-items:center;gap:10px"><span class="live-dot"></span><div style="flex:1;font-size:13px"><b>LIVE STREAMING NOW</b><br><span style="color:var(--muted)">${fmtK(r.viewers)} watching · chat enabled below</span></div></div>`:''}
       ${r.extracted||r.userMade?`<div class="creator-badge">👤 uploaded by <span class="cb-name">${r.userMade?'you':esc(r.creator)}</span> · featured by <span class="scyn-badge">⭐ Scyn AI</span></div>`:''}
+      <div class="rate-strip" onclick="openRateSheet('${r.id}')">
+        <span class="rate-stars">${starRow(r,false)}</span>
+        <span style="font-size:11.5px;color:var(--amber);font-weight:700">${r.myRating?'you rated '+r.myRating+'★':'tap to rate ›'}</span>
+      </div>
       <div class="btnrow" style="margin-bottom:14px">
         <button class="btn ghost sm" id="recipe-sheet-save" onclick="toggleSave('${r.id}')">${S.saved.includes(r.id)?'✓ In Cookbook':'🔖 Save'}</button>
         <button class="btn amber sm" onclick="exportRecipePDF(S.recipes.find(x=>x.id==='${r.id}'), ${RS.servings})">📄 PDF</button>
@@ -330,6 +336,65 @@ function nutritionVerdict(r){
   if(h>=55) return `Balanced but watch portion — calories run ${n.cal>600?'high':''}${n.sodium>900?' and sodium is up there':''}. Fine for training days.`;
   return `Treat-yourself territory: ${n.cal} kcal with ${n.fat}g fat${n.sugar>20?' and a sugar hit':''}. Pair with a lighter day around it.`;
 }
+// ---- star ratings ----
+function starRow(r, interactive){
+  const mine = r.myRating || 0;
+  const stars = Array.from({length:5}, (_,i)=>{
+    const v = i+1;
+    const on = v <= Math.round(r.rating||0);
+    const mineOn = v <= mine;
+    return `<span class="star ${interactive?'clk':''} ${mineOn?'mine':''} ${on?'on':''}" data-v="${v}" data-rid="${r.id}">${mineOn?'★':(on?'★':'☆')}</span>`;
+  }).join('');
+  return `${stars}<span class="star-n">${r.rating?r.rating.toFixed(1):'—'} · ${fmtK(r.ratingsCount||0)} rating${(r.ratingsCount||0)===1?'':'s'}</span>`;
+}
+function openRateSheet(id){
+  const r = S.recipes.find(x=>x.id===id); if(!r) return;
+  const w = $('#sheet-rate');
+  w.querySelector('.sheet').innerHTML = `
+    <div class="sheet-grab"><i></i></div>
+    <div class="sheet-head"><img src="${r.image}" alt="" style="width:54px;height:54px;border-radius:14px;object-fit:cover">
+      <div class="sh-txt"><h2>Rate this recipe</h2><div class="sh-sub">${esc(r.title)}</div></div>
+      <button class="close-x" data-close="sheet-rate" onclick="closeSheet('sheet-rate')">✕</button></div>
+    <div class="sheet-body" style="text-align:center">
+      <div style="font-size:13px;color:var(--muted);margin-bottom:14px">${SYNC.online&&SYNC.token?'Your rating syncs to the server and updates the average.':'Running offline — your rating is stored locally.'}</div>
+      <div id="rate-stars" style="font-size:44px;letter-spacing:6px;line-height:1">${starRow(r,true)}</div>
+      <div id="rate-hint" style="font-size:12px;color:var(--amber);min-height:18px;margin-top:10px">${r.myRating?'Tap a star to change your '+r.myRating+'★ rating.':'How was it? 1★ struggle — 5★ permanent rotation.'}</div>
+      <div class="btnrow" style="justify-content:center;margin-top:16px">
+        ${r.myRating?`<button class="btn ghost sm" onclick="clearMyRating('${r.id}')">Clear my rating</button>`:''}
+        <button class="btn sm" onclick="closeSheet('sheet-rate')">Done</button>
+      </div>
+    </div>`;
+  bindSheetVeil('sheet-rate');
+  w.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
+  w.querySelectorAll('#rate-stars .star.clk').forEach(s=>s.addEventListener('click',()=>setMyRating(s.dataset.rid, Number(s.dataset.v))));
+  openSheet('sheet-rate');
+}
+async function setMyRating(id, stars){
+  const r = S.recipes.find(x=>x.id===id); if(!r) return;
+  const prev = r.myRating||0;
+  // local average update: treat prior seed aggregate as immutable base
+  r.myRating = stars;
+  if(prev){ /* re-rate: average unchanged in local mode approximation */ }
+  else { r.ratingsCount = (r.ratingsCount||0)+1; }
+  r.rating = Math.round((( (r.rating||0)*(r.ratingsCount-1) + stars ) / r.ratingsCount)*100)/100;
+  save();
+  const j = (SYNC.online && SYNC.token) ? await SYNC.rate(id, stars) : null;
+  if(j && j.rating !== undefined){ r.rating = j.rating; r.ratingsCount = j.ratingsCount; save(); }
+  const hint = document.getElementById('rate-hint');
+  if(hint) hint.textContent = 'Rated '+stars+'★ — '+(SYNC.online&&SYNC.token?'synced to the server.':'stored locally.');
+  const sw = document.getElementById('rate-stars');
+  if(sw) sw.innerHTML = starRow(r,true);
+  sw.querySelectorAll('.star.clk').forEach(s=>s.addEventListener('click',()=>setMyRating(s.dataset.rid, Number(s.dataset.v))));
+  toast('⭐', stars+'★ saved', (r.title)+' now averages '+(r.rating||0).toFixed(1)+'★.', 2800, '#ffb86b');
+  renderFeed();
+}
+function clearMyRating(id){
+  const r = S.recipes.find(x=>x.id===id); if(!r || !r.myRating) return;
+  r.ratingsCount = Math.max(0,(r.ratingsCount||0)-1);
+  r.myRating = 0; save();
+  toast('☆','Rating cleared','You can rate again anytime.');
+  closeSheet('sheet-rate'); renderFeed();
+}
 function subsFor(name){
   const k = name.toLowerCase();
   for(const key in SUBSTITUTIONS){ if(k.includes(key)) return SUBSTITUTIONS[key].slice(0,2).join(' or '); }
@@ -373,21 +438,35 @@ async function orderGroceries(name, url, idx, rid){
 }
 
 // =============== DISCOVER ===============
-let DIS = {q:'', cuisine:'All', sort:'trending'};
+let DIS = {q:'', cuisine:'All', sort:'trending', diff:'Any', maxTime:0};
 function renderDiscover(){
   const cuis = $('#discover-cuisines');
   if(cuis && !cuis.children.length){
     cuis.innerHTML = CUISINES.map(c=>`<button class="pill ${DIS.cuisine===c?'active':''}" onclick="DIS.cuisine='${c}';renderDiscover()">${c}</button>`).join('');
   } else if(cuis){ $$('#discover-cuisines .pill').forEach(p=>p.classList.toggle('active', p.textContent===DIS.cuisine)); }
-  const sorts=[['trending','🔥 Trending'],['new','🆕 New'],['top','⭐ Top Saved']];
+  const sorts=[['trending','🔥 Trending'],['new','🆕 New'],['top','⭐ Top Saved'],['rating','🌟 Top Rated']];
   const sortEl=$('#discover-sort');
-  if(sortEl && !sortEl.children.length){ sortEl.innerHTML = sorts.map(s=>`<button class="pill gold ${DIS.sort===s[0]?'active':''}" onclick="DIS.sort='${s[0]}';renderDiscover()">${s[1]}</button>`).join(''); }
+  if(sortEl && !sortEl.children.length){ sortEl.innerHTML = sorts.map(s=>`<button class="pill gold ${DIS.sort===s[0]?'active':''}" onclick="DIS.sort='${s[0]}';renderDiscover()">${s[1]}</button>`).join('')
+    + `<div class="pills" id="discover-filters" style="padding-top:8px"></div>`; }
+  const filterEl=$('#discover-filters');
+  if(filterEl){
+    const diffs=['Any','Easy','Medium','Hard'];
+    filterEl.innerHTML = `<div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+      <span style="font-size:11px;color:var(--faint);font-weight:700">DIFFICULTY</span>
+      ${diffs.map(d=>`<button class="pill sm ${DIS.diff===d?'active':''}" onclick="DIS.diff='${d}';renderDiscover()">${d}</button>`).join('')}
+      <span style="font-size:11px;color:var(--faint);font-weight:700;margin-left:8px">TIME</span>
+      ${[['0','Any'],['20','≤20m'],['40','≤40m'],['60','≤60m']].map(([v,l])=>`<button class="pill sm ${String(DIS.maxTime)===v?'active':''}" onclick="DIS.maxTime=${v};renderDiscover()">${l}</button>`).join('')}
+    </div>`;
+  }
   let recs = S.recipes.filter(r=>!r.live);
   if(DIS.cuisine!=='All') recs = recs.filter(r=>r.cuisine===DIS.cuisine);
+  if(DIS.diff!=='Any') recs = recs.filter(r=>r.difficulty===DIS.diff);
+  if(DIS.maxTime) recs = recs.filter(r=>r.time<=DIS.maxTime);
   if(DIS.q){ const q=DIS.q.toLowerCase().replace('#',''); recs = recs.filter(r=> (r.title+' '+r.cuisine+' '+r.hashtags.join(' ')+' '+r.creator+' '+r.desc).toLowerCase().includes(q)); }
   if(DIS.sort==='new') recs.sort((a,b)=>(b.created||0)-(a.created||0)||a.title.localeCompare(b.title));
   if(DIS.sort==='top') recs.sort((a,b)=>(b.saves)-(a.saves));
   if(DIS.sort==='trending') recs.sort((a,b)=>b.likes-a.likes);
+  if(DIS.sort==='rating') recs.sort((a,b)=>(b.rating||0)-(a.rating||0) || (b.ratingsCount||0)-(a.ratingsCount||0));
   const body=$('#discover-body');
   const tags = {};
   recs.forEach(r=>r.hashtags.forEach(h=>tags[h]=(tags[h]||0)+1));
@@ -399,7 +478,8 @@ function renderDiscover(){
       <div class="rec-card" onclick="openRecipe('${r.id}')">
         <img src="${r.image}" alt="${esc(r.title)}" loading="lazy">
         <div class="rc-ov"><div class="rc-t">${esc(r.title)}</div>
-        <div class="rc-m"><span>❤️ ${fmtK(r.likes)}</span><span>${r.time}m</span><span>${r.cuisine}</span></div></div>
+        <div class="rc-m"><span>❤️ ${fmtK(r.likes)}</span><span>${r.time}m</span><span>${r.cuisine}</span></div>
+        <div class="rc-stars">★ ${r.rating?r.rating.toFixed(1):'—'}<span style="opacity:.5"> (${fmtK(r.ratingsCount||0)})</span></div></div>
       </div>`).join('')}</div>`
     :`<div class="empty"><div class="e-ico">🤔</div><div class="e-tt">Nothing matches “${esc(DIS.q)}”</div><div style="font-size:12.5px">Let the AI Chef suggest something instead.</div><button class="btn sm" style="margin-top:10px" onclick="openAISheet('feed')">✨ Ask AI Chef</button></div>`}
     <div style="height:20px"></div>`;

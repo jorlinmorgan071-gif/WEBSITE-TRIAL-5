@@ -45,7 +45,7 @@ Ollama needs no key, just a running local Ollama: `ollama serve` + `ollama pull 
 - `GET  /api/health` — server info
 - `POST /api/auth/register|login|logout` · `GET/PATCH /api/auth/me`
 - `GET  /api/recipes` (+`?q=&cuisine=&sort=&mine=1`) · `GET/POST/DELETE /api/recipes/:id`
-- `POST /api/recipes/:id/like|save|comments`
+- `POST /api/recipes/:id/like|save|rate|comments`
 - `POST /api/users/:handle/follow`
 - `GET  /api/cookbook` · `GET /api/notifications` · `POST /api/notifications/read`
 - `GET/PUT /api/mealplan`
@@ -53,7 +53,7 @@ Ollama needs no key, just a running local Ollama: `ollama serve` + `ollama pull 
 
 ## Files
 - `server.js` — HTTP server, router, SQLite, AI proxy, extractor, admin
-- `seed.js` — 9 demo recipes (auto-seeds a fresh database)
+- `seed.js` — 19 demo recipes (auto-seeds a fresh database)
 - `public/ForkFeed.html` — the full app (same single file as the offline version)
 - `data/forkfeed.db` — SQLite database (created at first boot)
 - `data/config.json` — admin token + provider keys

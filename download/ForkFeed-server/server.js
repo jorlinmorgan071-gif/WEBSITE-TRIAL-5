@@ -57,6 +57,8 @@ CREATE TABLE IF NOT EXISTS recipes (
   likes INTEGER DEFAULT 0,
   comments_count INTEGER DEFAULT 0,
   saves INTEGER DEFAULT 0,
+  rating REAL DEFAULT 0,
+  ratings_count INTEGER DEFAULT 0,
   image TEXT,
   hashtags TEXT DEFAULT '[]',
   desc TEXT DEFAULT '',
@@ -73,6 +75,13 @@ CREATE TABLE IF NOT EXISTS recipes (
 CREATE TABLE IF NOT EXISTS likes (
   user_id INTEGER NOT NULL,
   recipe_id TEXT NOT NULL,
+  created_at INTEGER DEFAULT (unixepoch()),
+  PRIMARY KEY (user_id, recipe_id)
+);
+CREATE TABLE IF NOT EXISTS ratings (
+  user_id INTEGER NOT NULL,
+  recipe_id TEXT NOT NULL,
+  stars INTEGER NOT NULL CHECK(stars BETWEEN 1 AND 5),
   created_at INTEGER DEFAULT (unixepoch()),
   PRIMARY KEY (user_id, recipe_id)
 );
@@ -149,6 +158,7 @@ function recipeRow(r) {
     id: r.id, title: r.title, creator: r.creator || 'ForkFeed', creatorHandle: r.creator_handle || '@forkfeed',
     cuisine: r.cuisine || 'American', time: r.time || 30, difficulty: r.difficulty || 'Easy',
     servings: r.servings || 4, likes: r.likes || 0, commentsCount: r.comments_count || 0, saves: r.saves || 0,
+    rating: r.rating || 0, ratingsCount: r.ratings_count || 0, myRating: 0,
     image: r.image || '', hashtags: JSON.parse(r.hashtags || '[]'), desc: r.desc || '',
     ingredients: JSON.parse(r.ingredients || '[]'), steps: JSON.parse(r.steps || '[]'),
     nutrition: JSON.parse(r.nutrition || '{}'), ytId: r.yt_id || '', live: !!r.live,
@@ -161,7 +171,9 @@ function myRecipeJSON(r, uid) {
   if (uid && base) {
     base.likedByMe = !!db.prepare('SELECT 1 FROM likes WHERE user_id=? AND recipe_id=?').get(uid, r.id);
     base.savedByMe = !!db.prepare('SELECT 1 FROM saves WHERE user_id=? AND recipe_id=?').get(uid, r.id);
-  } else { base.likedByMe = false; base.savedByMe = false; }
+    const mr = db.prepare('SELECT stars FROM ratings WHERE user_id=? AND recipe_id=?').get(uid, r.id);
+    base.myRating = mr ? mr.stars : 0;
+  } else { base.likedByMe = false; base.savedByMe = false; base.myRating = 0; }
   return base;
 }
 function publicUser(u) { return { id: u.id, username: u.username, handle: u.handle, bio: u.bio || '', avatar: u.avatar || '' }; }
@@ -374,6 +386,7 @@ route('GET', '/api/recipes', async (req, res) => {
   if (q) { const ql = q.toLowerCase().replace('#', ''); rows = rows.filter(r => (r.title + ' ' + r.cuisine + ' ' + r.hashtags + ' ' + r.creator + ' ' + r.desc).toLowerCase().includes(ql)); }
   if (sort === 'new') rows = rows.sort((a, b) => b.created_at - a.created_at);
   if (sort === 'top') rows = rows.sort((a, b) => b.saves - a.saves);
+  if (sort === 'rating') rows = rows.sort((a, b) => (b.rating || 0) - (a.rating || 0) || (b.ratings_count || 0) - (a.ratings_count || 0));
   const mine = url.searchParams.get('mine');
   if (mine === '1' && u) rows = rows.filter(r => r.user_id === u.id);
   send(res, 200, { recipes: rows.map(r => myRecipeJSON(r, u && u.id)) });
@@ -391,12 +404,12 @@ route('POST', '/api/recipes', async (req, res) => {
   const b = await readBody(req);
   if (!b.title) return send(res, 400, { error: 'title required' });
   const id = 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-  db.prepare(`INSERT INTO recipes (id,user_id,title,creator,creator_handle,cuisine,time,difficulty,servings,image,hashtags,desc,ingredients,steps,nutrition,yt_id,user_made,scyn_curated,live)
-    VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,0)`).run(
+  db.prepare(`INSERT INTO recipes (id,user_id,title,creator,creator_handle,cuisine,time,difficulty,servings,likes,comments_count,saves,rating,ratings_count,image,hashtags,desc,ingredients,steps,nutrition,yt_id,user_made,scyn_curated,live)
+    VALUES (?,?,?,?,?,?,?,?,?,0,0,0,0,0,?,?,?,?,?,?,?,0,1,0)`).run(
     id, u.id, String(b.title).slice(0, 120), u.username, u.handle, String(b.cuisine || 'American'), Number(b.time) || 30, String(b.difficulty || 'Medium'),
     Number(b.servings) || 4, String(b.image || ''), JSON.stringify(b.hashtags || ['#homecook']), String(b.desc || '').slice(0, 500),
     JSON.stringify(b.ingredients || []), JSON.stringify(b.steps || []), JSON.stringify(b.nutrition || {}),
-    String(b.ytId || ''), b.userMade ? 1 : 0, 1);
+    String(b.ytId || ''), b.userMade ? 1 : 0);
   notify(u.id, '⭐', 'Recipe published', `“${String(b.title).slice(0, 40)}” went live with Scyn AI curation and your creator signature.`);
   send(res, 201, { recipe: myRecipeJSON(db.prepare('SELECT * FROM recipes WHERE id=?').get(id), u.id) });
 });
@@ -408,6 +421,7 @@ route('DELETE', '/api/recipes/:id', async (req, res, params) => {
   db.prepare('DELETE FROM recipes WHERE id=?').run(params.id);
   db.prepare('DELETE FROM likes WHERE recipe_id=?').run(params.id);
   db.prepare('DELETE FROM saves WHERE recipe_id=?').run(params.id);
+  db.prepare('DELETE FROM ratings WHERE recipe_id=?').run(params.id);
   db.prepare('DELETE FROM comments WHERE recipe_id=?').run(params.id);
   send(res, 200, { ok: true });
 });
@@ -434,6 +448,24 @@ route('POST', '/api/recipes/:id/save', async (req, res, params) => {
   if (has) { db.prepare('DELETE FROM saves WHERE user_id=? AND recipe_id=?').run(u.id, params.id); db.prepare('UPDATE recipes SET saves=saves-1 WHERE id=?').run(params.id); }
   else { db.prepare('INSERT INTO saves (user_id, recipe_id) VALUES (?,?)').run(u.id, params.id); db.prepare('UPDATE recipes SET saves=saves+1 WHERE id=?').run(params.id); }
   send(res, 200, { saved: !has, saves: db.prepare('SELECT saves FROM recipes WHERE id=?').get(params.id).saves });
+});
+route('POST', '/api/recipes/:id/rate', async (req, res, params) => {
+  const u = requireAuth(req, res); if (!u) return;
+  const r = db.prepare('SELECT * FROM recipes WHERE id=?').get(params.id);
+  if (!r) return send(res, 404, { error: 'not found' });
+  const b = await readBody(req);
+  const stars = Number(b.stars);
+  if (!Number.isInteger(stars) || stars < 1 || stars > 5) return send(res, 400, { error: 'stars must be an integer 1-5' });
+  const prev = db.prepare('SELECT stars FROM ratings WHERE user_id=? AND recipe_id=?').get(u.id, params.id);
+  // blended aggregate: prior mass (rating × ratings_count) adjusted by this user's rating
+  let total = (r.rating || 0) * (r.ratings_count || 0);
+  if (prev) { total = total - prev.stars + stars; db.prepare('UPDATE ratings SET stars=? WHERE user_id=? AND recipe_id=?').run(stars, u.id, params.id); }
+  else { total += stars; db.prepare('INSERT INTO ratings (user_id, recipe_id, stars) VALUES (?,?,?)').run(u.id, params.id, stars); db.prepare('UPDATE recipes SET ratings_count=ratings_count+1 WHERE id=?').run(params.id); }
+  const count = Math.max((r.ratings_count || 0) + (prev ? 0 : 1), 1);
+  const avg = Math.round(total / count * 100) / 100;
+  db.prepare('UPDATE recipes SET rating=? WHERE id=?').run(avg, params.id);
+  if (r.user_id && r.user_id !== u.id) notify(r.user_id, '⭐', `${u.username} rated your recipe ${stars}★`, `"${r.title}" now averages ${avg.toFixed(1)}★.`);
+  send(res, 200, { rating: avg, ratingsCount: count, myRating: stars });
 });
 route('POST', '/api/recipes/:id/comments', async (req, res, params) => {
   const u = requireAuth(req, res); if (!u) return;
@@ -547,10 +579,10 @@ function seed() {
   if (!fs.existsSync(seedFile)) return;
   delete require.cache[require.resolve(seedFile)];
   const { SEED_RECIPES } = require(seedFile);
-  const ins = db.prepare(`INSERT OR REPLACE INTO recipes (id,user_id,title,creator,creator_handle,cuisine,time,difficulty,servings,likes,comments_count,saves,image,hashtags,desc,ingredients,steps,nutrition,yt_id,live,viewers,user_made,scyn_curated,created_at)
-    VALUES (@id,0,@title,@creator,@creator_handle,@cuisine,@time,@difficulty,@servings,@likes,@commentsCount,@saves,@image,@hashtags,@desc,@ingredients,@steps,@nutrition,@ytId,@live,@viewers,0,1,unixepoch())`);
+  const ins = db.prepare(`INSERT OR REPLACE INTO recipes (id,user_id,title,creator,creator_handle,cuisine,time,difficulty,servings,likes,comments_count,saves,rating,ratings_count,image,hashtags,desc,ingredients,steps,nutrition,yt_id,live,viewers,user_made,scyn_curated,created_at)
+    VALUES (@id,0,@title,@creator,@creator_handle,@cuisine,@time,@difficulty,@servings,@likes,@commentsCount,@saves,@rating,@ratingsCount,@image,@hashtags,@desc,@ingredients,@steps,@nutrition,@ytId,@live,@viewers,0,1,unixepoch())`);
   for (const r of SEED_RECIPES) {
-    ins.run({ id: r.id, title: r.title, creator: r.creator, creator_handle: r.creatorHandle, cuisine: r.cuisine, time: r.time, difficulty: r.difficulty, servings: r.servings, likes: r.likes, commentsCount: r.commentsCount, saves: r.saves, image: r.image, hashtags: JSON.stringify(r.hashtags), desc: r.desc, ingredients: JSON.stringify(r.ingredients), steps: JSON.stringify(r.steps), nutrition: JSON.stringify(r.nutrition), ytId: r.ytId || '', live: r.live ? 1 : 0, viewers: r.viewers || 0 });
+    ins.run({ id: r.id, title: r.title, creator: r.creator, creator_handle: r.creatorHandle, cuisine: r.cuisine, time: r.time, difficulty: r.difficulty, servings: r.servings, likes: r.likes, commentsCount: r.commentsCount, saves: r.saves, rating: r.rating || 0, ratingsCount: r.ratingsCount || 0, image: r.image, hashtags: JSON.stringify(r.hashtags), desc: r.desc, ingredients: JSON.stringify(r.ingredients), steps: JSON.stringify(r.steps), nutrition: JSON.stringify(r.nutrition), ytId: r.ytId || '', live: r.live ? 1 : 0, viewers: r.viewers || 0 });
   }
 }
 

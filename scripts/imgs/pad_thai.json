@@ -1,0 +1,30 @@
+{
+  "success": true,
+  "query": "pad thai noodles with shrimp, crushed peanuts and lime, overhead food photography",
+  "count": 3,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c3aa234f59ad.jpg",
+      "caption": "",
+      "source": "Alamy",
+      "original_width": "1300px",
+      "original_height": "956px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e59ce00c17f5.jpg",
+      "caption": "",
+      "source": "Eater LA",
+      "original_width": "2000px",
+      "original_height": "1333px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a874d10cdcfb.jpg",
+      "caption": "",
+      "source": "RecipeTin Eats",
+      "original_width": "900px",
+      "original_height": "1260px"
+    }
+  ]
+}

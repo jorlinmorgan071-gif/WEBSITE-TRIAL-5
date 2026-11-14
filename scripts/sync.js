@@ -49,6 +49,7 @@ const SYNC = {
   },
   // ---- write-through ----
   like(id) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('POST', '/api/recipes/' + id + '/like', {}).then(j => { const r = S.recipes.find(x => x.id === id); if (r && j.likes !== undefined) r.likes = j.likes; save(); return j; }).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  rate(id, stars) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('POST', '/api/recipes/' + id + '/rate', { stars }).then(j => { const r = S.recipes.find(x => x.id === id); if (r && j.rating !== undefined) { r.rating = j.rating; r.ratingsCount = j.ratingsCount; } save(); return j; }).catch(e => { SYNC.lastErr = e.message; return null; }); },
   saveRecipe(id) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('POST', '/api/recipes/' + id + '/save', {}).then(j => { const r = S.recipes.find(x => x.id === id); if (r && j.saves !== undefined) r.saves = j.saves; return j; }).catch(e => { SYNC.lastErr = e.message; return null; }); },
   follow(handle) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('POST', '/api/users/' + encodeURIComponent(handle) + '/follow', {}).catch(e => { SYNC.lastErr = e.message; return null; }); },
   comment(id, text) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('POST', '/api/recipes/' + id + '/comments', { text }).then(j => j.comment).catch(e => { SYNC.lastErr = e.message; return null; }); },
@@ -78,7 +79,8 @@ function normalizeServerRecipe(r) {
   return {
     id: r.id, title: r.title, creator: r.creator, creatorHandle: r.creatorHandle, cuisine: r.cuisine,
     time: r.time, difficulty: r.difficulty, servings: r.servings, likes: r.likes, commentsCount: r.commentsCount,
-    saves: r.saves, image: r.image || IMG.ramen, hashtags: r.hashtags || [], desc: r.desc || '',
+    saves: r.saves, rating: r.rating || 0, ratingsCount: r.ratingsCount || 0, myRating: r.myRating || 0,
+    image: r.image || IMG.ramen, hashtags: r.hashtags || [], desc: r.desc || '',
     ingredients: r.ingredients || [], steps: r.steps || [], nutrition: r.nutrition || {},
     ytId: r.ytId || '', live: !!r.live, viewers: r.viewers || 0, userMade: !!r.userMade,
     scynCurated: !!r.scynCurated, created: r.created || 0

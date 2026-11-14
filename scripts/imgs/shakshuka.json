@@ -1,0 +1,30 @@
+{
+  "success": true,
+  "query": "shakshuka eggs poached in tomato pepper sauce in a cast iron pan",
+  "count": 3,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/402b87024e92.jpg",
+      "caption": "",
+      "source": "Baba's",
+      "original_width": "1600px",
+      "original_height": "1102px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6a62aefe2d49.jpg",
+      "caption": "",
+      "source": "The Food Dictator",
+      "original_width": "1571px",
+      "original_height": "1152px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ba6c7cd1a6f7.jpg",
+      "caption": "",
+      "source": "Street Smart Nutrition",
+      "original_width": "1200px",
+      "original_height": "1800px"
+    }
+  ]
+}

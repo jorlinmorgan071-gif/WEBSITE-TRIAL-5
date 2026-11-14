@@ -1,0 +1,30 @@
+{
+  "success": true,
+  "query": "thai green curry with chicken, eggplant and thai basil in a bowl",
+  "count": 3,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f9321fdd2986.jpg",
+      "caption": "",
+      "source": "glebe kitchen",
+      "original_width": "900px",
+      "original_height": "989px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/422cfa4ec966.jpg",
+      "caption": "",
+      "source": "Happy Healthy Mama",
+      "original_width": "1349px",
+      "original_height": "2048px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1c69181fb3ba.jpg",
+      "caption": "",
+      "source": "TwoSleevers",
+      "original_width": "1200px",
+      "original_height": "675px"
+    }
+  ]
+}

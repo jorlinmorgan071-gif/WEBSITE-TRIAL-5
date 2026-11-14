@@ -1,0 +1,30 @@
+{
+  "success": true,
+  "query": "mapo tofu sichuan dish with chili oil and minced pork in a bowl",
+  "count": 3,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/00ab19292629.jpg",
+      "caption": "",
+      "source": "RecipeTin Eats",
+      "original_width": "1200px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3aec70c7ebf5.jpg",
+      "caption": "",
+      "source": "Scott Steinke - Substack",
+      "original_width": "3960px",
+      "original_height": "4936px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/fcf2ba50df9f.jpg",
+      "caption": "",
+      "source": "note",
+      "original_width": "1200px",
+      "original_height": "1804px"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "success": true,
+  "query": "greek moussaka baked eggplant casserole with bechamel topping on a plate",
+  "count": 3,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/666e13fa8a6d.jpg",
+      "caption": "",
+      "source": "For the Love of Cooking",
+      "original_width": "1000px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/fad64da88358.jpg",
+      "caption": "",
+      "source": "Real Greek Recipes",
+      "original_width": "1200px",
+      "original_height": "1798px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/17194900f854.jpg",
+      "caption": "",
+      "source": "RecipeTin Eats",
+      "original_width": "900px",
+      "original_height": "1260px"
+    }
+  ]
+}

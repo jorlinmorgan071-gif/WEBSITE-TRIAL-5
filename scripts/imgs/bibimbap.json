@@ -1,0 +1,30 @@
+{
+  "success": true,
+  "query": "korean bibimbap in a hot stone bowl with egg and colorful vegetables",
+  "count": 3,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a126e406ffe3.jpg",
+      "caption": "",
+      "source": "The Delicious Life",
+      "original_width": "1200px",
+      "original_height": "1680px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7602e131d588.jpg",
+      "caption": "",
+      "source": "The Bold Italic",
+      "original_width": "1120px",
+      "original_height": "1120px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/dafd3ee09bc7.jpg",
+      "caption": "",
+      "source": "Visit Korea",
+      "original_width": "1620px",
+      "original_height": "1080px"
+    }
+  ]
+}

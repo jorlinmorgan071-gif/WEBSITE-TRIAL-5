@@ -1,0 +1,30 @@
+{
+  "success": true,
+  "query": "vietnamese pho beef noodle soup bowl with fresh herbs and lime",
+  "count": 3,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/ae932c2cffaa.jpg",
+      "caption": "",
+      "source": "CHIN-SU",
+      "original_width": "1600px",
+      "original_height": "1200px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/7e8ace80a655.jpg",
+      "caption": "",
+      "source": "lily's cooking and home",
+      "original_width": "1024px",
+      "original_height": "768px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/1943d218558e.jpg",
+      "caption": "",
+      "source": "Honest Cooking",
+      "original_width": "768px",
+      "original_height": "1376px"
+    }
+  ]
+}

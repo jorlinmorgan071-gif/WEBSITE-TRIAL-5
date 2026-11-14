@@ -1,0 +1,30 @@
+{
+  "success": true,
+  "query": "spanish seafood paella in a wide pan with saffron rice",
+  "count": 3,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/2ce62774465f.jpg",
+      "caption": "",
+      "source": "The Gracious Wife",
+      "original_width": "1000px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/be7781f8ab4d.jpg",
+      "caption": "",
+      "source": "Noshing with the nolands",
+      "original_width": "1200px",
+      "original_height": "1800px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/415ff651227f.jpg",
+      "caption": "",
+      "source": "RecipeTin Eats",
+      "original_width": "900px",
+      "original_height": "1260px"
+    }
+  ]
+}

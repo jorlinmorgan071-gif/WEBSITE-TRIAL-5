@@ -1,0 +1,30 @@
+{
+  "success": true,
+  "query": "baker laminating buttered croissant dough on a floured counter in a bakery",
+  "count": 3,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e1b6036a2526.jpg",
+      "caption": "",
+      "source": "BrodandTaylor.com",
+      "original_width": "1500px",
+      "original_height": "1072px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/4c8da13798c3.jpg",
+      "caption": "",
+      "source": "Bon Appetit",
+      "original_width": "2664px",
+      "original_height": "1998px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/14fd6d21edee.jpg",
+      "caption": "",
+      "source": "Baking With Butter",
+      "original_width": "1200px",
+      "original_height": "1798px"
+    }
+  ]
+}

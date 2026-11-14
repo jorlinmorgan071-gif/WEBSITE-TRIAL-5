@@ -345,3 +345,19 @@ input::placeholder,textarea::placeholder{color:var(--faint);}
 .vc-txt{font-size:15.5px;font-weight:700;text-align:center;line-height:1.5;max-width:300px;}
 .vc-sub{font-size:12.5px;color:var(--muted);text-align:center;}
 .vc-btns{display:flex;gap:9px;justify-content:center;padding:0 22px calc(26px + var(--safe-b));flex-wrap:wrap;}
+
+/* ---------- star ratings ---------- */
+.rate-strip{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 0 12px;padding:9px 12px;border-radius:14px;background:rgba(255,184,107,.08);border:1px solid rgba(255,184,107,.22);}
+.rate-strip .star{font-size:17px;color:rgba(255,184,107,.35);}
+.rate-strip .star.on{color:var(--amber);}
+.rate-strip .star.mine{color:#ffd166;text-shadow:0 0 8px rgba(255,209,102,.55);}
+.rate-strip .star-n{font-size:11.5px;color:var(--muted);margin-left:8px;}
+#rate-stars .star{cursor:pointer;transition:transform .15s;}
+#rate-stars .star:hover{transform:scale(1.2);}
+#rate-stars .star{color:rgba(255,184,107,.4);}
+#rate-stars .star.on{color:var(--amber);}
+#rate-stars .star.mine{color:#ffd166;}
+#rate-stars .star-n{display:block;font-size:12px;color:var(--muted);margin-top:8px;letter-spacing:0;}
+.rc-stars{font-size:10.5px;color:var(--amber);font-weight:800;margin-top:3px;}
+.railbtn.rated{color:var(--amber);}
+.railbtn.rated .rb-ico{filter:drop-shadow(0 0 6px rgba(255,184,107,.5));}
