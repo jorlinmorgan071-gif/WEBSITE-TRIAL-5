@@ -1,0 +1,26 @@
+🚀 Initializing Z-AI SDK...
+🔎 Searching images: "dragon roll sushi plate dark moody food photography"
+✅ Got 2 images
+{
+  "success": true,
+  "query": "dragon roll sushi plate dark moody food photography",
+  "count": 2,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f4ff3daf707b.jpg",
+      "caption": "",
+      "source": "Dreamstime",
+      "original_width": "887px",
+      "original_height": "1690px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f003ec29a4b0.jpg",
+      "caption": "",
+      "source": "Shutterstock",
+      "original_width": "1500px",
+      "original_height": "1213px"
+    }
+  ]
+}

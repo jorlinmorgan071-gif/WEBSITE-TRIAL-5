@@ -1,0 +1,26 @@
+🚀 Initializing Z-AI SDK...
+🔎 Searching images: "tarte tatin caramelized apple tart dark moody"
+✅ Got 2 images
+{
+  "success": true,
+  "query": "tarte tatin caramelized apple tart dark moody",
+  "count": 2,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a36703ce5c2e.jpg",
+      "caption": "",
+      "source": "The Jewish Table - Substack",
+      "original_width": "1786px",
+      "original_height": "1966px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b8f5165b74b9.jpg",
+      "caption": "",
+      "source": "Call Me Cupcake",
+      "original_width": "992px",
+      "original_height": "1489px"
+    }
+  ]
+}

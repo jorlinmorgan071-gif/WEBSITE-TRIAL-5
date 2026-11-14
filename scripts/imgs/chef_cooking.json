@@ -1,0 +1,26 @@
+🚀 Initializing Z-AI SDK...
+🔎 Searching images: "chef cooking flame restaurant kitchen dark cinematic"
+✅ Got 2 images
+{
+  "success": true,
+  "query": "chef cooking flame restaurant kitchen dark cinematic",
+  "count": 2,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9bdd9782d26e.jpg",
+      "caption": "",
+      "source": "Eater",
+      "original_width": "2400px",
+      "original_height": "1607px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/0490d2c58e69.jpg",
+      "caption": "",
+      "source": "BBC",
+      "original_width": "1920px",
+      "original_height": "1080px"
+    }
+  ]
+}

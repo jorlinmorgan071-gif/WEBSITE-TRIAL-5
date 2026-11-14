@@ -1,0 +1,26 @@
+🚀 Initializing Z-AI SDK...
+🔎 Searching images: "indian butter chicken curry copper bowl dark moody"
+✅ Got 2 images
+{
+  "success": true,
+  "query": "indian butter chicken curry copper bowl dark moody",
+  "count": 2,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b397cbf0ce57.jpg",
+      "caption": "",
+      "source": "Shutterstock",
+      "original_width": "1500px",
+      "original_height": "1100px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/c124cc95d50b.jpg",
+      "caption": "",
+      "source": "Yelp",
+      "original_width": "1000px",
+      "original_height": "1000px"
+    }
+  ]
+}

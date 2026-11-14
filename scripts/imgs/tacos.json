@@ -1,0 +1,26 @@
+🚀 Initializing Z-AI SDK...
+🔎 Searching images: "street tacos al pastor with pineapple on dark moody table"
+✅ Got 2 images
+{
+  "success": true,
+  "query": "street tacos al pastor with pineapple on dark moody table",
+  "count": 2,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/983b8a40dd20.jpg",
+      "caption": "",
+      "source": "DoorDash: Food, Grocery and Retail - Fast Same Day Delivery",
+      "original_width": "4000px",
+      "original_height": "2250px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a76db92e1ff6.jpg",
+      "caption": "",
+      "source": "Edible Monterey Bay",
+      "original_width": "1024px",
+      "original_height": "984px"
+    }
+  ]
+}

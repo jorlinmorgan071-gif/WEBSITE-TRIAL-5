@@ -1,0 +1,3327 @@
+Build and app that combine TikTok and Instacart every recipe should be downloadable and the animations should be striking interface should be similar to iphone interface and the app should also be able to provide streaming link to food recipes and other things
+
+Show less
+6 months ago
+
+Base44 response
+
+Thought for less than a second
+What's the core experience you want users to have?
+
+Both combined
+
+Who is the primary audience for this app?
+
+Both creators and viewers
+
+What does 'downloadable recipe' mean to you?
+
+Both PDF export + in-app saving
+
+6 months ago
+
+
+Your message
+Both combined
+Both creators and viewers
+Both PDF export + in-app saving
+6 months ago
+
+Your message
+Both combined
+Both creators and viewers
+Both PDF export + in-app saving
+6 months ago
+
+Base44 response
+
+Thought for less than a second
+For the grocery/shopping side, how should ingredient ordering work?
+
+Let's make it in such away that it will provide link to you own shopping platform from you country
+
+For the visual style — this is an iPhone-inspired, TikTok-meets-food app. Which aesthetic feels right?
+
+Dark & cinematic
+
+
+Thought for less than a second
+1. How should the grocery/ingredient shopping work?
+2. What's the visual vibe you're going for?
+6 months ago
+
+
+Your message
+Let's make it in such away that it will provide link to you own shopping platform from you country
+Dark & cinematic
+6 months ago
+
+Your message
+Let's make it in such away that it will provide link to you own shopping platform from you country
+Dark & cinematic
+6 months ago
+
+Base44 response
+
+Thought for less than a second
+Your PRD for ForkFeed is ready! 🎬🍴 Would you like to make any changes before building, or are you ready to go?
+
+Add social features
+
+6 months ago
+
+
+Your message
+Add social features
+
+6 months ago
+
+Your message
+Add social features
+
+6 months ago
+
+Base44 response
+The PRD is fully updated with social features! 🎉 Are you ready to build ForkFeed?
+
+Add notifications
+
+6 months ago
+
+
+Your message
+Add notifications
+
+6 months ago
+
+Your message
+Plan approved
+
+6 months ago
+
+
+
+Revert
+Your message
+Plan approved
+
+6 months ago
+
+
+
+Revert
+Base44 response
+Building ForkFeed now — all entities, pages, and components in one shot!
+
+
+Set up the Recipe data
+Base44 response
+Building ForkFeed now — all files in one shot!
+
+
+Updated the Recipe, User Profile, and 11 more
+Base44 response
+Now let me write all the components and pages in parallel:
+
+
+Built the Layout, Video Feed Card, and 13 more
+Base44 response
+Now update App.jsx and index.css simultaneously:
+
+
+Built App
+Base44 response
+Now update index.css for dark cinematic theme and create seed data:
+
+
+Updated styles
+Base44 response
+Now let me seed some sample recipe data:
+
+
+Added Recipe records
+Base44 response
+Now seed demo data:
+
+
+Added Recipe records
+Base44 response
+ForkFeed is live! Here's what was built:
+
+Home — TikTok-style vertical snap feed with auto-play YouTube videos, double-tap to like, swipe hints, and action buttons
+Live — Active cooking streams with pulsing live badges and embedded stream player
+Discover — Search + cuisine filters on a trending recipe grid
+Cookbook — Saved recipes collection with delete capability
+Profile — Creator profile with bio editing, stats, and recipe grid
+Notifications — Grouped notification center (Today / This Week / Older) with unread badges
+Upload — Full recipe creation form with image upload, ingredients, steps, hashtags, and streaming link
+Recipe Sheet — Ingredient checklist + numbered steps + PDF export + Shop Ingredients modal linking to 16 country-specific grocery platforms
+6 demo recipes seeded including a live stream
+Base44 response
+ForkFeed is live! Here's what was built:
+
+8 pages: Home feed, Live streams, Discover, Cookbook, Profile, Notifications, Create Recipe, plus a full Layout with iPhone-style bottom nav.
+
+Key features working:
+
+TikTok-style vertical feed — full-screen snap scroll, thumbnail + YouTube embed on tap, swipe-up for full recipe
+Recipe detail sheet — animated slide-up with ingredients, steps, PDF download, and in-app save
+Shop Ingredients — routes to 14 country-specific grocery platforms (Instacart, Tesco, Woolworths, Jumia, BigBasket, etc.)
+Social layer — likes, comments, save to cookbook, follow button, notifications grouped Today/This Week
+Live streams — pulsing live badges, embedded stream viewer, mid-stream shopping
+Discover — search by keyword/hashtag, filter by 9 cuisines, trending tags
+Create Recipe — full form with dynamic ingredients + steps, PDF export, live toggle
+Dark cinematic design — coral/amber accents, glassmorphism overlays, smooth framer-motion spring animations throughout
+Seeded with 8 real recipes (Tacos, Carbonara, Butter Chicken, Smash Burgers, Dragon Roll, Jollof Rice, Tarte Tatin + one Live stream)
+6 months ago
+
+
+Your message
+Design a dark-themed recipe card template that displays the video, ingredient list, and the button to export the PDF version.anddCreate a tool that lets users toggle serving sizes on a recipe and automatically updates the ingredient quantities for the grocery list. And also add a Ai feature that enable people to use Ai to search for recipes and also make sure and also add a save featurebwherw they can save recipe and videos and also add some more cool features to increase user accessibility and also add more thing like one can add recipes and save the and also add voice automation that will be like your own Ai personal chef guiding in every step of the way. With no pressure and you interfere to clarify for a step similar to Google Gemini Ai
+
+Show more
+6 months ago
+
+
+
+Revert
+Base44 response
+Let me read the Home page first, then build everything in parallel.
+
+
+Read Home
+Base44 response
+Now I'll build all features in parallel — AI Chef Search, Voice Chef, enhanced Recipe Sheet with serving size scaler, and update Home:
+
+
+Updated the AIChef Search, Voice Chef, and Home
+Base44 response
+The RecipeSheet has some structural issues from the edits. Let me rewrite it cleanly:
+
+
+Built the Recipe Sheet
+Base44 response
+All features are live. Here's what was added:
+
+AI Chef Search — tap "AI Search" on the home feed, describe your craving in plain language, get 3 AI-generated recipes with ingredients, timing and a "why it matches" explanation — save directly to your Cookbook
+Voice Chef — tap "Chef" in any recipe sheet to launch a step-by-step voice-guided cooking session: speaks each step aloud, listens to your voice commands ("next", "repeat", "what does sauté mean?"), and answers clarifying questions using AI — just like Gemini
+Serving size scaler — +/− buttons auto-scale all ingredient quantities in real-time; also reflected in the PDF export
+Video tab — recipe sheet now has 3 tabs: Ingredients, Steps, Video (embedded player)
+Save button — bookmark icon on every recipe sheet saves to your Cookbook instantly
+PDF export — now includes serving size in the header
+6 months ago
+
+
+Your message
+Add a meal planner page where users can drag and drop their saved recipes into a weekly calendar view. Make sure the total ingredient list for the week automatically sums up for the grocery shopping . and also i can add that one can connect a an open router api to use open router free ai model like when using the camera during live session with ai explain the procedure of make the thing the user want the to make and also maybe can you add a health chart that will show the amout of calories and all other nutrients it has and make sure in the end the ai should be able to produce a clear summary of what they and a clear joke of it is good for and the user can inquire more bout and also maybe acan add that there should be preset prompts that the user can pres and send also the other thing make sure that the ai uses a inbuilt prompt that make it act like a chef with humanly tone when talking and also maybe can you also addd that the user can alter with how itresponds and its not only open router based api but also ollama api and also maybe can you make that it has presset emotion tones or the user can just add theirs
+
+Show more
+5 months ago
+
+
+
+Revert
+Base44 response
+Let me read the current files I need before building:
+
+
+Read 2 files
+Base44 response
+Big build incoming. I'll plan it all:
+
+Files to create:
+
+entities/MealPlan.json — meal slot entity
+pages/MealPlanner.jsx — drag-drop weekly calendar + grocery list
+pages/AIChefLive.jsx — camera AI analysis, chat with OpenRouter/Ollama/builtin, nutrition chart, tone presets
+components/NutritionChart.jsx — recharts nutrient visualization
+components/AIChefSettingsPanel.jsx — API provider settings
+Update App.jsx + Layout.jsx for new routes/nav
+
+Built the Meal Plan, Nutrition Chart, and 3 more
+Base44 response
+Now wire up the routes and navigation:
+
+
+Updated the App and Layout
+Base44 response
+All done! Here's what was built:
+
+🗓️ Meal Planner — drag-and-drop weekly calendar with Breakfast/Lunch/Dinner slots for every day, tap any empty slot to pick from your saved recipes, and a live-merged grocery list that sums all ingredients across the week — with PDF export.
+
+🤖 AI Chef Live — camera analysis page where you point your phone at food and the AI explains what it is, how to cook it, and nutritional info; supports OpenRouter (free models like Llama 3.1), Ollama (local models), or the built-in AI. Includes a nutrition bar chart, a funny food joke, 8 preset prompts, voice input, and 5 emotion tone presets (Warm Chef, Gordon Mode, Calm Sensei, Hype Friend, Grandma) — fully configurable from the settings panel.
+
+5 months ago
+
+
+Your message
+Build a quick toggle on the ingredient list that shows common substitutions for dietary needs, like gluten-free or dairy-free alternatives.and make sure that when starting the app there will be clear survy that will make and assement of how the users want the content to be and during this time they can still be able to paste the api and he must specify the model they are using and their provider is it olama opene ruoter or even open ai and make sure add the open ai api rout and also the other thing is that yu should also a a button the ai will be able to get direct feed from the for you page that will enble the ai to know what the user want to cook and the can guide them the also add when you are looking at the recpi of the dish there you can see the nutirient for the dish showing the stats of the didh and also maybe you and put that the app remembers where you left att and you can just continue in you feed and if by chance you you meet onther food and you foward it to the ai which will anaiyse and and produce sytem based prompt on whot you want to do with the food or maybe you can ask for other things about the foof also you long press the ai button where the app will be able to capture the screen or in phone you long prees to prompt the screen to display the cute yet i catch chat box similar to that of gemini where you can just be able be able to to ask about the content on your screen or maybe circle with you screen the part you want to aks abput excluding th other area if its an other the youhighlt and maybe you want info the ai will be able to give the estimate price and even provide prompt of whether you want to order and and also show your places near you using google maps that they sell the device but you can still ask other thing
+
+Show more
+5 months ago
+
+
+
+Revert
+Base44 response
+Let me read the files I need first:
+
+
+Read 3 files
+Base44 response
+Big plan:
+
+lib/dietSubstitutions.js — static lookup map
+pages/Onboarding.jsx — multi-step survey + AI config (OpenAI/OpenRouter/Ollama)
+components/FeedAIFloat.jsx — Gemini-like overlay from feed with maps/price
+Modify RecipeSheet — substitution pills
+Modify RecipeDetailSheet — nutrition section
+Modify VideoFeedCard — AI float button
+Modify pages/Home — feed position memory
+Modify App.jsx — onboarding gate
+Modify AIChefSettingsPanel — save to localStorage
+
+Built the diet Substitutions, Onboarding Page, and Feed AIFloat
+Base44 response
+Now update RecipeSheet (substitutions + nutrition tab), RecipeDetailSheet (nutrition section), VideoFeedCard (AI float button), and App.jsx (onboarding gate):
+
+
+Updated the Recipe Sheet
+Base44 response
+Now update VideoFeedCard to add the AI float button and feed context button:
+
+
+Updated the Video Feed Card
+Base44 response
+Now add onboarding gate to App.jsx and feed position memory in Home:
+
+
+Updated App
+Base44 response
+Now add feed position memory to Home page:
+
+
+Updated the Home
+Base44 response
+Done! Here's everything that was built:
+
+🎬 Onboarding Survey — shows on first launch: welcome screen, dietary preferences, cuisine/difficulty picker, and full AI config (OpenAI + GPT models, OpenRouter free models, Ollama local, or built-in). All saved to localStorage.
+
+🔄 Ingredient Substitutions — 4 diet filter pills (GF 🌾, Dairy-Free 🥛, Vegan 🌿, Keto 🥩) appear above the ingredient list. Tap one and every ingredient that has a substitute shows a coral replacement suggestion inline. Tap again to clear.
+
+📊 Nutrition Tab — new "📊 Nutrition" tab in RecipeSheet, AI estimates calories/protein/carbs/fat etc. per serving with a live bar chart and health score.
+
+✨ Feed AI Float — every video card now has an "AI" button in the right action rail. Tap it (or long-press) to open a Gemini-style chat overlay pre-loaded with context about that dish. Includes price estimation, Google Maps "nearby" button, voice input, and 8 preset prompts.
+
+💾 Feed Position Memory — your scroll position in the feed is saved to session storage. If you scroll down and come back, it resumes exactly where you left off.
+
+5 months ago
+
+
+Your message
+also now it ai searcj i want oyu to add that can be able too to see all thumbnalia and the ai will fiter out bit by bit
+
+5 months ago
+
+
+
+Revert
+Base44 response
+
+Read AIChef Search
+Base44 response
+Now I'll rewrite AIChefSearch to show all real recipe thumbnails from the DB first, then filter them bit-by-bit as the AI scores them. When no query is active, all thumbnails are shown.
+
+
+Built the AIChef Search
+Base44 response
+AI Search now loads all recipe thumbnails in a grid immediately. When you type and search, the AI scores each recipe and non-matching ones fade/shrink away while matches stay bright with a ✨ badge — all animated bit by bit.
+
+5 months ago
+
+
+Your message
+so her i what i want be ready am about to give a code i want you to analyze it know wha it does then chip it in my curent and i anlo want yoou to read and understand the and know just where to put in and and for any new elements iw want you to be able to if its in and if the elements has some new implementation add the and make sure that the code dont conflict with each other . now do you the you can do that
+
+Show more
+5 months ago
+
+
+
+Revert
+Base44 response
+
+Thought for less than a second
+Yes, I can definitely do that. I'll analyze the code you provide, understand its purpose, and suggest the best place to integrate it into your existing project. I'll also ensure that any new elements are properly styled and that there are no conflicts with your current code.
+
+Please provide the code snippet when you're ready!
+
+5 months ago
+
+
+Your message
+The app already exists — you are ONLY adding, not replacing. Below is the complete feature set with full code. Integrate this code into the existing codebase following the app's existing structure, theme, and patterns. Do NOT conflict with existing code. Use the app's current theme for all UI elements, buttons, error notifications, and dialogs. Now those are all the codes but i want to professionally imp lent each of not just throw them make sure understand the code know what it does the impact it brings and know where to put and make them work well and good
+
+FEATURE 1: YouTube Data & OAuth Service Create a new file lib/services/youtube_service.dart:
+
+dart
+
+// ============================================================ // YOUTUBE SERVICE // Handles: OAuth authentication, channel info, playlist fetching, // video metadata, and download stream resolution. // Uses youtube_explode_dart for metadata/streams and // googleapis for OAuth-authenticated API calls. // ============================================================
+
+import 'dart:io'; import 'package:flutter/foundation.dart'; import 'package:youtube_explode_dart/youtube_explode_dart.dart'; import 'package:googleapis/youtube/v3.dart' as yt; import 'package:googleapis_auth/auth_io.dart' as auth; import 'package:flutter_secure_storage/flutter_secure_storage.dart'; import 'package:path_provider/path_provider.dart';
+
+import '../models/video_metadata.dart'; // your existing model or create this import '../models/downloaded_video.dart'; // your existing model or create this
+
+class YouTubeService { // ---------------------------------------------------------- // SINGLETON: Reuse a single instance across the app. // ---------------------------------------------------------- static final YouTubeService _instance = YouTubeService._internal(); factory YouTubeService() => _instance; YouTubeService._internal();
+
+// Core: youtube_explode_dart client (no API key required for metadata/streams) final YoutubeExplode _explode = YoutubeExplode();
+
+// OAuth / Google API client (optional — for "My Channel" tab only) yt.YouTubeApi? _authenticatedApi; final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+
+// OAuth configuration — REPLACE with your Google Cloud Console credentials static const String _clientId = 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com'; static const String _clientSecret = 'YOUR_CLIENT_SECRET'; static const List<String> _scopes = [yt.YouTubeApi.youtubeReadonlyScope];
+
+bool get isAuthenticated => _authenticatedApi != null;
+
+// ---------------------------------------------------------- // A) DOWNLOAD: Resolve a YouTube video URL to direct download streams // ---------------------------------------------------------- // Returns null if the video is blocked / restricted. // Throws a descriptive string if we can explain why. // ---------------------------------------------------------- Future<VideoDownloadInfo?> getDownloadInfo(String url) async { try { // 1. Parse video ID from any YouTube URL format final videoId = VideoId.parseVideoId(url); if (videoId == null) { throw const FormatException('INVALID_URL'); }
+
+  // 2. Fetch video metadata
+  final video = await _explode.videos.get(videoId.value);
+
+  // 3. Check restrictions
+  if (video.status?.isPremium ?? false) {
+    throw const FormatException('PREMIUM_CONTENT');
+  }
+  if (video.status?.isRequiresPurchase ?? false) {
+    throw const FormatException('PURCHASE_REQUIRED');
+  }
+  if (video.status?.isUnplayable ?? false) {
+    throw const FormatException('BLOCKED_CONTENT');
+  }
+
+  // 4. Get stream manifest (contains all available qualities)
+  final manifest = await _explode.videos.streamsClient.getManifest(videoId.value);
+
+  // 5. Select best available streams
+  //    - Prefer muxed (video+audio combined) if available
+  //    - Fall back to separate best video + best audio
+  StreamInfo? videoStream;
+  StreamInfo? audioStream;
+
+  // Try muxed first (simplest for playback)
+  if (manifest.muxed.isNotEmpty) {
+    // Pick the highest quality muxed stream that's ≤1080p
+    videoStream = manifest.muxed
+        .where((s) => s.videoQuality?.height != null && s.videoQuality!.height! <= 1080)
+        .reduce((a, b) =>
+            (a.videoQuality?.height ?? 0) >= (b.videoQuality?.height ?? 0) ? a : b);
+  }
+
+  // If no muxed, get separate video-only and audio-only streams
+  if (videoStream == null && manifest.video.isNotEmpty) {
+    videoStream = manifest.video
+        .where((s) => s.videoQuality?.height != null && s.videoQuality!.height! <= 1080)
+        .reduce((a, b) =>
+            (a.videoQuality?.height ?? 0) >= (b.videoQuality?.height ?? 0) ? a : b);
+  }
+  if (manifest.audioOnly.isNotEmpty) {
+    audioStream = manifest.audioOnly
+        .reduce((a, b) => a.bitrate > b.bitrate ? a : b);
+  }
+
+  if (videoStream == null) {
+    throw const FormatException('NO_AVAILABLE_STREAM');
+  }
+
+  // 6. Return download info
+  return VideoDownloadInfo(
+    videoId: videoId.value,
+    title: video.title,
+    author: video.author,
+    duration: video.duration,
+    thumbnailUrl: video.thumbnails.highResUrl,
+    videoStreamUrl: videoStream.url.toString(),
+    audioStreamUrl: audioStream?.url.toString(),
+    suggestedFileName: _sanitizeFileName('${video.title}.mp4'),
+    fileSize: videoStream.size.totalBytes,
+    isMuxed: audioStream == null, // true if both audio+video combined
+  );
+} on FormatException catch (e) {
+  // Re-throw our known errors with user-friendly messages
+  rethrow;
+} catch (e) {
+  debugPrint('[YouTubeService] getDownloadInfo error: $e');
+  return null;
+}
+}
+
+// ---------------------------------------------------------- // B) ACTUAL DOWNLOAD: Stream bytes from YouTube to local file // ---------------------------------------------------------- Future<DownloadedVideo> downloadVideo( VideoDownloadInfo info, { required void Function(double progress) onProgress, }) async { // 1. Determine local save directory final dir = await getDownloadDirectory();
+
+// 2. Create output file
+final file = File('${dir.path}/${info.suggestedFileName}');
+
+// 3. If muxed stream — single download
+if (info.isMuxed && info.videoStreamUrl != null) {
+  await _downloadStream(
+    Uri.parse(info.videoStreamUrl!),
+    file,
+    info.fileSize,
+    onProgress,
+  );
+} else {
+  // 4. Separate video + audio: download both, then merge via FFmpeg
+  final videoFile = File('${dir.path}/_temp_video_${info.videoId}.mp4');
+  final audioFile = File('${dir.path}/_temp_audio_${info.videoId}.m4a');
+
+  // Download video track
+  await _downloadStream(
+    Uri.parse(info.videoStreamUrl!),
+    videoFile,
+    info.fileSize,
+    (p) => onProgress(p * 0.7), // video = 70% of progress
+  );
+
+  // Download audio track
+  if (info.audioStreamUrl != null) {
+    await _downloadStream(
+      Uri.parse(info.audioStreamUrl!),
+      audioFile,
+      0, // unknown size for audio
+      (p) => onProgress(0.7 + p * 0.3), // audio = remaining 30%
+    );
+  }
+
+  // Merge using FFmpeg (bundled in the app — see setup notes)
+  await _mergeVideoAudio(videoFile, audioFile, file, (p) {
+    onProgress(0.7 + 0.3 * p);
+  });
+
+  // Clean up temp files
+  if (await videoFile.exists()) await videoFile.delete();
+  if (await audioFile.exists()) await audioFile.delete();
+}
+
+// 5. Return the downloaded video metadata
+return DownloadedVideo(
+  videoId: info.videoId,
+  title: info.title,
+  author: info.author,
+  localPath: file.path,
+  thumbnailUrl: info.thumbnailUrl,
+  duration: info.duration,
+  downloadedAt: DateTime.now(),
+  fileSize: await file.length(),
+);
+}
+
+// Helper: download bytes from a URL to a file with progress Future<void> _downloadStream( Uri url, File file, int totalBytes, void Function(double progress) onProgress, ) async { final client = HttpClient(); final request = await client.getUrl(url); final response = await request.close(); final sink = file.openWrite(); int bytesReceived = 0;
+
+await for (final chunk in response) {
+  sink.add(chunk);
+  bytesReceived += chunk.length;
+  if (totalBytes > 0) {
+    onProgress(bytesReceived / totalBytes);
+  }
+}
+await sink.close();
+client.close();
+}
+
+// Helper: merge video + audio using FFmpeg Future<void> _mergeVideoAudio( File videoFile, File audioFile, File outputFile, void Function(double progress) onProgress, ) async { // FFmpeg path differs per platform // On Android: use the ffmpeg-kit Flutter plugin // On Windows: assume ffmpeg is on PATH or bundled if (Platform.isAndroid) { // Use flutter_ffmpeg_kit or similar // await FFmpegKit.execute('-i "${videoFile.path}" -i "${audioFile.path}" -c:v copy -c:a aac "${outputFile.path}"'); // This is a placeholder — implement with your chosen FFmpeg library await videoFile.copy(outputFile.path); // fallback: just copy video } else { final result = await Process.run('ffmpeg', [ '-i', videoFile.path, '-i', audioFile.path, '-c:v', 'copy', '-c:a', 'aac', '-y', outputFile.path, ]); if (result.exitCode != 0) { throw Exception('FFmpeg merge failed: ${result.stderr}'); } } onProgress(1.0); }
+
+// ---------------------------------------------------------- // C) CHECK VIDEO AVAILABILITY (for blocked / restricted detection) // ---------------------------------------------------------- // Returns null if downloadable, or a user-friendly error message if blocked. // ---------------------------------------------------------- Future<String?> checkAvailability(String url) async { try { final info = await getDownloadInfo(url); if (info == null) return 'This video is currently unavailable for download.'; return null; // all good } on FormatException catch (e) { switch (e.message) { case 'INVALID_URL': return 'Invalid YouTube URL. Please check the link.'; case 'PREMIUM_CONTENT': return 'This is YouTube Premium content and cannot be downloaded.'; case 'PURCHASE_REQUIRED': return 'This video requires a purchase or rental.'; case 'BLOCKED_CONTENT': return 'This video is blocked by the uploader and cannot be downloaded.'; case 'NO_AVAILABLE_STREAM': return 'No downloadable stream found for this video.'; default: return 'An unknown error occurred while checking this video.'; } } catch (e) { return 'Could not verify this video. It may be private or restricted.'; } }
+
+// ---------------------------------------------------------- // D) SHORTS & VIDEO FEED: Fetch YouTube search results (for the feed) // ---------------------------------------------------------- Future<List<VideoMetadata>> fetchFeed({ String query = '', int maxResults = 20, }) async { // If query is empty, fetch trending final search = query.isEmpty ? await _explode.search.getTrending() : await _explode.search.search(query);
+
+final results = <VideoMetadata>[];
+await for (final video in search.take(maxResults)) {
+  results.add(VideoMetadata(
+    videoId: video.id.value,
+    title: video.title,
+    author: video.author,
+    description: video.description ?? '',
+    duration: video.duration,
+    thumbnailUrl: video.thumbnails.highResUrl,
+    viewCount: video.engagement?.viewCount ?? 0,
+    likeCount: video.engagement?.likeCount ?? 0,
+    isShort: (video.duration?.inSeconds ?? 0) <= 60,
+  ));
+}
+return results;
+}
+
+// ---------------------------------------------------------- // E) SEARCH: Query YouTube by keyword // ---------------------------------------------------------- Future<List<VideoMetadata>> search(String query, {int maxResults = 30}) async { final searchResults = await _explode.search.search(query); final results = <VideoMetadata>[]; await for (final video in searchResults.take(maxResults)) { results.add(VideoMetadata( videoId: video.id.value, title: video.title, author: video.author, description: video.description ?? '', duration: video.duration, thumbnailUrl: video.thumbnails.highResUrl, viewCount: video.engagement?.viewCount ?? 0, likeCount: video.engagement?.likeCount ?? 0, isShort: (video.duration?.inSeconds ?? 0) <= 60, )); } return results; }
+
+// ---------------------------------------------------------- // F) OAuth AUTHENTICATION (optional — for "My Channel" tab) // ---------------------------------------------------------- Future<void> authenticateWithGoogle() async { // This uses the googleapis_auth package for OAuth 2.0 // The redirect URI must match what's configured in Google Cloud Console final clientId = auth.ClientId(_clientId, _clientSecret); final redirectUri = Uri.parse('com.yourapp:/oauth2redirect');
+
+try {
+  final client = await auth.clientViaUserConsent(
+    clientId,
+    _scopes,
+    redirectUri,
+    (url) {
+      // Open the URL in the browser for user consent
+      // You'll need to intercept the redirect back to your app
+      debugPrint('Open this URL in a browser: $url');
+      // In production: use url_launcher + app link / custom scheme
+    },
+  );
+
+  _authenticatedApi = yt.YouTubeApi(client);
+  // Store refresh token for later reuse
+  // await _secureStorage.write(key: 'youtube_refresh_token', value: ...);
+} catch (e) {
+  debugPrint('[YouTubeService] Auth failed: $e');
+  rethrow;
+}
+}
+
+// ---------------------------------------------------------- // G) GET MY CHANNEL INFO (requires OAuth) // ---------------------------------------------------------- Future<Map<String, dynamic>?> getMyChannelInfo() async { if (authenticatedApi == null) return null; try { final channelResponse = await authenticatedApi!.channels.list( ['snippet', 'contentDetails', 'statistics'], mine: true, ); if (channelResponse.items == null || channelResponse.items!.isEmpty) { return null; } final channel = channelResponse.items!.first; return { 'id': channel.id, 'title': channel.snippet?.title, 'description': channel.snippet?.description, 'thumbnail': channel.snippet?.thumbnails?.default?.url, 'subscriberCount': channel.statistics?.subscriberCount, 'videoCount': channel.statistics?.videoCount, 'uploadsPlaylistId': channel.contentDetails?.relatedPlaylists?.uploads, }; } catch (e) { debugPrint('[YouTubeService] getMyChannelInfo error: $e'); return null; } }
+
+// ---------------------------------------------------------- // H) GET MY UPLOADS (requires OAuth + a channel) // ---------------------------------------------------------- Future<List<VideoMetadata>> getMyUploads(String uploadsPlaylistId) async { if (authenticatedApi == null) return []; try { final playlistResponse = await authenticatedApi!.playlistItems.list( ['snippet', 'contentDetails'], playlistId: uploadsPlaylistId, maxResults: 50, ); final items = playlistResponse.items ?? []; return items.map((item) { final snippet = item.snippet!; return VideoMetadata( videoId: item.contentDetails!.videoId!, title: snippet.title!, author: snippet.channelTitle ?? 'My Channel', description: snippet.description ?? '', duration: null, // would need another API call for exact duration thumbnailUrl: snippet.thumbnails?.high?.url ?? snippet.thumbnails?.default?.url ?? '', viewCount: 0, likeCount: 0, isShort: false, ); }).toList(); } catch (e) { debugPrint('[YouTubeService] getMyUploads error: $e'); return []; } }
+
+// ---------------------------------------------------------- // I) GET VIDEO STREAM URL FOR IN-APP PLAYBACK // ---------------------------------------------------------- Future<String?> getPlaybackUrl(String videoId) async { try { final manifest = await _explode.videos.streamsClient.getManifest(videoId); // Pick the best muxed stream (≤1080p) for quick playback if (manifest.muxed.isNotEmpty) { final stream = manifest.muxed .where((s) => s.videoQuality?.height != null && s.videoQuality!.height! <= 720) .reduce((a, b) => (a.videoQuality?.height ?? 0) >= (b.videoQuality?.height ?? 0) ? a : b); return stream.url.toString(); } // Fallback to video-only if (manifest.video.isNotEmpty) { return manifest.video.first.url.toString(); } return null; } catch (e) { debugPrint('[YouTubeService] getPlaybackUrl error: $e'); return null; } }
+
+// ---------------------------------------------------------- // HELPERS // ---------------------------------------------------------- String sanitizeFileName(String name) { return name.replaceAll(RegExp(r'[<>:"/\|?*]'), ''); }
+
+Future<Directory> getDownloadDirectory() async { if (Platform.isAndroid) { // Use app-specific external storage final dir = Directory('/storage/emulated/0/Download/MyAppName'); if (!await dir.exists()) await dir.create(recursive: true); return dir; } else if (Platform.isWindows) { final appDir = await getApplicationDocumentsDirectory(); final dir = Directory('${appDir.path}/downloads'); if (!await dir.exists()) await dir.create(recursive: true); return dir; } else { final appDir = await getApplicationDocumentsDirectory(); final dir = Directory('${appDir.path}/downloads'); if (!await dir.exists()) await dir.create(recursive: true); return dir; } }
+
+/// Dispose the HTTP client when the service is no longer needed void dispose() { _explode.close(); } }
+
+// ============================================================ // DATA CLASSES // ============================================================
+
+/// Information needed to perform a download class VideoDownloadInfo { final String videoId; final String title; final String author; final Duration? duration; final String thumbnailUrl; final String? videoStreamUrl; final String? audioStreamUrl; final String suggestedFileName; final int fileSize; final bool isMuxed;
+
+VideoDownloadInfo({ required this.videoId, required this.title, required this.author, this.duration, required this.thumbnailUrl, this.videoStreamUrl, this.audioStreamUrl, required this.suggestedFileName, required this.fileSize, required this.isMuxed, }); }
+
+/// Metadata for a video shown in the feed / search results class VideoMetadata { final String videoId; final String title; final String author; final String description; final Duration? duration; final String thumbnailUrl; final int viewCount; final int likeCount; final bool isShort;
+
+VideoMetadata({ required this.videoId, required this.title, required this.author, required this.description, this.duration, required this.thumbnailUrl, required this.viewCount, required this.likeCount, required this.isShort, }); }
+
+/// Represents a video that has been downloaded locally class DownloadedVideo { final String videoId; final String title; final String author; final String localPath; final String thumbnailUrl; final Duration? duration; final DateTime downloadedAt; final int fileSize;
+
+DownloadedVideo({ required this.videoId, required this.title, required this.author, required this.localPath, required this.thumbnailUrl, this.duration, required this.downloadedAt, required this.fileSize, }); }
+
+FEATURE 2: Download Manager (state management for downloads + "Saved" tab) Create lib/services/download_manager.dart:
+
+dart
+
+// ============================================================ // DOWNLOAD MANAGER // Singleton that manages: // - Active download queue (one at a time) // - Download progress state // - Persisted list of completed downloads (Saved Videos) // - Bookmarking / "Watch Later" functionality // Uses ChangeNotifier so the UI can react to state changes. // ============================================================
+
+import 'dart:convert'; import 'package:flutter/foundation.dart'; import 'package:flutter_secure_storage/flutter_secure_storage.dart'; import 'package:shared_preferences/shared_preferences.dart'; import '../services/youtube_service.dart';
+
+class DownloadManager extends ChangeNotifier { // Singleton static final DownloadManager _instance = DownloadManager._internal(); factory DownloadManager() => _instance; DownloadManager._internal();
+
+final YouTubeService _ytService = YouTubeService(); final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+
+// ---- STATE ----
+
+/// All completed downloads (persisted) List<DownloadedVideo> _downloadedVideos = []; List<DownloadedVideo> get downloadedVideos => List.unmodifiable(_downloadedVideos);
+
+/// Bookmarked / "Watch Later" videos (persisted) List<VideoMetadata> _bookmarkedVideos = []; List<VideoMetadata> get bookmarkedVideos => List.unmodifiable(_bookmarkedVideos);
+
+/// Currently active download progress (null if none) DownloadProgress? _currentDownload; DownloadProgress? get currentDownload => _currentDownload;
+
+/// Whether a download is in progress bool get isDownloading => _currentDownload != null;
+
+// ---- INIT ----
+
+Future<void> initialize() async { await _loadDownloadedVideos(); await _loadBookmarkedVideos(); notifyListeners(); }
+
+// ---------------------------------------------------------- // A) DOWNLOAD A VIDEO // ---------------------------------------------------------- Future<void> startDownload(String videoUrl, {String? customTitle}) async { if (isDownloading) { debugPrint('[DownloadManager] A download is already in progress.'); return; }
+
+// 1. Check availability first
+final availabilityError = await _ytService.checkAvailability(videoUrl);
+if (availabilityError != null) {
+  // Emit an error state — the UI will pick this up and show a dialog
+  _currentDownload = DownloadProgress(
+    videoUrl: videoUrl,
+    status: DownloadStatus.failed,
+    errorMessage: availabilityError,
+    progress: 0.0,
+  );
+  notifyListeners();
+  return;
+}
+
+// 2. Resolve download info
+VideoDownloadInfo? info;
+try {
+  info = await _ytService.getDownloadInfo(videoUrl);
+} catch (e) {
+  _currentDownload = DownloadProgress(
+    videoUrl: videoUrl,
+    status: DownloadStatus.failed,
+    errorMessage: 'Failed to get video information. The video may be restricted.',
+    progress: 0.0,
+  );
+  notifyListeners();
+  return;
+}
+
+if (info == null) {
+  _currentDownload = DownloadProgress(
+    videoUrl: videoUrl,
+    status: DownloadStatus.failed,
+    errorMessage: 'This video cannot be downloaded. It may be private or blocked.',
+    progress: 0.0,
+  );
+  notifyListeners();
+  return;
+}
+
+// 3. Start the download with progress callbacks
+_currentDownload = DownloadProgress(
+  videoUrl: videoUrl,
+  status: DownloadStatus.downloading,
+  title: info.title,
+  progress: 0.0,
+);
+notifyListeners();
+
+try {
+  final downloaded = await _ytService.downloadVideo(
+    info,
+    onProgress: (progress) {
+      _currentDownload = _currentDownload!.copyWith(progress: progress);
+      notifyListeners();
+    },
+  );
+
+  // 4. Save to completed list
+  _downloadedVideos.insert(0, downloaded);
+  _persistDownloadedVideos();
+
+  _currentDownload = DownloadProgress(
+    videoUrl: videoUrl,
+    status: DownloadStatus.completed,
+    title: downloaded.title,
+    progress: 1.0,
+  );
+  notifyListeners();
+
+  // Clear the current after a short delay
+  Future.delayed(const Duration(seconds: 3), () {
+    _currentDownload = null;
+    notifyListeners();
+  });
+} catch (e) {
+  _currentDownload = DownloadProgress(
+    videoUrl: videoUrl,
+    status: DownloadStatus.failed,
+    errorMessage: 'Download failed: ${e.toString()}',
+    progress: 0.0,
+  );
+  notifyListeners();
+}
+}
+
+// ---------------------------------------------------------- // B) BOOKMARK / "WATCH LATER" // ---------------------------------------------------------- void bookmarkVideo(VideoMetadata video) { // Avoid duplicates if (_bookmarkedVideos.any((v) => v.videoId == video.videoId)) return; _bookmarkedVideos.insert(0, video); _persistBookmarkedVideos(); notifyListeners(); }
+
+void removeBookmark(String videoId) { _bookmarkedVideos.removeWhere((v) => v.videoId == videoId); _persistBookmarkedVideos(); notifyListeners(); }
+
+bool isBookmarked(String videoId) { return _bookmarkedVideos.any((v) => v.videoId == videoId); }
+
+// ---------------------------------------------------------- // C) DELETE A DOWNLOADED VIDEO // ---------------------------------------------------------- Future<void> deleteDownloadedVideo(String videoId) async { final idx = _downloadedVideos.indexWhere((v) => v.videoId == videoId); if (idx == -1) return;
+
+final video = _downloadedVideos[idx];
+try {
+  final file = java_io_File(video.localPath); // use dart:io File
+  if (await file.exists()) await file.delete();
+} catch (_) {}
+
+_downloadedVideos.removeAt(idx);
+_persistDownloadedVideos();
+notifyListeners();
+}
+
+// ---------------------------------------------------------- // D) PERSISTENCE (using SharedPreferences for simplicity) // ---------------------------------------------------------- Future<void> _persistDownloadedVideos() async { final prefs = await SharedPreferences.getInstance(); final json = jsonEncode(_downloadedVideos.map((v) => { 'videoId': v.videoId, 'title': v.title, 'author': v.author, 'localPath': v.localPath, 'thumbnailUrl': v.thumbnailUrl, 'duration': v.duration?.inSeconds, 'downloadedAt': v.downloadedAt.toIso8601String(), 'fileSize': v.fileSize, }).toList()); await prefs.setString('downloaded_videos', json); }
+
+Future<void> _loadDownloadedVideos() async { final prefs = await SharedPreferences.getInstance(); final json = prefs.getString('downloaded_videos'); if (json == null || json.isEmpty) return; try { final list = jsonDecode(json) as List; downloadedVideos = list.map((e) { final m = e as Map<String, dynamic>; return DownloadedVideo( videoId: m['videoId'] as String, title: m['title'] as String, author: m['author'] as String, localPath: m['localPath'] as String, thumbnailUrl: m['thumbnailUrl'] as String, duration: m['duration'] != null ? Duration(seconds: m['duration'] as int) : null, downloadedAt: DateTime.parse(m['downloadedAt'] as String), fileSize: m['fileSize'] as int, ); }).toList(); } catch () {} }
+
+Future<void> _persistBookmarkedVideos() async { final prefs = await SharedPreferences.getInstance(); final json = jsonEncode(_bookmarkedVideos.map((v) => { 'videoId': v.videoId, 'title': v.title, 'author': v.author, 'description': v.description, 'thumbnailUrl': v.thumbnailUrl, 'duration': v.duration?.inSeconds, 'viewCount': v.viewCount, 'likeCount': v.likeCount, 'isShort': v.isShort, }).toList()); await prefs.setString('bookmarked_videos', json); }
+
+Future<void> _loadBookmarkedVideos() async { final prefs = await SharedPreferences.getInstance(); final json = prefs.getString('bookmarked_videos'); if (json == null || json.isEmpty) return; try { final list = jsonDecode(json) as List; bookmarkedVideos = list.map((e) { final m = e as Map<String, dynamic>; return VideoMetadata( videoId: m['videoId'] as String, title: m['title'] as String, author: m['author'] as String, description: m['description'] as String? ?? '', duration: m['duration'] != null ? Duration(seconds: m['duration'] as int) : null, thumbnailUrl: m['thumbnailUrl'] as String, viewCount: m['viewCount'] as int? ?? 0, likeCount: m['likeCount'] as int? ?? 0, isShort: m['isShort'] as bool? ?? false, ); }).toList(); } catch () {} } }
+
+// ============================================================ // VALUE CLASSES // ============================================================
+
+enum DownloadStatus { idle, downloading, completed, failed }
+
+class DownloadProgress { final String videoUrl; final DownloadStatus status; final String? title; final double progress; final String? errorMessage;
+
+DownloadProgress({ required this.videoUrl, required this.status, this.title, required this.progress, this.errorMessage, });
+
+DownloadProgress copyWith({ DownloadStatus? status, String? title, double? progress, String? errorMessage, }) { return DownloadProgress( videoUrl: videoUrl, status: status ?? this.status, title: title ?? this.title, progress: progress ?? this.progress, errorMessage: errorMessage ?? this.errorMessage, ); } } FEATURE 3: TikTok-Style Feed (Shorts + Videos) Create lib/screens/feed_screen.dart:
+
+dart
+
+// ============================================================ // FEED SCREEN // TikTok-style vertical swipe feed. // Shows both shorts (<60s) and regular videos. // Each video card shows: thumbnail, title, description overlay. // Bookmark button on each card. // Download button triggers background download automatically. // ============================================================
+
+import 'package:flutter/material.dart'; import 'package:provider/provider.dart'; // or your state management import '../services/youtube_service.dart'; import '../services/download_manager.dart';
+
+class FeedScreen extends StatefulWidget { const FeedScreen({Key? key}) : super(key: key);
+
+@override _FeedScreenState createState() => _FeedScreenState(); }
+
+class _FeedScreenState extends State<FeedScreen> { final YouTubeService _ytService = YouTubeService(); final PageController _pageController = PageController(); List<VideoMetadata> _feedVideos = []; bool _isLoading = true; String? _errorMessage;
+
+@override void initState() { super.initState(); _loadFeed(); }
+
+Future<void> _loadFeed() async { setState(() { _isLoading = true; _errorMessage = null; }); try { // Fetch trending / popular videos for the feed final videos = await _ytService.fetchFeed(); setState(() { _feedVideos = videos; _isLoading = false; }); } catch (e) { setState(() { _errorMessage = 'Failed to load feed. Pull to refresh.'; _isLoading = false; }); } }
+
+@override void dispose() { _pageController.dispose(); super.dispose(); }
+
+@override Widget build(BuildContext context) { final theme = Theme.of(context); // <-- uses existing app theme
+
+if (_isLoading) {
+  return const Center(child: CircularProgressIndicator());
+}
+
+if (_errorMessage != null) {
+  return Center(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.cloud_off, size: 64, color: theme.colorScheme.error),
+        const SizedBox(height: 16),
+        Text(_errorMessage!, style: theme.textTheme.bodyLarge),
+        const SizedBox(height: 16),
+        ElevatedButton.icon(
+          onPressed: _loadFeed,
+          icon: const Icon(Icons.refresh),
+          label: const Text('Retry'),
+        ),
+      ],
+    ),
+  );
+}
+
+if (_feedVideos.isEmpty) {
+  return Center(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.video_library_outlined, size: 64, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+        const SizedBox(height: 16),
+        Text('No videos available right now.', style: theme.textTheme.bodyLarge),
+        const SizedBox(height: 16),
+        ElevatedButton.icon(
+          onPressed: _loadFeed,
+          icon: const Icon(Icons.refresh),
+          label: const Text('Refresh'),
+        ),
+      ],
+    ),
+  );
+}
+
+return RefreshIndicator(
+  onRefresh: _loadFeed,
+  child: PageView.builder(
+    controller: _pageController,
+    scrollDirection: Axis.vertical,
+    itemCount: _feedVideos.length,
+    itemBuilder: (context, index) {
+      return _VideoFeedCard(
+        video: _feedVideos[index],
+        theme: theme,
+        // Auto-download the currently visible video
+        // The download starts when the user presses the download button
+      );
+    },
+  ),
+);
+} }
+
+// Each card in the feed — swipeable vertically, TikTok style class _VideoFeedCard extends StatefulWidget { final VideoMetadata video; final ThemeData theme;
+
+const _VideoFeedCard({required this.video, required this.theme});
+
+@override __VideoFeedCardState createState() => __VideoFeedCardState(); }
+
+class __VideoFeedCardState extends State<_VideoFeedCard> { late final DownloadManager _downloadManager; bool _isDownloadingThisVideo = false;
+
+@override void initState() { super.initState(); _downloadManager = context.read<DownloadManager>(); _downloadManager.addListener(_onDownloadStateChanged);
+
+// Also listen for the current download to update the button state
+_onDownloadStateChanged();
+}
+
+void _onDownloadStateChanged() { final current = _downloadManager.currentDownload; final isThis = current?.videoUrl.contains(widget.video.videoId) ?? false; if (mounted && _isDownloadingThisVideo != (isThis && current?.status == DownloadStatus.downloading)) { setState(() { _isDownloadingThisVideo = isThis && current?.status == DownloadStatus.downloading; }); } }
+
+@override void dispose() { _downloadManager.removeListener(_onDownloadStateChanged); super.dispose(); }
+
+void _handleDownload() { final videoUrl = 'https://youtube.com/watch?v=${widget.video.videoId}'; _downloadManager.startDownload(videoUrl); setState(() => _isDownloadingThisVideo = true);
+
+// Show a snackbar-style notification
+ScaffoldMessenger.of(context).showSnackBar(
+  SnackBar(
+    content: Text('Downloading "${widget.video.title}" in the background...'),
+    duration: const Duration(seconds: 2),
+    behavior: SnackBarBehavior.floating,
+  ),
+);
+}
+
+void _handleBookmark() { if (_downloadManager.isBookmarked(widget.video.videoId)) { _downloadManager.removeBookmark(widget.video.videoId); ScaffoldMessenger.of(context).showSnackBar( SnackBar( content: const Text('Removed from Saved'), duration: const Duration(seconds: 1), behavior: SnackBarBehavior.floating, ), ); } else { _downloadManager.bookmarkVideo(widget.video); ScaffoldMessenger.of(context).showSnackBar( SnackBar( content: const Text('Saved to Watch Later!'), duration: const Duration(seconds: 1), behavior: SnackBarBehavior.floating, ), ); } }
+
+@override Widget build(BuildContext context) { final video = widget.video; final theme = widget.theme; final isBookmarked = _downloadManager.isBookmarked(video.videoId);
+
+return Stack(
+  fit: StackFit.expand,
+  children: [
+    // Background: thumbnail as hero image
+    Image.network(
+      video.thumbnailUrl,
+      fit: BoxFit.cover,
+      loadingBuilder: (context, child, loadingProgress) {
+        if (loadingProgress == null) return child;
+        return Center(
+          child: CircularProgressIndicator(
+            value: loadingProgress.expectedTotalBytes != null
+                ? loadingProgress.cumulativeBytesLoaded / loadingProgress.expectedTotalBytes!
+                : null,
+          ),
+        );
+      },
+      errorBuilder: (context, error, stackTrace) {
+        return Container(color: theme.colorScheme.surfaceVariant);
+      },
+    ),
+
+    // Gradient overlay for text readability
+    Container(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [Colors.transparent, Colors.black87],
+          stops: [0.6, 1.0],
+        ),
+      ),
+    ),
+
+    // Info overlay at the bottom
+    Positioned(
+      left: 16,
+      right: 80,
+      bottom: 40,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Duration badge
+          if (video.duration != null)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.black54,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                _formatDuration(video.duration!),
+                style: const TextStyle(color: Colors.white, fontSize: 12),
+              ),
+            ),
+          const SizedBox(height: 8),
+
+          // Title
+          Text(
+            video.title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 4),
+
+          // Author + stats
+          Text(
+            '${video.author} • ${_formatCount(video.viewCount)} views',
+            style: const TextStyle(color: Colors.white70, fontSize: 13),
+          ),
+          const SizedBox(height: 6),
+
+          // Description (truncated)
+          if (video.description.isNotEmpty)
+            Text(
+              video.description,
+              style: const TextStyle(color: Colors.white60, fontSize: 12),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+
+          // Shorts badge
+          if (video.isShort)
+            Container(
+              margin: const EdgeInsets.only(top: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.red.withOpacity(0.8),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: const Text(
+                '#Shorts',
+                style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w600),
+              ),
+            ),
+        ],
+      ),
+    ),
+
+    // Action buttons (right side)
+    Positioned(
+      right: 12,
+      bottom: 120,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          // Download button
+          _ActionButton(
+            icon: _isDownloadingThisVideo ? Icons.downloading : Icons.download,
+            label: _isDownloadingThisVideo ? 'DL...' : 'Save',
+            color: _isDownloadingThisVideo ? Colors.orange : Colors.white,
+            onTap: _isDownloadingThisVideo ? null : _handleDownload,
+          ),
+          const SizedBox(height: 16),
+
+          // Bookmark / Watch Later button
+          _ActionButton(
+            icon: isBookmarked ? Icons.bookmark : Icons.bookmark_outline,
+            label: isBookmarked ? 'Saved' : 'Save',
+            color: isBookmarked ? Colors.yellow : Colors.white,
+            onTap: _handleBookmark,
+          ),
+          const SizedBox(height: 16),
+
+          // Play button (preview in-app)
+          _ActionButton(
+            icon: Icons.play_circle_outline,
+            label: 'Play',
+            color: Colors.white,
+            onTap: () {
+              // Navigate to in-app player
+              Navigator.of(context).pushNamed('/video_player', arguments: video);
+            },
+          ),
+        ],
+      ),
+    ),
+  ],
+);
+}
+
+String _formatDuration(Duration d) { final hours = d.inHours; final minutes = d.inMinutes.remainder(60); final seconds = d.inSeconds.remainder(60); if (hours > 0) return '${hours}h ${minutes}m'; return '${minutes}m ${seconds}s'; }
+
+String _formatCount(int count) { if (count >= 1_000_000) return '${(count / 1_000_000).toStringAsFixed(1)}M'; if (count >= 1_000) return '${(count / 1_000).toStringAsFixed(1)}K'; return count.toString(); } }
+
+// Small circular icon button used in the action column class _ActionButton extends StatelessWidget { final IconData icon; final String label; final Color color; final VoidCallback? onTap;
+
+const _ActionButton({ required this.icon, required this.label, required this.color, this.onTap, });
+
+@override Widget build(BuildContext context) { return GestureDetector( onTap: onTap, child: Column( mainAxisSize: MainAxisSize.min, children: [ Container( width: 52, height: 52, decoration: BoxDecoration( color: Colors.black.withOpacity(0.4), shape: BoxShape.circle, ), child: Icon(icon, color: color, size: 28), ), const SizedBox(height: 4), Text( label, style: TextStyle(color: color.withOpacity(0.9), fontSize: 10), ), ], ), ); } } FEATURE 4: Saved Videos / Downloads Tab Screen Create lib/screens/saved_screen.dart:
+
+dart
+
+// ============================================================ // SAVED SCREEN // Shows two sections at the top: // 1) "Downloaded Videos" — locally stored files that play offline // 2) "Watch Later" — bookmarked videos that stream when tapped // User taps on any item to play it (offline file or stream). // ============================================================
+
+import 'package:flutter/material.dart'; import 'package:provider/provider.dart'; import '../services/download_manager.dart'; import '../services/youtube_service.dart';
+
+class SavedScreen extends StatefulWidget { const SavedScreen({Key? key}) : super(key: key);
+
+@override _SavedScreenState createState() => _SavedScreenState(); }
+
+class _SavedScreenState extends State<SavedScreen> with SingleTickerProviderStateMixin { late TabController _tabController;
+
+@override void initState() { super.initState(); _tabController = TabController(length: 2, vsync: this); }
+
+@override void dispose() { _tabController.dispose(); super.dispose(); }
+
+@override Widget build(BuildContext context) { final theme = Theme.of(context); final downloadManager = context.watch<DownloadManager>();
+
+return Scaffold(
+  appBar: AppBar(
+    title: const Text('My Library'),
+    bottom: TabBar(
+      controller: _tabController,
+      indicatorColor: theme.colorScheme.primary,
+      labelColor: theme.colorScheme.primary,
+      unselectedLabelColor: theme.colorScheme.onSurface.withOpacity(0.6),
+      tabs: [
+        Tab(
+          icon: const Icon(Icons.download_done),
+          text: 'Downloads (${downloadManager.downloadedVideos.length})',
+        ),
+        Tab(
+          icon: const Icon(Icons.bookmark),
+          text: 'Watch Later (${downloadManager.bookmarkedVideos.length})',
+        ),
+      ],
+    ),
+  ),
+  body: TabBarView(
+    controller: _tabController,
+    children: [
+      // Tab 1: Downloaded Videos (local files)
+      _DownloadedList(downloadManager: downloadManager, theme: theme),
+      // Tab 2: Bookmarked / Watch Later
+      _BookmarkedList(downloadManager: downloadManager, theme: theme),
+    ],
+  ),
+);
+} }
+
+// ---------------------------------------------------------- // TAB 1: Downloaded Videos // ---------------------------------------------------------- class _DownloadedList extends StatelessWidget { final DownloadManager downloadManager; final ThemeData theme;
+
+const _DownloadedList({required this.downloadManager, required this.theme});
+
+@override Widget build(BuildContext context) { final videos = downloadManager.downloadedVideos;
+
+if (videos.isEmpty) {
+  return Center(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.download_outlined, size: 64, color: theme.colorScheme.onSurface.withOpacity(0.3)),
+        const SizedBox(height: 16),
+        Text('No downloads yet', style: theme.textTheme.titleMedium),
+        const SizedBox(height: 8),
+        Text('Download videos from the feed to view them here',
+            style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.6))),
+      ],
+    ),
+  );
+}
+
+return ListView.builder(
+  padding: const EdgeInsets.all(8),
+  itemCount: videos.length,
+  itemBuilder: (context, index) {
+    final video = videos[index];
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(8),
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.network(
+            video.thumbnailUrl,
+            width: 100,
+            height: 60,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                width: 100,
+                height: 60,
+                color: theme.colorScheme.surfaceVariant,
+                child: const Icon(Icons.movie),
+              );
+            },
+          ),
+        ),
+        title: Text(
+          video.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: theme.textTheme.titleSmall,
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(video.author, style: theme.textTheme.bodySmall),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Icon(Icons.done, size: 14, color: Colors.green),
+                const SizedBox(width: 4),
+                Text(
+                  'Downloaded',
+                  style: theme.textTheme.bodySmall?.copyWith(color: Colors.green),
+                ),
+                const Spacer(),
+                if (video.duration != null)
+                  Text(
+                    _durationString(video.duration!),
+                    style: theme.textTheme.bodySmall,
+                  ),
+              ],
+            ),
+          ],
+        ),
+        trailing: IconButton(
+          icon: Icon(Icons.delete_outline, color: theme.colorScheme.error),
+          onPressed: () => _confirmDelete(context, video.videoId),
+        ),
+        onTap: () {
+          // Navigate to local video player (plays from local file)
+          Navigator.of(context).pushNamed('/local_player', arguments: video);
+        },
+      ),
+    );
+  },
+);
+}
+
+void _confirmDelete(BuildContext context, String videoId) { showDialog( context: context, builder: (ctx) => AlertDialog( title: const Text('Delete Download'), content: const Text('Remove this video from your device?'), actions: [ TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('Cancel')), TextButton( onPressed: () { downloadManager.deleteDownloadedVideo(videoId); Navigator.pop(ctx); ScaffoldMessenger.of(context).showSnackBar( const SnackBar(content: Text('Video deleted'), behavior: SnackBarBehavior.floating), ); }, child: Text('Delete', style: TextStyle(color: Theme.of(context).colorScheme.error)), ), ], ), ); }
+
+String _durationString(Duration d) { final m = d.inMinutes.remainder(60); final s = d.inSeconds.remainder(60); return '${m}m ${s}s'; } }
+
+// ---------------------------------------------------------- // TAB 2: Bookmarked / Watch Later // ---------------------------------------------------------- class _BookmarkedList extends StatelessWidget { final DownloadManager downloadManager; final ThemeData theme;
+
+const _BookmarkedList({required this.downloadManager, required this.theme});
+
+@override Widget build(BuildContext context) { final videos = downloadManager.bookmarkedVideos;
+
+if (videos.isEmpty) {
+  return Center(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.bookmark_border, size: 64, color: theme.colorScheme.onSurface.withOpacity(0.3)),
+        const SizedBox(height: 16),
+        Text('No saved videos', style: theme.textTheme.titleMedium),
+        const SizedBox(height: 8),
+        Text('Bookmark videos from the feed to watch later',
+            style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurface.withOpacity(0.6))),
+      ],
+    ),
+  );
+}
+
+return ListView.builder(
+  padding: const EdgeInsets.all(8),
+  itemCount: videos.length,
+  itemBuilder: (context, index) {
+    final video = videos[index];
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      child: ListTile(
+        contentPadding: const EdgeInsets.all(8),
+        leading: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Image.network(
+            video.thumbnailUrl,
+            width: 100,
+            height: 60,
+            fit: BoxFit.cover,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                width: 100,
+                height: 60,
+                color: theme.colorScheme.surfaceVariant,
+                child: const Icon(Icons.movie),
+              );
+            },
+          ),
+        ),
+        title: Text(
+          video.title,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: theme.textTheme.titleSmall,
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(video.author, style: theme.textTheme.bodySmall),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Icon(Icons.cloud_queue, size: 14, color: Colors.blue.shade300),
+                const SizedBox(width: 4),
+                Text(
+                  'Streaming',
+                  style: theme.textTheme.bodySmall?.copyWith(color: Colors.blue.shade300),
+                ),
+                const Spacer(),
+                if (video.duration != null)
+                  Text(_durationString(video.duration!), style: theme.textTheme.bodySmall),
+              ],
+            ),
+          ],
+        ),
+        trailing: IconButton(
+          icon: Icon(Icons.bookmark_remove, color: theme.colorScheme.error),
+          onPressed: () {
+            downloadManager.removeBookmark(video.videoId);
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Removed from Saved'), behavior: SnackBarBehavior.floating),
+            );
+          },
+        ),
+        onTap: () {
+          // Navigate to stream-based player (fetches URL then plays)
+          Navigator.of(context).pushNamed('/video_player', arguments: video);
+        },
+      ),
+    );
+  },
+);
+}
+
+String _durationString(Duration d) { final m = d.inMinutes.remainder(60); final s = d.inSeconds.remainder(60); return '${m}m ${s}s'; } } FEATURE 5: My Channel Tab (OAuth Optional) Create lib/screens/channel_screen.dart:
+
+dart
+
+// ============================================================ // MY CHANNEL SCREEN (OPTIONAL) // Only shown if the user authenticates via OAuth. // Displays: channel avatar, subscriber count, video count, // and the user's own upload feed. // Navigation: accessible from bottom nav bar only if authenticated. // ============================================================
+
+import 'package:flutter/material.dart'; import 'package:provider/provider.dart'; import '../services/youtube_service.dart'; import '../services/download_manager.dart';
+
+class ChannelScreen extends StatefulWidget { const ChannelScreen({Key? key}) : super(key: key);
+
+@override _ChannelScreenState createState() => _ChannelScreenState(); }
+
+class _ChannelScreenState extends State<ChannelScreen> { final YouTubeService _ytService = YouTubeService(); Map<String, dynamic>? _channelInfo; List<VideoMetadata> _uploads = []; bool _isLoading = true; String? _errorMessage;
+
+@override void initState() { super.initState(); _loadChannelData(); }
+
+Future<void> _loadChannelData() async { setState(() { _isLoading = true; _errorMessage = null; });
+
+try {
+  if (!_ytService.isAuthenticated) {
+    // Prompt user to sign in
+    setState(() {
+      _isLoading = false;
+      _errorMessage = 'not_authenticated';
+    });
+    return;
+  }
+
+  final channelInfo = await _ytService.getMyChannelInfo();
+  if (channelInfo == null) {
+    setState(() {
+      _isLoading = false;
+      _errorMessage = 'Could not load channel info.';
+    });
+    return;
+  }
+
+  final uploadsPlaylistId = channelInfo['uploadsPlaylistId'] as String?;
+  List<VideoMetadata> uploads = [];
+  if (uploadsPlaylistId != null) {
+    uploads = await _ytService.getMyUploads(uploadsPlaylistId);
+  }
+
+  setState(() {
+    _channelInfo = channelInfo;
+    _uploads = uploads;
+    _isLoading = false;
+  });
+} catch (e) {
+  setState(() {
+    _isLoading = false;
+    _errorMessage = 'Failed to load channel. Please try again.';
+  });
+}
+}
+
+Future<void> _authenticate() async { try { await _ytService.authenticateWithGoogle(); await _loadChannelData(); } catch (e) { if (mounted) { ScaffoldMessenger.of(context).showSnackBar( SnackBar( content: Text('Authentication failed: ${e.toString()}'), behavior: SnackBarBehavior.floating, backgroundColor: Theme.of(context).colorScheme.error, ), ); } } }
+
+@override Widget build(BuildContext context) { final theme = Theme.of(context); final downloadManager = context.watch<DownloadManager>();
+
+if (_isLoading) {
+  return const Center(child: CircularProgressIndicator());
+}
+
+if (_errorMessage == 'not_authenticated') {
+  return Center(
+    child: Padding(
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.person_outline, size: 80, color: theme.colorScheme.onSurface.withOpacity(0.4)),
+          const SizedBox(height: 24),
+          Text(
+            'Connect Your YouTube Channel',
+            style: theme.textTheme.titleLarge,
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 12),
+          Text(
+            'Sign in with Google to see your channel info, subscriber count, and your own uploads.',
+            style: theme.textTheme.bodyMedium?.copyWith(
+              color: theme.colorScheme.onSurface.withOpacity(0.7),
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(height: 32),
+          ElevatedButton.icon(
+            onPressed: _authenticate,
+            icon: const Icon(Icons.login),
+            label: const Text('Connect YouTube Account'),
+            style: ElevatedButton.styleFrom(
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+            ),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+if (_errorMessage != null) {
+  return Center(
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Icon(Icons.error_outline, size: 48, color: theme.colorScheme.error),
+        const SizedBox(height: 16),
+        Text(_errorMessage!, style: theme.textTheme.bodyLarge),
+        const SizedBox(height: 16),
+        ElevatedButton.icon(
+          onPressed: _loadChannelData,
+          icon: const Icon(Icons.refresh),
+          label: const Text('Retry'),
+        ),
+      ],
+    ),
+  );
+}
+
+final info = _channelInfo!;
+
+return RefreshIndicator(
+  onRefresh: _loadChannelData,
+  child: CustomScrollView(
+    slivers: [
+      // Channel header
+      SliverToBoxAdapter(
+        child: Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                theme.colorScheme.primaryContainer,
+                theme.colorScheme.secondaryContainer,
+              ],
+            ),
+          ),
+          child: Column(
+            children: [
+              // Avatar
+              CircleAvatar(
+                radius: 40,
+                backgroundImage: info['thumbnail'] != null
+                    ? NetworkImage(info['thumbnail'] as String)
+                    : null,
+                child: info['thumbnail'] == null
+                    ? Icon(Icons.person, size: 40, color: theme.colorScheme.onPrimaryContainer)
+                    : null,
+              ),
+              const SizedBox(height: 12),
+
+              // Channel name
+              Text(
+                info['title'] as String? ?? 'My Channel',
+                style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+              ),
+
+              if (info['description'] != null && (info['description'] as String).isNotEmpty)
+                Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Text(
+                    info['description'] as String,
+                    style: theme.textTheme.bodyMedium,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+
+              const SizedBox(height: 16),
+
+              // Stats row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _StatChip(
+                    icon: Icons.person,
+                    label: '${_formatCount(info['subscriberCount'] as int? ?? 0)} subscribers',
+                    theme: theme,
+                  ),
+                  const SizedBox(width: 16),
+                  _StatChip(
+                    icon: Icons.video_library,
+                    label: '${info['videoCount'] ?? 0} videos',
+                    theme: theme,
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+
+      // Uploads section header
+      SliverToBoxAdapter(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 24, 16, 8),
+          child: Text(
+            'My Uploads',
+            style: theme.textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+
+      // Uploads grid
+      if (_uploads.isEmpty)
+        SliverFillRemaining(
+          hasScrollBody: false,
+          child: Center(
+            child: TextButton(
+              onPressed: _loadChannelData,
+              child: const Text('No uploads found. Refresh.'),
+            ),
+          ),
+        )
+      else
+        SliverGrid(
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            childAspectRatio: 0.75,
+            crossAxisSpacing: 8,
+            mainAxisSpacing: 8,
+          ),
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              final video = _uploads[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.of(context).pushNamed('/video_player', arguments: video);
+                },
+                child: Card(
+                  clipBehavior: Clip.antiAlias,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Image.network(
+                          video.thumbnailUrl,
+                          fit: BoxFit.cover,
+                          width: double.infinity,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Container(
+                              color: theme.colorScheme.surfaceVariant,
+                              child: const Center(child: Icon(Icons.movie_outlined, size: 40)),
+                            );
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8),
+                        child: Text(
+                          video.title,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            },
+            childCount: _uploads.length,
+          ),
+        ),
+    ],
+  ),
+);
+}
+
+String _formatCount(int count) { if (count >= 1_000_000) return '${(count / 1_000_000).toStringAsFixed(1)}M'; if (count >= 1_000) return '${(count / 1_000).toStringAsFixed(1)}K'; return count.toString(); } }
+
+class _StatChip extends StatelessWidget { final IconData icon; final String label; final ThemeData theme;
+
+const _StatChip({required this.icon, required this.label, required this.theme});
+
+@override Widget build(BuildContext context) { return Container( padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6), decoration: BoxDecoration( color: theme.colorScheme.surface.withOpacity(0.8), borderRadius: BorderRadius.circular(20), ), child: Row( mainAxisSize: MainAxisSize.min, children: [ Icon(icon, size: 16, color: theme.colorScheme.primary), const SizedBox(width: 6), Text(label, style: theme.textTheme.bodySmall?.copyWith(fontWeight: FontWeight.w600)), ], ), ); } } FEATURE 6: In-App Video Player (Both Stream & Local) Create lib/screens/video_player_screen.dart:
+
+dart
+
+// ============================================================ // VIDEO PLAYER SCREEN // Handles two modes: // 1) Local file playback (DownloadedVideo) // 2) Stream playback (VideoMetadata — fetches the URL then plays) // Uses the app's video_player_controller or similar. // ============================================================
+
+import 'package:flutter/material.dart'; import 'package:video_player/video_player.dart'; import 'package:provider/provider.dart'; import '../services/youtube_service.dart'; import '../services/download_manager.dart';
+
+class VideoPlayerScreen extends StatefulWidget { /// Can be either VideoMetadata (stream) or DownloadedVideo (local) final dynamic videoData;
+
+const VideoPlayerScreen({Key? key, required this.videoData}) : super(key: key);
+
+@override _VideoPlayerScreenState createState() => _VideoPlayerScreenState(); }
+
+class _VideoPlayerScreenState extends State<VideoPlayerScreen> { VideoPlayerController? _controller; final YouTubeService _ytService = YouTubeService(); bool _isInitializing = true; String? _errorMessage; bool _isPlaying = false; bool _showControls = true;
+
+@override void initState() { super.initState(); _initializePlayer(); }
+
+Future<void> _initializePlayer() async { setState(() { _isInitializing = true; _errorMessage = null; });
+
+final data = widget.videoData;
+
+try {
+  if (data is DownloadedVideo) {
+    // LOCAL FILE PLAYBACK
+    final file = java_io_File(data.localPath);
+    if (!await file.exists()) {
+      throw Exception('File not found. It may have been deleted.');
+    }
+    _controller = VideoPlayerController.file(file);
+  } else if (data is VideoMetadata) {
+    // STREAM PLAYBACK — fetch the stream URL first
+    final streamUrl = await _ytService.getPlaybackUrl(data.videoId);
+    if (streamUrl == null) {
+      throw Exception('Could not get playback URL for this video.');
+    }
+    _controller = VideoPlayerController.networkUrl(Uri.parse(streamUrl));
+  } else {
+    throw Exception('Unsupported video data type.');
+  }
+
+  await _controller!.initialize();
+  _controller!.addListener(_onPlayerStateChanged);
+
+  if (mounted) {
+    setState(() {
+      _isInitializing = false;
+    });
+    _controller!.play();
+  }
+} catch (e) {
+  if (mounted) {
+    setState(() {
+Sources Let me continue from where I was cut off — completing the Video Player Screen and then the remaining features.
+
+FEATURE 6: In-App Video Player (continued) Create lib/screens/video_player_screen.dart (complete file):
+
+dart
+
+// ============================================================ // VIDEO PLAYER SCREEN // Handles two modes: // 1) Local file playback (DownloadedVideo) // 2) Stream playback (VideoMetadata — fetches stream URL then plays) // ============================================================
+
+import 'package:flutter/material.dart'; import 'dart:io' as io; import 'package:video_player/video_player.dart'; import '../services/youtube_service.dart'; import '../services/download_manager.dart';
+
+class VideoPlayerScreen extends StatefulWidget { final dynamic videoData; // VideoMetadata or DownloadedVideo
+
+const VideoPlayerScreen({Key? key, required this.videoData}) : super(key: key);
+
+@override _VideoPlayerScreenState createState() => _VideoPlayerScreenState(); }
+
+class _VideoPlayerScreenState extends State<VideoPlayerScreen> { VideoPlayerController? _controller; final YouTubeService _ytService = YouTubeService(); bool _isInitializing = true; String? _errorMessage; bool _isPlaying = false; bool _showControls = true;
+
+@override void initState() { super.initState(); _initializePlayer(); }
+
+Future<void> _initializePlayer() async { setState(() { _isInitializing = true; _errorMessage = null; });
+
+final data = widget.videoData;
+
+try {
+  if (data is DownloadedVideo) {
+    // LOCAL FILE PLAYBACK
+    final file = io.File(data.localPath);
+    if (!await file.exists()) {
+      throw Exception('File not found. It may have been deleted.');
+    }
+    _controller = VideoPlayerController.file(file);
+  } else if (data is VideoMetadata) {
+    // STREAM PLAYBACK — fetch the stream URL
+    final streamUrl = await _ytService.getPlaybackUrl(data.videoId);
+    if (streamUrl == null) {
+      throw Exception('Could not get playback URL for this video.');
+    }
+    _controller = VideoPlayerController.networkUrl(Uri.parse(streamUrl));
+  } else {
+    throw Exception('Unsupported video data type.');
+  }
+
+  await _controller!.initialize();
+  _controller!.addListener(_onPlayerStateChanged);
+
+  if (mounted) {
+    setState(() { _isInitializing = false; });
+    _controller!.play();
+    _isPlaying = true;
+  }
+} catch (e) {
+  if (mounted) {
+    setState(() {
+      _isInitializing = false;
+      _errorMessage = e.toString().replaceAll('Exception: ', '');
+    });
+  }
+}
+}
+
+void _onPlayerStateChanged() { if (_controller == null) return; if (mounted && _isPlaying != _controller!.value.isPlaying) { setState(() { _isPlaying = _controller!.value.isPlaying; }); } }
+
+@override void dispose() { _controller?.removeListener(_onPlayerStateChanged); _controller?.dispose(); super.dispose(); }
+
+@override Widget build(BuildContext context) { final theme = Theme.of(context);
+
+// Get title and author info from whichever data type was passed
+String title = '';
+String author = '';
+if (widget.videoData is DownloadedVideo) {
+  final v = widget.videoData as DownloadedVideo;
+  title = v.title;
+  author = v.author;
+} else if (widget.videoData is VideoMetadata) {
+  final v = widget.videoData as VideoMetadata;
+  title = v.title;
+  author = v.author;
+}
+
+return Scaffold(
+  backgroundColor: Colors.black,
+  appBar: AppBar(
+    backgroundColor: Colors.black,
+    foregroundColor: Colors.white,
+    title: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(title, style: const TextStyle(fontSize: 14), maxLines: 1, overflow: TextOverflow.ellipsis),
+        Text(author, style: TextStyle(fontSize: 11, color: Colors.white.withOpacity(0.7))),
+      ],
+    ),
+  ),
+  body: _buildBody(theme),
+);
+}
+
+Widget _buildBody(ThemeData theme) { if (_isInitializing) { return const Center(child: CircularProgressIndicator(color: Colors.white)); }
+
+if (_errorMessage != null) {
+  return Center(
+    child: Padding(
+      padding: const EdgeInsets.all(32),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(Icons.error_outline, size: 64, color: Colors.red.shade300),
+          const SizedBox(height: 16),
+          Text(_errorMessage!, style: const TextStyle(color: Colors.white, fontSize: 16), textAlign: TextAlign.center),
+          const SizedBox(height: 24),
+          ElevatedButton.icon(
+            onPressed: _initializePlayer,
+            icon: const Icon(Icons.refresh),
+            label: const Text('Retry'),
+          ),
+          const SizedBox(height: 12),
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Go Back', style: TextStyle(color: Colors.white70)),
+          ),
+        ],
+      ),
+    ),
+  );
+}
+
+if (_controller == null || !_controller!.value.isInitialized) {
+  return const Center(child: Text('Unable to play video', style: TextStyle(color: Colors.white)));
+}
+
+return GestureDetector(
+  onTap: () => setState(() { _showControls = !_showControls; }),
+  child: Stack(
+    fit: StackFit.expand,
+    children: [
+      // The actual video
+      Center(child: AspectRatio(aspectRatio: _controller!.value.aspectRatio, child: VideoPlayer(_controller!))),
+
+      // Play/Pause overlay when controls are shown
+      if (_showControls)
+        Center(
+          child: GestureDetector(
+            onTap: () {
+              if (_controller!.value.isPlaying) {
+                _controller!.pause();
+              } else {
+                _controller!.play();
+              }
+            },
+            child: Container(
+              decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.black.withOpacity(0.5)),
+              padding: const EdgeInsets.all(20),
+              child: Icon(
+                _isPlaying ? Icons.pause : Icons.play_arrow,
+                color: Colors.white,
+                size: 48,
+              ),
+            ),
+          ),
+        ),
+
+      // Progress bar at the bottom
+      if (_showControls)
+        Positioned(
+          left: 0, right: 0, bottom: 0,
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            color: Colors.black.withOpacity(0.6),
+            child: VideoProgressIndicator(
+              _controller!,
+              allowScrubbing: true,
+              colors: VideoProgressColors(
+                playedColor: theme.colorScheme.primary,
+                bufferedColor: Colors.white30,
+                backgroundColor: Colors.white10,
+              ),
+            ),
+          ),
+        ),
+
+      // Close controls hint
+      if (!_showControls)
+        Positioned(
+          top: 0, left: 0, right: 0,
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            color: Colors.transparent,
+            child: const Center(child: Text('Tap to show controls', style: TextStyle(color: Colors.white38, fontSize: 12))),
+          ),
+        ),
+    ],
+  ),
+);
+} } FEATURE 7: Navigation Setup (main.dart updates) Add this to your existing main.dart — wire up routes and providers:
+
+dart
+
+// ============================================================ // APP WIRING // Add to your existing main.dart: // 1. Register providers (DownloadManager, YouTubeService) // 2. Add new routes // 3. Integrate FeedScreen as the main/home tab // 4. Add SavedScreen and ChannelScreen navigation // ============================================================
+
+import 'package:flutter/material.dart'; import 'package:provider/provider.dart'; import 'services/download_manager.dart'; import 'services/youtube_service.dart'; import 'screens/feed_screen.dart'; import 'screens/saved_screen.dart'; import 'screens/channel_screen.dart'; import 'screens/video_player_screen.dart';
+
+void main() async { WidgetsFlutterBinding.ensureInitialized();
+
+// Initialize the download manager (loads persisted data) final downloadManager = DownloadManager(); await downloadManager.initialize();
+
+runApp( MultiProvider( providers: [ ChangeNotifierProvider<DownloadManager>.value(value: downloadManager), Provider<YouTubeService>(create: (_) => YouTubeService()), ], child: const MyApp(), ), ); }
+
+// Inside your existing MaterialApp, add these routes: /* MaterialApp( ... home: const MainScaffold(), // your existing home or the new one below routes: { '/video_player': (context) { final args = ModalRoute.of(context)!.settings.arguments; return VideoPlayerScreen(videoData: args); }, '/local_player': (context) { final args = ModalRoute.of(context)!.settings.arguments; return VideoPlayerScreen(videoData: args); }, }, ... ); */
+
+// If you don't have a main scaffold yet, use this one: class MainScaffold extends StatefulWidget { const MainScaffold({Key? key}) : super(key: key);
+
+@override _MainScaffoldState createState() => _MainScaffoldState(); }
+
+class _MainScaffoldState extends State<MainScaffold> { int _currentIndex = 0;
+
+// The "My Channel" page only shows if the user has authenticated // via OAuth. Check YouTubeService().isAuthenticated at runtime. final YouTubeService _ytService = YouTubeService();
+
+@override Widget build(BuildContext context) { final theme = Theme.of(context);
+
+// Build the bottom nav items dynamically
+List<BottomNavigationBarItem> navItems = [
+  const BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Feed'),
+  const BottomNavigationBarItem(icon: Icon(Icons.download_outlined), label: 'Saved'),
+];
+
+// Only add "My Channel" if authenticated
+if (_ytService.isAuthenticated) {
+  navItems.add(const BottomNavigationBarItem(
+    icon: Icon(Icons.person_outline),
+    label: 'My Channel',
+  ));
+}
+
+// Build the pages list
+List<Widget> pages = [
+  const FeedScreen(),
+  const SavedScreen(),
+];
+
+if (_ytService.isAuthenticated) {
+  pages.add(const ChannelScreen());
+}
+
+return Scaffold(
+  body: IndexedStack(
+    index: _currentIndex.clamp(0, pages.length - 1),
+    children: pages,
+  ),
+  bottomNavigationBar: BottomNavigationBar(
+    currentIndex: _currentIndex,
+    onTap: (index) => setState(() => _currentIndex = index),
+    type: BottomNavigationBarType.fixed,
+    selectedItemColor: theme.colorScheme.primary,
+    unselectedItemColor: theme.colorScheme.onSurface.withOpacity(0.6),
+    items: navItems,
+  ),
+);
+} } PUBSPEC.YAML DEPENDENCIES Add these to your existing pubspec.yaml:
+
+yaml
+
+dependencies: flutter: sdk: flutter
+
+YouTube metadata / stream resolution (no API key needed)
+youtube_explode_dart: ^2.3.0
+
+Video playback in-app
+video_player: ^2.9.2
+
+State management
+provider: ^6.1.2
+
+Secure storage for OAuth tokens
+flutter_secure_storage: ^9.2.2
+
+Google API client (for OAuth / My Channel tab)
+googleapis: ^13.1.0 googleapis_auth: ^1.6.0 http: ^1.2.1
+
+Local storage for download/bookmark lists
+shared_preferences: ^2.3.2
+
+FFmpeg for merging video+audio on Android
+flutter_ffmpeg_kit: ^0.0.7 # OR use ffmpeg_kit_flutter
+URL launcher for OAuth redirect
+url_launcher: ^6.3.0 ANDROID-SPECIFIC SETUP In android/app/build.gradle, ensure:
+
+gradle
+
+android { defaultConfig { ... minSdkVersion 21 targetSdkVersion 34 } // Required for youtube_explode_dart to work properly compileOptions { coreLibraryDesugaringEnabled true } }
+
+dependencies { // Required for youtube_explode_dart coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4' }
+
+Show more
+5 months ago
+
+
+
+Revert
+Base44 response
+I need to stop you here and be completely transparent with you.
+
+This code cannot be integrated into your ForkFeed app. Here's why:
+
+The code you shared is Flutter/Dart — a completely different programming language and framework. Your ForkFeed app is built with React + JavaScript. These are incompatible:
+
+.dart files ❌ — your app uses .jsx/.js
+flutter_secure_storage, youtube_explode_dart, video_player ❌ — these are Flutter packages, not npm packages
+pubspec.yaml ❌ — your app uses package.json
+Provider, ChangeNotifier ❌ — Flutter state management, not React
+What these features actually do (the good ideas worth keeping):
+
+Flutter Feature	React Equivalent I Can Build
+YouTube feed screen	Already exists in your VideoFeedCard + Home
+Saved/Downloads tab	Already exists in your Cookbook page
+Video player	Already exists via YouTube embeds
+Bookmarking	Already exists via SavedRecipe entity
+Download manager	Already exists via jsPDF + recipe saving
+Your app already has most of these concepts implemented in React — just in a food recipe context rather than a YouTube downloader context.
+
+What would you actually like me to build? Tell me the specific feature/experience you want added to ForkFeed and I'll build it properly in React.
+
+5 months ago
+
+
+Your message
+ou are integrating new features into an existing React + JavaScript application that functions similar to TikTok (vertical video feed, shorts streaming, user content). The app targets both Android (via WebView/Capacitor) and Windows (via Electron or browser). Below is the complete feature set and code to integrate. All code must follow the existing app's theme, component structure, and styling patterns.
+
+🧩 FEATURE OVERVIEW Smart Download Button – Downloads the currently watched YouTube video in the background YouTube Shorts + Videos Feed – Streams short-form and long-form content with titles/descriptions Bookmark/Save for Later – Like YouTube's "Watch Later" with a dedicated navigation page Downloaded Content Library – View saved videos with thumbnails, play offline Optional "My Channel" Tab – OAuth-based YouTube channel integration Creator Feed Integration – If users link their YouTube, their own content appears in the feed (TikTok-style) 📦 STEP 1: INSTALL DEPENDENCIES Run this in your project root:
+
+bash
+
+npm install youtube-dl-exec @ffmpeg/ffmpeg @ffmpeg/core react-native-fs react-native-video react-native-thumbnail @react-native-community/netinfo axios react-native-youtube-iframe react-native-vector-icons For Windows/Electron, also:
+
+bash
+
+npm install electron electron-builder --save-dev 📁 STEP 2: FILE STRUCTURE TO CREATE/UPDATE
+
+src/ ├── components/ │ ├── DownloadButton.jsx │ ├── VideoFeed.jsx │ ├── ShortsFeed.jsx │ ├── BookmarkButton.jsx │ └── ThumbnailCard.jsx ├── screens/ │ ├── FeedScreen.jsx │ ├── ShortsScreen.jsx │ ├── DownloadedScreen.jsx │ ├── BookmarksScreen.jsx │ └── MyChannelScreen.jsx ├── services/ │ ├── youtubeApi.js │ ├── downloadService.js │ └── storageService.js ├── hooks/ │ ├── useCurrentVideo.js │ └── useBookmarks.js ├── context/ │ └── AppContext.jsx └── utils/ ├── constants.js └── helpers.js 📄 STEP 3: ALL CODE FILES src/utils/constants.js javascript
+
+// ============================================== // APP CONSTANTS - Central configuration file // ==============================================
+
+export const YOUTUBE_CONFIG = { API_KEY: 'YOUR_YOUTUBE_API_KEY', // ← Replace with your YouTube Data API v3 key CLIENT_ID: 'YOUR_OAUTH_CLIENT_ID', // ← Replace for OAuth channel linking BASE_URL: 'https://www.googleapis.com/youtube/v3', SCOPES: [ 'https://www.googleapis.com/auth/youtube.readonly', 'https://www.googleapis.com/auth/youtube.upload' ] };
+
+export const DOWNLOAD_CONFIG = { OUTPUT_DIR: '/downloads/', // Directory where downloads are saved MAX_CONCURRENT_DOWNLOADS: 2, // Prevent overwhelming the device VIDEO_QUALITY: '720p', // Default quality: '360p', '480p', '720p', '1080p' FORMAT: 'mp4', // Output format (mp4 is most compatible) TIMEOUT_MS: 300000 // 5 minute timeout per download };
+
+export const FEED_CONFIG = { SHORTS_FEED_TYPE: 'shorts', // For YouTube Shorts VIDEOS_FEED_TYPE: 'videos', // For regular videos DEFAULT_FEED_LIMIT: 20, // Videos to load per batch FEED_REFRESH_INTERVAL_MS: 300000 // Auto-refresh feed every 5 minutes };
+
+export const THEME = { // ============================================== // APP THEME - Matches your existing app's theme // Change these values to match your brand colors // ============================================== colors: { primary: '#FF0000', // YouTube Red - your brand color secondary: '#282828', // Dark gray for backgrounds background: '#0F0F0F', // Near-black background (TikTok/YouTube dark) surface: '#1A1A1A', // Card/container backgrounds surfaceLight: '#272727', // Elevated surfaces textPrimary: '#FFFFFF', // Main text color textSecondary: '#AAAAAA', // Secondary/muted text accent: '#3EA6FF', // Blue accent (for links/highlights) success: '#2BA640', // Green for success states error: '#FF4444', // Red for errors/blocked content warning: '#FFAA00', // Orange for warnings bookmark: '#FFD700' // Gold for bookmarks }, borderRadius: { sm: '8px', md: '12px', lg: '16px', xl: '24px' }, spacing: { xs: '4px', sm: '8px', md: '16px', lg: '24px', xl: '32px' }, typography: { fontFamily: 'System', // Uses system font for cross-platform sizes: { caption: '12px', body: '14px', subtitle: '16px', title: '18px', heading: '22px', large: '28px' } } }; src/utils/helpers.js javascript
+
+// ============================================== // HELPER FUNCTIONS - Utility methods used across the app // ============================================== import { THEME } from './constants';
+
+/**
+
+Formats video duration from ISO 8601 to mm:ss or hh:mm:ss
+Example: PT1H2M10S → 01:02:10 */ export function formatDuration(isoDuration) { if (!isoDuration) return '0:00'; const match = isoDuration.match(/PT(\d+H)?(\d+M)?(\d+S)?/); if (!match) return '0:00'; const hours = (match[1] || '').replace('H', '') || '0'; const minutes = (match[2] || '').replace('M', '') || '0'; const seconds = (match[3] || '').replace('S', '') || '0'; const padded = (val) => String(val).padStart(2, '0'); if (hours !== '0') { return ${padded(hours)}:${padded(minutes)}:${padded(seconds)}; } return ${minutes}:${padded(seconds)}; }
+/**
+
+Formats view count with abbreviations (1K, 1.5M, etc.) */ export function formatViewCount(count) { if (!count) return '0 views'; const num = parseInt(count); if (num >= 1000000000) return ${(num / 1000000000).toFixed(1)}B views; if (num >= 1000000) return ${(num / 1000000).toFixed(1)}M views; if (num >= 1000) return ${(num / 1000).toFixed(1)}K views; return ${num} views; }
+/**
+
+Extracts YouTube Video ID from various URL formats
+Handles: youtube.com/watch?v=..., youtu.be/..., youtube.com/shorts/... */ export function extractVideoId(url) { if (!url) return null; const patterns = [ /(?:youtube.com/watch?v=|youtu.be/|youtube.com/embed/|youtube.com/v/|youtube.com/shorts/)([a-zA-Z0-9_-]{11})/, /^([a-zA-Z0-9_-]{11})$/ // raw ID ]; for (const pattern of patterns) { const match = url.match(pattern); if (match) return match[1]; } return null; }
+/**
+
+Generates a unique download ID for tracking */ export function generateDownloadId() { return dl_${Date.now()}_${Math.random().toString(36).substr(2, 9)}; }
+/**
+
+Returns the appropriate icon name based on file state/status
+Uses react-native-vector-icons (MaterialIcons or Feather) */ export function getStatusIcon(status) { const icons = { downloading: 'cloud-download', completed: 'check-circle', failed: 'alert-circle', blocked: 'shield-off', paused: 'pause-circle', queued: 'clock' }; return icons[status] || 'help-circle'; }
+/**
+
+Applies theme color based on status type */ export function getStatusColor(status) { const colorMap = { downloading: THEME.colors.accent, completed: THEME.colors.success, failed: THEME.colors.error, blocked: THEME.colors.error, paused: THEME.colors.warning, queued: THEME.colors.textSecondary }; return colorMap[status] || THEME.colors.textSecondary; }
+/**
+
+Truncates text with ellipsis */ export function truncateText(text, maxLength = 60) { if (!text || text.length <= maxLength) return text || ''; return text.substring(0, maxLength - 3) + '...'; } src/services/youtubeApi.js javascript
+// ============================================== // YOUTUBE DATA API SERVICE // Handles all YouTube API calls including: // - Fetching video details // - Searching videos/shorts // - OAuth authentication for "My Channel" // - Channel and playlist data // ============================================== import axios from 'axios'; import { YOUTUBE_CONFIG } from '../utils/constants';
+
+// Create a pre-configured axios instance for YouTube API const youtubeApi = axios.create({ baseURL: YOUTUBE_CONFIG.BASE_URL, params: { key: YOUTUBE_CONFIG.API_KEY, part: 'snippet,contentDetails,statistics' } });
+
+/**
+
+Fetches detailed info about a single video by its ID
+Used by: DownloadButton (to verify video is downloadable),
+      VideoFeed, Bookmarked videos
+*/ export async function getVideoDetails(videoId) { try { const response = await youtubeApi.get('/videos', { params: { id: videoId, part: 'snippet,contentDetails,statistics,status' } }); if (response.data.items.length === 0) { throw new Error('VIDEO_NOT_FOUND'); } const video = response.data.items[0]; return { id: video.id, title: video.snippet.title, description: video.snippet.description, thumbnail: video.snippet.thumbnails.high?.url || video.snippet.thumbnails.default?.url, channelTitle: video.snippet.channelTitle, channelId: video.snippet.channelId, publishedAt: video.snippet.publishedAt, duration: video.contentDetails.duration, viewCount: video.statistics.viewCount, likeCount: video.statistics.likeCount, // Critical: checks if video allows embedding (often correlates with downloadability) embeddable: video.status.embeddable, // Checks region/location restrictions regionRestriction: video.contentDetails.regionRestriction || null, // YouTube's "made for kids" flag restricts download/embed madeForKids: video.status.madeForKids }; } catch (error) { console.error('YouTube API - getVideoDetails error:', error.message); throw error; } }
+
+/**
+
+Searches for videos/shorts by query or topic
+
+Used by: FeedScreen, ShortsScreen to populate content */ export async function searchVideos(query, type = 'video', maxResults = 20, pageToken = null) { try { const params = { q: query, type: 'video', maxResults, part: 'snippet', videoEmbeddable: 'true', // Only get videos that can be embedded (streamed) order: 'date' // Most recent first for fresh content };
+
+// If fetching shorts, add video duration constraint (shorts are < 60 seconds) if (type === 'shorts') { params.videoDuration = 'short'; // YouTube API filter for < 4 min }
+
+if (pageToken) { params.pageToken = pageToken; }
+
+const response = await youtubeApi.get('/search', { params });
+
+// After getting search results, fetch full details for each video const videoIds = response.data.items.map(item => item.id.videoId).join(','); const detailsResponse = await getVideoDetails(videoIds); // Bulk fetch handling
+
+return { videos: response.data.items.map((item, index) => ({ id: item.id.videoId, title: item.snippet.title, description: item.snippet.description, thumbnail: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.default?.url, channelTitle: item.snippet.channelTitle, channelId: item.snippet.channelId, publishedAt: item.snippet.publishedAt, // Additional details (may be from bulk fetch) ...(detailsResponse[index] || {}) })), nextPageToken: response.data.nextPageToken, prevPageToken: response.data.prevPageToken, totalResults: response.data.pageInfo.totalResults }; } catch (error) { console.error('YouTube API - searchVideos error:', error.message); throw error; } }
+
+/**
+
+Fetches trending/popular videos for the main feed
+
+Acts like TikTok's "For You" page */ export async function getTrendingVideos(regionCode = 'US', maxResults = 20, pageToken = null) { try { const params = { chart: 'mostPopular', regionCode, maxResults, part: 'snippet,contentDetails,statistics', videoCategoryId: '0' // 0 = all categories }; if (pageToken) params.pageToken = pageToken;
+
+const response = await youtubeApi.get('/videos', { params }); return { videos: response.data.items.map(video => ({ id: video.id, title: video.snippet.title, description: video.snippet.description, thumbnail: video.snippet.thumbnails.high?.url, channelTitle: video.snippet.channelTitle, channelId: video.snippet.channelId, publishedAt: video.snippet.publishedAt, duration: video.contentDetails.duration, viewCount: video.statistics.viewCount, likeCount: video.statistics.likeCount })), nextPageToken: response.data.nextPageToken }; } catch (error) { console.error('YouTube API - getTrendingVideos error:', error.message); throw error; } }
+
+/**
+
+OAuth Authentication Flow for "My Channel" tab
+This is OPTIONAL - only called when user chooses to connect account */ export function initiateOAuthFlow() { const authUrl = https://accounts.google.com/o/oauth2/v2/auth? + client_id=${YOUTUBE_CONFIG.CLIENT_ID}& + redirect_uri=${encodeURIComponent(window.location.origin + '/oauth/callback')}& + response_type=token& + scope=${encodeURIComponent(YOUTUBE_CONFIG.SCOPES.join(' '))}& + prompt=consent& + access_type=offline;
+// Open in system browser or in-app WebView depending on platform if (window.ReactNativeWebView) { // If in React Native WebView, post message to open externally window.ReactNativeWebView.postMessage(JSON.stringify({ type: 'OPEN_URL', url: authUrl })); } else { window.open(authUrl, '_blank', 'width=600,height=700'); } }
+
+/**
+
+Fetches the authenticated user's channel info
+
+Requires valid OAuth access token */ export async function getMyChannel(accessToken) { try { const response = await axios.get(${YOUTUBE_CONFIG.BASE_URL}/channels, { params: { part: 'snippet,contentDetails,statistics', mine: 'true' }, headers: { Authorization: Bearer ${accessToken} } });
+
+const channel = response.data.items[0]; return { id: channel.id, title: channel.snippet.title, description: channel.snippet.description, thumbnail: channel.snippet.thumbnails.default?.url, subscriberCount: channel.statistics.subscriberCount, videoCount: channel.statistics.videoCount, viewCount: channel.statistics.viewCount, uploadsPlaylistId: channel.contentDetails.relatedPlaylists.uploads }; } catch (error) { console.error('YouTube API - getMyChannel error:', error.message); throw error; } }
+
+/**
+
+Fetches user's own uploaded videos (for "My Channel" tab) */ export async function getMyUploadedVideos(playlistId, maxResults = 20, pageToken = null) { try { const params = { part: 'snippet,contentDetails', playlistId, maxResults }; if (pageToken) params.pageToken = pageToken;
+
+const response = await axios.get(${YOUTUBE_CONFIG.BASE_URL}/playlistItems, { params: { ...params, key: YOUTUBE_CONFIG.API_KEY } });
+
+return { videos: response.data.items.map(item => ({ id: item.snippet.resourceId.videoId, title: item.snippet.title, description: item.snippet.description, thumbnail: item.snippet.thumbnails.high?.url, channelTitle: item.snippet.channelTitle, publishedAt: item.snippet.publishedAt })), nextPageToken: response.data.nextPageToken }; } catch (error) { console.error('YouTube API - getMyUploadedVideos error:', error.message); throw error; } }
+
+/**
+
+Bulk fetch details for multiple videos at once
+Optimized to reduce API calls */ export async function getBulkVideoDetails(videoIds) { if (!videoIds || videoIds.length === 0) return []; try { const response = await youtubeApi.get('/videos', { params: { id: videoIds.join(','), part: 'snippet,contentDetails,statistics,status' } }); return response.data.items.map(video => ({ id: video.id, title: video.snippet.title, description: video.snippet.description, thumbnail: video.snippet.thumbnails.high?.url, channelTitle: video.snippet.channelTitle, duration: video.contentDetails.duration, viewCount: video.statistics.viewCount, embeddable: video.status.embeddable, madeForKids: video.status.madeForKids })); } catch (error) { console.error('YouTube API - getBulkVideoDetails error:', error.message); return []; } } src/services/downloadService.js javascript
+// ============================================== // DOWNLOAD SERVICE - Core download engine // // This service handles: // 1. Initializing the download of any YouTube video // 2. Checking if a video is downloadable (not blocked) // 3. Managing download queue to avoid conflicts // 4. Reporting progress back to the UI // 5. Saving files to device storage // // Uses youtube-dl-exec under the hood // Works on both Android (via React Native FS) and Windows (via Electron) // ============================================== import { Platform } from 'react-native'; import { DOWNLOAD_CONFIG } from '../utils/constants'; import { getVideoDetails } from './youtubeApi'; import { storageService } from './storageService';
+
+// Import platform-specific download engine let downloadEngine; if (Platform.OS === 'android' || Platform.OS === 'ios') { // React Native - use RNFS (React Native File System) downloadEngine = require('react-native-fs'); } else { // Electron/Windows - use Node.js FS const fs = require('fs'); const path = require('path'); downloadEngine = { fs, path }; }
+
+// In-memory queue to track ongoing downloads // This prevents duplicate downloads and provides progress tracking const downloadQueue = new Map(); const downloadProgress = new Map();
+
+/**
+
+Checks if a video is downloadable by analyzing its metadata
+
+Returns { downloadable: boolean, reason: string | null } */ export async function checkDownloadability(videoId) { try { const video = await getVideoDetails(videoId);
+
+// Check 1: Video must exist if (!video) { return { downloadable: false, reason: 'VIDEO_NOT_FOUND', message: 'This video could not be found. It may have been removed or set to private.' }; }
+
+// Check 2: Video must be embeddable (YouTube blocks download of non-embeddable) if (!video.embeddable) { return { downloadable: false, reason: 'EMBEDDING_DISABLED', message: 'This video has embedding disabled by the uploader, which prevents download. You can still stream it within the app.' }; }
+
+// Check 3: "Made for Kids" videos cannot be downloaded (YouTube policy) if (video.madeForKids) { return { downloadable: false, reason: 'MADE_FOR_KIDS', message: 'This video is marked as "Made for Kids" and cannot be downloaded due to YouTube policies.' }; }
+
+// Check 4: Region restrictions if (video.regionRestriction && video.regionRestriction.blocked) { return { downloadable: false, reason: 'REGION_BLOCKED', message: 'This video is not available in your region. Content restrictions prevent download.' }; }
+
+// Check 5: Live streams or premieres (not downloadable) if (video.duration === 'P0D' || !video.duration) { return { downloadable: false, reason: 'LIVE_CONTENT', message: 'Live streams and upcoming premieres cannot be downloaded. Try again after the broadcast ends.' }; }
+
+// All checks passed - video is downloadable return { downloadable: true, reason: null, message: null, videoDetails: video }; } catch (error) { console.error('Download check failed:', error); return { downloadable: false, reason: 'CHECK_FAILED', message: 'Unable to verify download availability. Please try again later.' }; } }
+
+/**
+
+Main download function
+Called when user presses the download button */ export async function downloadVideo(videoId, onProgress, onComplete, onError) { // First, check if this video is already being downloaded if (downloadQueue.has(videoId)) { return { success: false, message: 'This video is already being downloaded. Check your downloads tab for progress.' }; }
+// Check if already downloaded const isDownloaded = await storageService.isVideoDownloaded(videoId); if (isDownloaded) { return { success: false, message: 'This video has already been downloaded. You can find it in your downloads library.', alreadyDownloaded: true }; }
+
+// Verify downloadability const checkResult = await checkDownloadability(videoId); if (!checkResult.downloadable) { return { success: false, message: checkResult.message, reason: checkResult.reason, flagged: true // ← This triggers the flagged notification in the UI }; }
+
+// Add to download queue const downloadId = dl_${videoId}_${Date.now()}; downloadQueue.set(videoId, { id: downloadId, videoId, status: 'initializing', progress: 0, startTime: Date.now() });
+
+try { // Notify UI that download is starting if (onProgress) { onProgress({ status: 'initializing', progress: 0, videoId }); }
+
+// Platform-specific download logic
+let filePath;
+
+if (Platform.OS === 'android' || Platform.OS === 'ios') {
+  // ==============================================
+  // MOBILE (React Native) Download Path
+  // Uses youtube-dl-exec via native module or API
+  // ==============================================
+  filePath = await downloadMobile(videoId, downloadId, onProgress);
+} else {
+  // ==============================================
+  // DESKTOP (Electron/Windows) Download Path
+  // Uses youtube-dl-exec Node.js package
+  // ==============================================
+  filePath = await downloadDesktop(videoId, downloadId, onProgress);
+}
+
+// Save download record to persistent storage
+const downloadRecord = {
+  id: downloadId,
+  videoId,
+  filePath,
+  title: checkResult.videoDetails.title,
+  channelTitle: checkResult.videoDetails.channelTitle,
+  thumbnail: checkResult.videoDetails.thumbnail,
+  duration: checkResult.videoDetails.duration,
+  downloadedAt: new Date().toISOString(),
+  fileSize: await getFileSize(filePath),
+  status: 'completed'
+};
+
+await storageService.saveDownloadRecord(downloadRecord);
+
+// Remove from active queue
+downloadQueue.delete(videoId);
+
+// Notify completion
+if (onComplete) {
+  onComplete(downloadRecord);
+}
+
+return {
+  success: true,
+  message: 'Download completed successfully!',
+  downloadRecord
+};
+} catch (error) { // Remove from queue on failure downloadQueue.delete(videoId);
+
+console.error('Download failed:', error);
+if (onError) {
+  onError(error);
+}
+
+return {
+  success: false,
+  message: `Download failed: ${error.message}`,
+  reason: 'DOWNLOAD_FAILED',
+  flagged: true
+};
+} }
+
+/**
+
+Mobile download implementation
+Uses a proxy/youtube-dl API service since direct youtube-dl isn't possible on mobile */ async function downloadMobile(videoId, downloadId, onProgress) { const outputPath = ${downloadEngine.DocumentDirectoryPath}${DOWNLOAD_CONFIG.OUTPUT_DIR}${videoId}.mp4;
+// Ensure download directory exists const dirPath = ${downloadEngine.DocumentDirectoryPath}${DOWNLOAD_CONFIG.OUTPUT_DIR}; const dirExists = await downloadEngine.exists(dirPath); if (!dirExists) { await downloadEngine.mkdir(dirPath); }
+
+// ============================================== // NOTE: Direct youtube-dl is not possible on mobile. // This implementation uses a download proxy service. // For production, deploy your own youtube-dl server // or use a third-party service like: // - https://github.com/yt-dlp/yt-dlp (self-hosted API) // - RapidAPI YouTube downloader // ==============================================
+
+// Option 1: Use a self-hosted yt-dlp API endpoint const downloadUrl = https://your-ytdl-api.com/download?videoId=${videoId}&quality=${DOWNLOAD_CONFIG.VIDEO_QUALITY};
+
+const downloadResult = await downloadEngine.downloadFile({ fromUrl: downloadUrl, toFile: outputPath, progress: (res) => { const progress = Math.round((res.bytesWritten / res.contentLength) * 100); if (onProgress) { onProgress({ status: 'downloading', progress, videoId, bytesWritten: res.bytesWritten, contentLength: res.contentLength }); } } }).promise;
+
+if (downloadResult.statusCode !== 200) { throw new Error(Server returned status ${downloadResult.statusCode}); }
+
+return outputPath; }
+
+/**
+
+Desktop/Windows download implementation
+Uses youtube-dl-exec directly via Node.js */ async function downloadDesktop(videoId, downloadId, onProgress) { const youtubedl = require('youtube-dl-exec'); const path = require('path'); const os = require('os');
+const outputDir = path.join(os.homedir(), 'Downloads', 'MyAppDownloads'); const outputTemplate = path.join(outputDir, ${videoId}.%(ext)s);
+
+// Ensure output directory exists if (!downloadEngine.fs.existsSync(outputDir)) { downloadEngine.fs.mkdirSync(outputDir, { recursive: true }); }
+
+// Execute youtube-dl with progress tracking // youtube-dl-exec spawns the yt-dlp binary and streams progress to stdout const subprocess = youtubedl.exec(https://www.youtube.com/watch?v=${videoId}, { output: outputTemplate, format: best[height<=${DOWNLOAD_CONFIG.VIDEO_QUALITY.replace('p', '')}][ext=mp4], noCheckCertificates: true, noWarnings: true, preferFreeFormats: true, addHeader: ['referer:youtube.com', 'user-agent:Mozilla/5.0'] });
+
+// Parse progress from stderr/stdout subprocess.stderr.on('data', (data) => { const output = data.toString(); // youtube-dl outputs progress like: [download] 45.2% of ~25.36MiB at 2.34MiB/s ETA 00:12 const progressMatch = output.match(/(\d+.?\d*)%/); if (progressMatch && onProgress) { onProgress({ status: 'downloading', progress: parseFloat(progressMatch[1]), videoId, rawOutput: output }); } });
+
+// Wait for download to complete await new Promise((resolve, reject) => { subprocess.on('close', (code) => { if (code === 0) resolve(); else reject(new Error(youtube-dl exited with code ${code})); }); subprocess.on('error', reject); });
+
+// Find the actual file (youtube-dl may add format suffix) const files = downloadEngine.fs.readdirSync(outputDir); const videoFile = files.find(f => f.startsWith(videoId)); if (!videoFile) throw new Error('Download completed but file not found');
+
+return path.join(outputDir, videoFile); }
+
+/**
+
+Gets the file size of a downloaded video */ async function getFileSize(filePath) { try { if (Platform.OS === 'android' || Platform.OS === 'ios') { const stat = await downloadEngine.stat(filePath); return stat.size; } else { const stat = downloadEngine.fs.statSync(filePath); return stat.size; } } catch { return 0; } }
+/**
+
+Gets all currently active downloads with progress */ export function getActiveDownloads() { return Array.from(downloadQueue.values()); }
+/**
+
+Gets progress for a specific download */ export function getDownloadProgress(videoId) { return downloadProgress.get(videoId) || null; }
+/**
+
+Cancels an ongoing download */ export function cancelDownload(videoId) { if (downloadQueue.has(videoId)) { downloadQueue.delete(videoId); downloadProgress.delete(videoId); return true; } return false; }
+/**
+
+Retries a failed download */ export async function retryDownload(videoId, onProgress, onComplete, onError) { // Clear any existing record await storageService.removeDownloadRecord(videoId); // Retry the download return downloadVideo(videoId, onProgress, onComplete, onError); } src/services/storageService.js javascript
+// ============================================== // PERSISTENT STORAGE SERVICE // // Manages: // - Download records (what's been downloaded) // - Bookmarked videos // - User preferences // - Channel connection data // // Uses AsyncStorage for React Native (mobile) // Uses localStorage for Electron/Web (Windows) // ============================================== import { Platform } from 'react-native';
+
+let storage;
+
+// Platform-specific storage initialization if (Platform.OS === 'android' || Platform.OS === 'ios') { // React Native AsyncStorage const AsyncStorage = require('@react-native-async-storage/async-storage').default; storage = { getItem: (key) => AsyncStorage.getItem(key), setItem: (key, value) => AsyncStorage.setItem(key, value), removeItem: (key) => AsyncStorage.removeItem(key), getAllKeys: () => AsyncStorage.getAllKeys(), multiGet: (keys) => AsyncStorage.multiGet(keys) }; } else { // Browser/Electron localStorage storage = { getItem: (key) => Promise.resolve(localStorage.getItem(key)), setItem: (key, value) => Promise.resolve(localStorage.setItem(key, value)), removeItem: (key) => Promise.resolve(localStorage.removeItem(key)), getAllKeys: () => Promise.resolve(Object.keys(localStorage)), multiGet: (keys) => { const results = keys.map(key => [key, localStorage.getItem(key)]); return Promise.resolve(results); } }; }
+
+const STORAGE_KEYS = { DOWNLOADS: '@myapp_downloads', BOOKMARKS: '@myapp_bookmarks', USER_PREFS: '@myapp_preferences', OAUTH_TOKEN: '@myapp_oauth_token', CHANNEL_INFO: '@myapp_channel_info' };
+
+export const storageService = { // ============================ // DOWNLOAD RECORDS // ============================
+
+/**
+
+Saves a download record to persistent storage
+Called after successful download completion */ async saveDownloadRecord(record) { try { const existing = await this.getAllDownloads(); existing.push(record); await storage.setItem(STORAGE_KEYS.DOWNLOADS, JSON.stringify(existing)); return true; } catch (error) { console.error('Storage - saveDownloadRecord error:', error); return false; } },
+/**
+
+Gets all downloaded video records
+Used by: DownloadedContentScreen to display library */ async getAllDownloads() { try { const data = await storage.getItem(STORAGE_KEYS.DOWNLOADS); return data ? JSON.parse(data) : []; } catch (error) { console.error('Storage - getAllDownloads error:', error); return []; } },
+/**
+
+Checks if a specific video ID has been downloaded
+Used prevent duplicate downloads */ async isVideoDownloaded(videoId) { try { const downloads = await this.getAllDownloads(); return downloads.some(d => d.videoId === videoId); } catch { return false; } },
+/**
+
+Gets download record for a specific video */ async getDownloadRecord(videoId) { try { const downloads = await this.getAllDownloads(); return downloads.find(d => d.videoId === videoId) || null; } catch { return null; } },
+/**
+
+Removes a download record (when user deletes a downloaded video) */ async removeDownloadRecord(videoId) { try { const downloads = await this.getAllDownloads(); const filtered = downloads.filter(d => d.videoId !== videoId); await storage.setItem(STORAGE_KEYS.DOWNLOADS, JSON.stringify(filtered)); return true; } catch { return false; } },
+// ============================ // BOOKMARKS (Watch Later) // ============================
+
+/**
+
+Saves a bookmark (watch later) record
+Stores video metadata so it displays properly in the bookmarks list */ async saveBookmark(bookmark) { try { const existing = await this.getAllBookmarks(); // Prevent duplicates if (existing.some(b => b.videoId === bookmark.videoId)) { return { success: false, message: 'Already bookmarked' }; } existing.push({ ...bookmark, bookmarkedAt: new Date().toISOString() }); await storage.setItem(STORAGE_KEYS.BOOKMARKS, JSON.stringify(existing)); return { success: true, message: 'Saved to watch later' }; } catch (error) { console.error('Storage - saveBookmark error:', error); return { success: false, message: 'Failed to save bookmark' }; } },
+/**
+
+Gets all bookmarked videos
+Used by: BookmarksScreen to display saved content */ async getAllBookmarks() { try { const data = await storage.getItem(STORAGE_KEYS.BOOKMARKS); return data ? JSON.parse(data) : []; } catch (error) { console.error('Storage - getAllBookmarks error:', error); return []; } },
+/**
+
+Checks if a video is already bookmarked */ async isBookmarked(videoId) { try { const bookmarks = await this.getAllBookmarks(); return bookmarks.some(b => b.videoId === videoId); } catch { return false; } },
+/**
+
+Removes a bookmark */ async removeBookmark(videoId) { try { const bookmarks = await this.getAllBookmarks(); const filtered = bookmarks.filter(b => b.videoId !== videoId); await storage.setItem(STORAGE_KEYS.BOOKMARKS, JSON.stringify(filtered)); return true; } catch { return false; } },
+// ============================ // USER PREFERENCES // ============================
+
+/**
+
+Saves user preferences (theme, download quality, etc.) */ async savePreferences(prefs) { try { const existing = await this.getPreferences(); const merged = { ...existing, ...prefs }; await storage.setItem(STORAGE_KEYS.USER_PREFS, JSON.stringify(merged)); return true; } catch { return false; } },
+/**
+
+Gets user preferences */ async getPreferences() { try { const data = await storage.getItem(STORAGE_KEYS.USER_PREFS); return data ? JSON.parse(data) : { downloadQuality: '720p', autoPlay: true, saveDataMode: false }; } catch { return {}; } },
+// ============================ // OAUTH / CHANNEL DATA // ============================
+
+/**
+
+Saves OAuth access token securely
+(In production, use encrypted storage or Keychain) */ async saveOAuthToken(token) { try { await storage.setItem(STORAGE_KEYS.OAUTH_TOKEN, JSON.stringify(token)); return true; } catch { return false; } },
+/**
+
+Gets OAuth access token */ async getOAuthToken() { try { const data = await storage.getItem(STORAGE_KEYS.OAUTH_TOKEN); return data ? JSON.parse(data) : null; } catch { return null; } },
+/**
+
+Removes OAuth token (sign out) */ async clearOAuthToken() { try { await storage.removeItem(STORAGE_KEYS.OAUTH_TOKEN); await storage.removeItem(STORAGE_KEYS.CHANNEL_INFO); return true; } catch { return false; } },
+/**
+
+Saves channel info for quick access */ async saveChannelInfo(channelInfo) { try { await storage.setItem(STORAGE_KEYS.CHANNEL_INFO, JSON.stringify(channelInfo)); return true; } catch { return false; } },
+/**
+
+Gets saved channel info */ async getChannelInfo() { try { const data = await storage.getItem(STORAGE_KEYS.CHANNEL_INFO); return data ? JSON.parse(data) : null; } catch { return null; } },
+// ============================ // GENERAL UTILITY // ============================
+
+/**
+
+Clears all app data (for testing or user reset) */ async clearAllData() { try { const keys = Object.values(STORAGE_KEYS); for (const key of keys) { await storage.removeItem(key); } return true; } catch { return false; } },
+/**
+
+Gets total storage used by downloads */ async getDownloadsSize() { try { const downloads = await this.getAllDownloads(); const totalBytes = downloads.reduce((sum, d) => sum + (d.fileSize || 0), 0); return totalBytes; } catch { return 0; } } };
+export default storageService; src/context/AppContext.jsx javascript
+
+// ============================================== // GLOBAL APP CONTEXT // // Provides shared state across all components: // - Currently playing video ID // - Download status/notifications // - Bookmark state // - Theme consistency // - User channel info // ============================================== import React, { createContext, useContext, useState, useEffect, useCallback } from 'react'; import { Platform } from 'react-native'; import { THEME } from '../utils/constants'; import { storageService } from '../services/storageService';
+
+// Create the context with default values const AppContext = createContext({ // Current video being watched currentVideo: null, setCurrentVideo: () => {},
+
+// Download state activeDownloads: [], addDownload: () => {}, updateDownloadProgress: () => {}, removeDownload: () => {},
+
+// Notification/Flagged content system notification: null, showNotification: () => {}, dismissNotification: () => {},
+
+// Bookmark state bookmarks: [], isBookmarked: () => false, refreshBookmarks: () => {},
+
+// Channel/OAuth state channelInfo: null, isChannelConnected: false, setChannelInfo: () => {},
+
+// Theme (passed through for consistency) theme: THEME, platform: Platform.OS });
+
+/**
+
+AppProvider - Wraps the entire app to provide global state
+Place this at the root of your component tree (e.g., in App.jsx) */ export function AppProvider({ children }) { // ─── Current Video State ───────────────────────────── // Tracks which video the user is currently watching // This is used by the DownloadButton to know what to download const [currentVideo, setCurrentVideo] = useState(null);
+// ─── Download State ────────────────────────────────── const [activeDownloads, setActiveDownloads] = useState([]); const [downloadHistory, setDownloadHistory] = useState([]);
+
+const addDownload = useCallback((downloadInfo) => { setActiveDownloads(prev => [...prev, downloadInfo]); }, []);
+
+const updateDownloadProgress = useCallback((videoId, progress) => { setActiveDownloads(prev => prev.map(d => d.videoId === videoId ? { ...d, progress } : d) ); }, []);
+
+const removeDownload = useCallback((videoId) => { setActiveDownloads(prev => prev.filter(d => d.videoId !== videoId)); }, []);
+
+// Load download history on mount useEffect(() => { storageService.getAllDownloads().then(setDownloadHistory); }, []);
+
+// ─── Notification System ───────────────────────────── // Used for flagged content notifications and general alerts const [notification, setNotification] = useState(null);
+
+const showNotification = useCallback((type, title, message, duration = 5000) => { // type: 'success' | 'error' | 'warning' | 'info' // title: short header text // message: detailed explanation // duration: ms before auto-dismiss (0 = persistent) setNotification({ type, title, message, timestamp: Date.now(), // Color scheme based on type, using app theme colors: { success: THEME.colors.success, error: THEME.colors.error, warning: THEME.colors.warning, info: THEME.colors.accent }[type] || THEME.colors.textSecondary });
+
+// Auto-dismiss after duration unless duration is 0
+if (duration > 0) {
+  setTimeout(() => {
+    setNotification(null);
+  }, duration);
+}
+}, []);
+
+const dismissNotification = useCallback(() => { setNotification(null); }, []);
+
+// ─── Bookmark State ────────────────────────────────── const [bookmarks, setBookmarks] = useState([]);
+
+const refreshBookmarks = useCallback(async () => { const all = await storageService.getAllBookmarks(); setBookmarks(all); }, []);
+
+const isBookmarked = useCallback((videoId) => { return bookmarks.some(b => b.videoId === videoId); }, [bookmarks]);
+
+// Load bookmarks on mount useEffect(() => { refreshBookmarks(); }, [refreshBookmarks]);
+
+// ─── Channel/OAuth State ───────────────────────────── const [channelInfo, setChannelInfo] = useState(null); const [isChannelConnected, setIsChannelConnected] = useState(false);
+
+// Check for existing channel connection on mount useEffect(() => { storageService.getChannelInfo().then(info => { if (info) { setChannelInfo(info); setIsChannelConnected(true); } }); }, []);
+
+// ─── Context Value ─────────────────────────────────── const contextValue = { // Current video currentVideo, setCurrentVideo,
+
+// Downloads
+activeDownloads,
+downloadHistory,
+addDownload,
+updateDownloadProgress,
+removeDownload,
+
+// Notifications
+notification,
+showNotification,
+dismissNotification,
+
+// Bookmarks
+bookmarks,
+isBookmarked,
+refreshBookmarks,
+
+// Channel
+channelInfo,
+isChannelConnected,
+setChannelInfo: (info) => {
+  setChannelInfo(info);
+  setIsChannelConnected(!!info);
+  if (info) {
+    storageService.saveChannelInfo(info);
+  }
+},
+
+// Theme (pass through)
+theme: THEME,
+platform: Platform.OS
+};
+
+return ( <AppContext.Provider value={contextValue}> {children} </AppContext.Provider> ); }
+
+/**
+
+Custom hook to access app context
+Use this in any component:
+const { currentVideo, showNotification } = useAppContext(); */ export function useAppContext() { const context = useContext(AppContext); if (!context) { throw new Error('useAppContext must be used within an AppProvider'); } return context; }
+export default AppContext; src/hooks/useCurrentVideo.js javascript// ============================================== // CUSTOM HOOK - useCurrentVideo // // Tracks which video the user is currently watching. // This is the key hook that makes the DownloadButton // automatically know which video to download. // // Integrates with your existing video player component. // Simply call trackVideo(videoId, videoData) when a video starts playing. // ============================================== import { useCallback } from 'react'; import { useAppContext } from '../context/AppContext';
+
+export function useCurrentVideo() { const { currentVideo, setCurrentVideo } = useAppContext();
+
+/**
+
+Call this function when a video starts playing in your feed/player.
+It automatically updates the global "currently watched" video
+so the download button always targets the right video.
+@param {string} videoId - YouTube video ID
+@param {object} videoData - Optional metadata (title, thumbnail, channel, etc.)
+Usage in your VideoPlayer component:
+const { trackVideo } = useCurrentVideo();
+// On video play:
+trackVideo(video.id, { title: video.title, thumbnail: video.thumbnail }); */ const trackVideo = useCallback((videoId, videoData = {}) => { setCurrentVideo({ id: videoId, ...videoData, trackedAt: Date.now() }); }, [setCurrentVideo]);
+/**
+
+Clears the currently tracked video
+Call this when the user goes back to the feed or closes the player */ const clearTrackedVideo = useCallback(() => { setCurrentVideo(null); }, [setCurrentVideo]);
+return { currentVideo, trackVideo, clearTrackedVideo, hasCurrentVideo: currentVideo !== null }; } src/hooks/useBookmarks.js javascript
+
+// ============================================== // CUSTOM HOOK - useBookmarks // // Manages bookmark (Watch Later) functionality. // Provides toggle, check, and list operations. // ============================================== import { useCallback, useState } from 'react'; import { useAppContext } from '../context/AppContext'; import { storageService } from '../services/storageService';
+
+export function useBookmarks() { const { bookmarks, isBookmarked, refreshBookmarks, showNotification } = useAppContext(); const [loading, setLoading] = useState(false);
+
+/**
+
+Toggles bookmark state for a video
+
+If bookmarked → removes it
+
+If not bookmarked → saves it
+
+Shows appropriate notification */ const toggleBookmark = useCallback(async (videoData) => { setLoading(true); try { const { videoId, title, thumbnail, channelTitle, duration } = videoData;
+
+if (isBookmarked(videoId)) { // Remove bookmark await storageService.removeBookmark(videoId); await refreshBookmarks(); showNotification( 'info', 'Removed from Watch Later', "${title}" has been removed from your saved videos., 3000 ); return { bookmarked: false }; } else { // Add bookmark const result = await storageService.saveBookmark({ videoId, title, thumbnail, channelTitle, duration }); await refreshBookmarks(); if (result.success) { showNotification( 'success', 'Saved to Watch Later', "${title}" has been added to your saved videos., 3000 ); } else { showNotification( 'warning', 'Already Bookmarked', 'This video is already in your Watch Later list.', 3000 ); } return { bookmarked: result.success }; } } catch (error) { showNotification( 'error', 'Bookmark Failed', 'Could not save bookmark. Please try again.', 4000 ); return { bookmarked: isBookmarked(videoData.videoId) }; } finally { setLoading(false); } }, [isBookmarked, refreshBookmarks, showNotification]);
+
+/**
+
+Gets all bookmarked videos (already reactive via context) */ const getBookmarks = useCallback(() => { return bookmarks; }, [bookmarks]);
+/**
+
+Get bookmark count */ const getBookmarkCount = useCallback(() => { return bookmarks.length; }, [bookmarks]);
+return { bookmarks, isBookmarked, toggleBookmark, getBookmarks, getBookmarkCount, loading, refreshBookmarks }; } src/components/DownloadButton.jsx javascript
+
+// ============================================== // DOWNLOAD BUTTON COMPONENT // // The main download trigger button that appears // on video player controls or video cards. // // Behavior: // 1. Reads currentVideo from context (auto-detects what user is watching) // 2. When pressed, checks if video is downloadable // 3. If blocked/restricted → shows flagged notification with explanation // 4. If downloadable → initiates background download with progress // 5. Shows download progress indicator on the button itself // 6. Uses the app's theme colors consistently // ============================================== import React, { useState, useCallback } from 'react'; import { TouchableOpacity, Text, View, ActivityIndicator, StyleSheet, Platform } from 'react-native'; import { useAppContext } from '../context/AppContext'; import { downloadVideo, checkDownloadability, getActiveDownloads } from '../services/downloadService'; import { THEME } from '../utils/constants';
+
+// Icons – using text symbols for cross-platform compatibility // Replace with your preferred icon library (react-native-vector-icons, etc.) const ICONS = { download: '⬇', // Default download downloading: '⏳', // In progress completed: '✅', // Done blocked: '🚫', // Blocked/can't download error: '❌' // Error state };
+
+export default function DownloadButton({ videoId, // Optional: override auto-detection videoData, // Optional: video metadata (title, etc.) size = 'medium', // 'small' | 'medium' | 'large' onPress, // Optional callback after download starts style // Override container styles }) { // ─── Context & State ───────────────────────────── const { currentVideo, showNotification, theme } = useAppContext(); const [downloadState, setDownloadState] = useState('idle'); // States: 'idle' | 'checking' | 'downloading' | 'completed' | 'blocked' | 'error' const [progress, setProgress] = useState(0);
+
+// Determine target video – use provided videoId or fall back to currently watched video const targetVideoId = videoId || currentVideo?.id; const targetVideoData = videoData || currentVideo || {};
+
+// ─── Download Handler ──────────────────────────── const handleDownload = useCallback(async () => { if (!targetVideoId) { showNotification( 'warning', 'No Video Detected', 'Please play a video first, then press the download button.', 4000 ); return; }
+
+// If already downloading this video, don't start again
+if (downloadState === 'downloading') {
+  showNotification(
+    'info',
+    'Already Downloading',
+    'This video is already being downloaded.',
+    3000
+  );
+  return;
+}
+
+setDownloadState('checking');
+setProgress(0);
+
+// Step 1: Check if video can be downloaded
+const checkResult = await checkDownloadability(targetVideoId);
+
+if (!checkResult.downloadable) {
+  // ─── VIDEO IS BLOCKED / CANNOT DOWNLOAD ───────────
+  setDownloadState('blocked');
+  
+  // Show the flagged notification with explanation
+  // This tells the user WHY they can't download and suggests continuing to browse
+  showNotification(
+    'error',
+    'Download Blocked',
+    `${checkResult.message}\n\nYou can continue watching other videos in your feed.`,
+    8000  // Show longer for detailed message
+  );
+  
+  // Still call onPress if provided
+  if (onPress) onPress({ success: false, reason: checkResult.reason });
+  return;
+}
+
+// Step 2: Video is downloadable – initiate background download
+setDownloadState('downloading');
+
+const result = await downloadVideo(
+  targetVideoId,
+  // Progress callback
+  (progressData) => {
+    if (progressData.status === 'downloading') {
+      setProgress(progressData.progress);
+    }
+  },
+  // Completion callback
+  (downloadRecord) => {
+    setDownloadState('completed');
+    setProgress(100);
+    showNotification(
+      'success',
+      'Download Complete',
+      `"${targetVideoData.title || 'Video'}" has been downloaded successfully.`,
+      4000
+    );
+  },
+  // Error callback
+  (error) => {
+    setDownloadState('error');
+    showNotification(
+      'error',
+      'Download Failed',
+      `Could not download this video: ${error.message}. Please try again.`,
+      5000
+    );
+  }
+);
+
+if (!result.success) {
+  // Handle immediate failures (already downloaded, already queued, etc.)
+  if (result.flagged) {
+    setDownloadState('blocked');
+  } else if (result.alreadyDownloaded) {
+    setDownloadState('completed');
+    setProgress(100);
+  } else {
+    setDownloadState('error');
+  }
+  
+  if (result.message) {
+    showNotification(
+      result.flagged ? 'error' : 'warning',
+      result.flagged ? 'Download Blocked' : 'Download Notice',
+      result.message,
+      5000
+    );
+  }
+}
+
+if (onPress) onPress(result);
+}, [targetVideoId, targetVideoData, downloadState, showNotification, onPress]);
+
+// ─── Button Styling ────────────────────────────── const buttonSize = { small: { padding: 6, iconSize: 16, fontSize: 11 }, medium: { padding: 10, iconSize: 20, fontSize: 13 }, large: { padding: 14, iconSize: 26, fontSize: 15 } }[size] || { padding: 10, iconSize: 20, fontSize: 13 };
+
+// ─── Render States ─────────────────────────────── const renderContent = () => { switch (downloadState) { case 'checking': return ( <View style={styles.buttonContent}> <ActivityIndicator size="small" color={theme.colors.textPrimary} /> <Text style={[styles.label, { fontSize: buttonSize.fontSize, color: theme.colors.textPrimary }]}> Checking... </Text> </View> );
+
+  case 'downloading':
+    return (
+      <View style={styles.buttonContent}>
+        <Text style={{ fontSize: buttonSize.iconSize }}>{ICONS.downloading}</Text>
+        <Text style={[styles.label, { 
+          fontSize: buttonSize.fontSize, 
+          color: theme.colors.accent 
+        }]}>
+          {progress}%
+        </Text>
+        {/* Progress bar */}
+        <View style={[styles.progressBar, { backgroundColor: theme.colors.surfaceLight }]}>
+          <View style={[
+            styles.progressFill, 
+            { width: `${progress}%`, backgroundColor: theme.colors.accent }
+          ]} />
+        </View>
+      </View>
+    );
+
+  case 'completed':
+    return (
+      <View style={styles.buttonContent}>
+        <Text style={{ fontSize: buttonSize.iconSize }}>{ICONS.completed}</Text>
+        <Text style={[styles.label, { 
+          fontSize: buttonSize.fontSize, 
+          color: theme.colors.success 
+        }]}>
+          Downloaded
+        </Text>
+      </View>
+    );
+
+  case 'blocked':
+    return (
+      <View style={styles.buttonContent}>
+        <Text style={{ fontSize: buttonSize.iconSize }}>{ICONS.blocked}</Text>
+        <Text style={[styles.label, { 
+          fontSize: buttonSize.fontSize, 
+          color: theme.colors.error 
+        }]}>
+          Unavailable
+        </Text>
+      </View>
+    );
+
+  case 'error':
+    return (
+      <View style={styles.buttonContent}>
+        <Text style={{ fontSize: buttonSize.iconSize }}>{ICONS.error}</Text>
+        <Text style={[styles.label, { 
+          fontSize: buttonSize.fontSize, 
+          color: theme.colors.warning 
+        }]}>
+          Retry
+        </Text>
+      </View>
+    );
+
+  default: // 'idle'
+    return (
+      <View style={styles.buttonContent}>
+        <Text style={{ fontSize: buttonSize.iconSize }}>{ICONS.download}</Text>
+        <Text style={[styles.label, { 
+          fontSize: buttonSize.fontSize, 
+          color: theme.colors.textPrimary 
+        }]}>
+          Download
+        </Text>
+      </View>
+    );
+}
+};
+
+return ( <TouchableOpacity style={[ styles.container, { padding: buttonSize.padding, backgroundColor: downloadState === 'downloading' ? theme.colors.surfaceLight : theme.colors.surface, borderColor: downloadState === 'blocked' ? theme.colors.error : theme.colors.surfaceLight, borderWidth: downloadState === 'blocked' ? 1.5 : 0, opacity: downloadState === 'checking' ? 0.7 : 1 }, style ]} onPress={handleDownload} disabled={downloadState === 'downloading' || downloadState === 'checking'} activeOpacity={0.7} > {renderContent()} </TouchableOpacity> ); }
+
+// ─── Styles ────────────────────────────────────── // Uses theme variables for consistent look across the app const styles = StyleSheet.create({ container: { borderRadius: THEME.borderRadius.md, alignItems: 'center', justifyContent: 'center', minWidth: 80, ...Platform.select({ web: { cursor: 'pointer', userSelect: 'none' } }) }, buttonContent: { flexDirection: 'row', alignItems: 'center', gap: 6 }, label: { fontWeight: '600', letterSpacing: 0.3 }, progressBar: { height: 4, borderRadius: 2, flex: 1, marginLeft: 4, overflow: 'hidden' }, progressFill: { height: '100%', borderRadius: 2 } }); src/components/BookmarkButton.jsx javascript
+
+// ============================================== // BOOKMARK BUTTON COMPONENT // // "Save for Later" / "Watch Later" button // Toggles bookmark state for any video // Shows filled/outline state based on whether video is bookmarked // Integrates with the global bookmark system via useBookmarks hook // ============================================== import React, { useState, useCallback } from 'react'; import { TouchableOpacity, Text, StyleSheet, Platform } from 'react-native'; import { useAppContext } from '../context/AppContext'; import { useBookmarks } from '../hooks/useBookmarks'; import { THEME } from '../utils/constants';
+
+export default function BookmarkButton({ videoId, videoData = {}, // { title, thumbnail, channelTitle, duration } size = 'medium', style, showLabel = false // If true, shows "Save" / "Saved" text }) { const { theme } = useAppContext(); const { isBookmarked, toggleBookmark, loading } = useBookmarks();
+
+const bookmarked = isBookmarked(videoId);
+
+const handleToggle = useCallback(async () => { await toggleBookmark({ videoId, ...videoData }); }, [videoId, videoData, toggleBookmark]);
+
+const buttonSize = { small: { padding: 6, iconSize: 18, fontSize: 11 }, medium: { padding: 8, iconSize: 22, fontSize: 12 }, large: { padding: 10, iconSize: 26, fontSize: 14 } }[size] || { padding: 8, iconSize: 22, fontSize: 12 };
+
+return ( <TouchableOpacity style={[ styles.container, { padding: buttonSize.padding, backgroundColor: bookmarked ? theme.colors.bookmark + '20' // 20% opacity gold background : 'transparent' }, style ]} onPress={handleToggle} disabled={loading} activeOpacity={0.7} > {/* Bookmark icon - filled when bookmarked, outline when not */} <Text style={{ fontSize: buttonSize.iconSize, color: bookmarked ? theme.colors.bookmark : theme.colors.textSecondary }}> {bookmarked ? '🔖' : '🏷'} </Text>
+
+  {showLabel && (
+    <Text style={[
+      styles.label,
+      {
+        fontSize: buttonSize.fontSize,
+        color: bookmarked ? theme.colors.bookmark : theme.colors.textSecondary,
+        marginLeft: 4
+      }
+    ]}>
+      {bookmarked ? 'Saved' : 'Save'}
+    </Text>
+  )}
+</TouchableOpacity>
+); }
+
+const styles = StyleSheet.create({ container: { borderRadius: THEME.borderRadius.sm, alignItems: 'center', justifyContent: 'center', flexDirection: 'row', ...Platform.select({ web: { cursor: 'pointer', userSelect: 'none' } }) }, label: { fontWeight: '500' } }); src/components/VideoFeed.jsx javascript
+
+// ============================================== // VIDEO FEED COMPONENT // // Main feed display - like TikTok's "For You" page // Displays vertical video cards with: // - Thumbnail // - Title and description // - Channel name // - View count and duration // - Download button // - Bookmark button // // Supports infinite scroll via loadMore callback // ============================================== import React, { useState, useEffect, useCallback, useRef } from 'react'; import { View, Text, Image, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator, Platform, Dimensions } from 'react-native'; import { useAppContext } from '../context/AppContext'; import DownloadButton from './DownloadButton'; import BookmarkButton from './BookmarkButton'; import { THEME } from '../utils/constants'; import { formatDuration, formatViewCount, truncateText } from '../utils/helpers';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
+/**
+
+VideoFeed - The main content feed component
+Props:
+videos: Array of video objects
+onVideoPress: (video) => void - navigate to player
+onEndReached: () => void - load more (
+Continuing with the VideoFeed component and the rest of the codebase:
+
+src/components/VideoFeed.jsx (continued) javascript
+
+showShorts: Boolean - toggle between short-form and long-form content */ export default function VideoFeed({ videos = [], onVideoPress, onEndReached, showShorts = false, loading = false, ListHeaderComponent, style }) { const { theme, showNotification } = useAppContext(); const flatListRef = useRef(null);
+/**
+
+Renders a single video card in the feed
+Each card shows: thumbnail, title, description, channel, actions */ const renderVideoCard = useCallback(({ item, index }) => { const isShortsItem = showShorts || item.isShort;
+return (
+  <TouchableOpacity
+    style={[
+      styles.videoCard,
+      {
+        backgroundColor: theme.colors.surface,
+        // Shorts get a slightly different layout (taller thumbnail)
+        flexDirection: isShortsItem ? 'row' : 'column'
+      }
+    ]}
+    onPress={() => onVideoPress && onVideoPress(item)}
+    activeOpacity={0.8}
+  >
+    {/* Thumbnail */}
+    <View style={[
+      styles.thumbnailContainer,
+      isShortsItem ? styles.shortsThumbnail : styles.videoThumbnail
+    ]}>
+      <Image
+        source={{ uri: item.thumbnail || item.thumbnails?.high?.url }}
+        style={styles.thumbnail}
+        resizeMode="cover"
+      />
+      {/* Duration badge (top-right corner) */}
+      {item.duration && (
+        <View style={[styles.durationBadge, { backgroundColor: 'rgba(0,0,0,0.8)' }]}>
+          <Text style={styles.durationText}>
+            {formatDuration(item.duration)}
+          </Text>
+        </View>
+      )}
+      {/* Shorts indicator */}
+      {isShortsItem && (
+        <View style={[styles.shortsBadge, { backgroundColor: theme.colors.primary }]}>
+          <Text style={styles.shortsBadgeText}>SHORT</Text>
+        </View>
+      )}
+    </View>
+
+    {/* Video Info */}
+    <View style={[styles.videoInfo, isShortsItem && styles.shortsVideoInfo]}>
+      {/* Title */}
+      <Text style={[styles.title, { color: theme.colors.textPrimary }]} numberOfLines={2}>
+        {truncateText(item.title, 80)}
+      </Text>
+
+      {/* Channel name */}
+      <Text style={[styles.channelName, { color: theme.colors.textSecondary }]} numberOfLines={1}>
+        {item.channelTitle || 'YouTube Channel'}
+      </Text>
+
+      {/* Description (only for non-shorts or expanded view) */}
+      {!isShortsItem && item.description && (
+        <Text style={[styles.description, { color: theme.colors.textSecondary }]} numberOfLines={2}>
+          {truncateText(item.description, 120)}
+        </Text>
+      )}
+
+      {/* View count and metadata */}
+      <View style={styles.metaRow}>
+        {item.viewCount && (
+          <Text style={[styles.metaText, { color: theme.colors.textSecondary }]}>
+            {formatViewCount(item.viewCount)}
+          </Text>
+        )}
+        {item.publishedAt && (
+          <Text style={[styles.metaText, { color: theme.colors.textSecondary }]}>
+            • {timeAgo(item.publishedAt)}
+          </Text>
+        )}
+      </View>
+
+      {/* Action buttons row */}
+      <View style={styles.actionRow}>
+        <DownloadButton
+          videoId={item.id}
+          videoData={{
+            title: item.title,
+            thumbnail: item.thumbnail,
+            channelTitle: item.channelTitle
+          }}
+          size="small"
+        />
+        <BookmarkButton
+          videoId={item.id}
+          videoData={{
+            title: item.title,
+            thumbnail: item.thumbnail,
+            channelTitle: item.channelTitle,
+            duration: item.duration
+          }}
+          size="small"
+        />
+      </View>
+    </View>
+  </TouchableOpacity>
+);
+}, [theme, onVideoPress, showShorts]);
+
+// Render loading indicator if (loading && videos.length === 0) { return ( <View style={[styles.centerContainer, { backgroundColor: theme.colors.background }]}> <ActivityIndicator size="large" color={theme.colors.primary} /> <Text style={[styles.loadingText, { color: theme.colors.textSecondary }]}> Loading videos... </Text> </View> ); }
+
+// Render empty state if (!loading && videos.length === 0) { return ( <View style={[styles.centerContainer, { backgroundColor: theme.colors.background }]}> <Text style={[styles.emptyIcon]}>📹</Text> <Text style={[styles.emptyTitle, { color: theme.colors.textPrimary }]}> No videos yet </Text> <Text style={[styles.emptySubtitle, { color: theme.colors.textSecondary }]}> Check back later for new content </Text> </View> ); }
+
+return ( <FlatList ref__={flatListRef} data={videos} renderItem={renderVideoCard} keyExtractor={(item) => item.id} showsVerticalScrollIndicator={false} onEndReached={onEndReached} onEndReachedThreshold={0.5} ListHeaderComponent={ListHeaderComponent} contentContainerStyle={[styles.listContainer, style]} ListFooterComponent={ loading ? ( <View style={styles.footerLoader}> <ActivityIndicator size="small" color={theme.colors.accent} /> </View> ) : null } /> ); }
+
+/**
+
+Helper: formats publishedAt to relative time string */ function timeAgo(dateString) { const now = new Date(); const date = new Date(dateString); const seconds = Math.floor((now - date) / 1000);
+if (seconds < 60) return 'just now'; const minutes = Math.floor(seconds / 60); if (minutes < 60) return ${minutes}m ago; const hours = Math.floor(minutes / 60); if (hours < 24) return ${hours}h ago; const days = Math.floor(hours / 24); if (days < 30) return ${days}d ago; const months = Math.floor(days / 30); if (months < 12) return ${months}mo ago; return ${Math.floor(months / 12)}y ago; }
+
+const styles = StyleSheet.create({ listContainer: { padding: THEME.spacing.md, }, videoCard: { borderRadius: THEME.borderRadius.lg, marginBottom: THEME.spacing.lg, overflow: 'hidden', elevation: 3, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.25, shadowRadius: 4, }, thumbnailContainer: { position: 'relative', }, videoThumbnail: { width: '100%', aspectRatio: 16 / 9, }, shortsThumbnail: { width: 120, height: 200, }, thumbnail: { width: '100%', height: '100%', }, durationBadge: { position: 'absolute', bottom: 6, right: 6, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, }, durationText: { color: '#FFFFFF', fontSize: 12, fontWeight: '600', }, shortsBadge: { position: 'absolute', top: 6, left: 6, paddingHorizontal: 6, paddingVertical: 2, borderRadius: 4, }, shortsBadgeText: { color: '#FFFFFF', fontSize: 10, fontWeight: '700', }, videoInfo: { padding: THEME.spacing.md, }, shortsVideoInfo: { flex: 1, padding: THEME.spacing.sm, }, title: { fontSize: THEME.typography.sizes.subtitle, fontWeight: '600', marginBottom: 4, lineHeight: 22, }, channelName: { fontSize: THEME.typography.sizes.body, marginBottom: 4, }, description: { fontSize: THEME.typography.sizes.body, marginBottom: 6, lineHeight: 20, }, metaRow: { flexDirection: 'row', alignItems: 'center', marginBottom: 8, }, metaText: { fontSize: THEME.typography.sizes.caption, }, actionRow: { flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 4, }, centerContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: THEME.spacing.xl, }, loadingText: { marginTop: THEME.spacing.md, fontSize: THEME.typography.sizes.body, }, emptyIcon: { fontSize: 48, marginBottom: THEME.spacing.md, }, emptyTitle: { fontSize: THEME.typography.sizes.heading, fontWeight: '600', marginBottom: 8, }, emptySubtitle: { fontSize: THEME.typography.sizes.body, textAlign: 'center', }, footerLoader: { paddingVertical: THEME.spacing.lg, alignItems: 'center', }, }); Now I'll provide the remaining screens and the integration guide. Let me continue with the screens:
+
+src/screens/FeedScreen.jsx javascript
+
+// ============================================== // FEED SCREEN - Main landing screen // // Displays the primary video feed (like TikTok's "For You") // Includes: // - Trending/popular videos // - Shorts section // - User's uploaded content (if channel connected) // - Infinite scroll pagination // - Pull-to-refresh // ============================================== import React, { useState, useEffect, useCallback } from 'react'; import { View, StyleSheet, RefreshControl, ScrollView, Text } from 'react-native'; import { useAppContext } from '../context/AppContext'; import VideoFeed from '../components/VideoFeed'; import { getTrendingVideos, searchVideos, getMyUploadedVideos } from '../services/youtubeApi'; import { THEME } from '../utils/constants';
+
+export default function FeedScreen({ navigation }) { const { theme, channelInfo, showNotification } = useAppContext();
+
+// Feed state const [trendingVideos, setTrendingVideos] = useState([]); const [shortsFeed, setShortsFeed] = useState([]); const [myVideos, setMyVideos] = useState([]); const [loading, setLoading] = useState(true); const [refreshing, setRefreshing] = useState(false); const [nextPageToken, setNextPageToken] = useState(null); const [activeTab, setActiveTab] = useState('trending'); // 'trending' | 'shorts' | 'mychannel'
+
+/**
+
+Loads the initial feed data */ const loadFeed = useCallback(async (refresh = false) => { try { if (refresh) setRefreshing(true); else setLoading(true);
+
+// Load trending videos (main feed) const trendingData = await getTrendingVideos('US', 20); setTrendingVideos(refresh ? trendingData.videos : [...trendingVideos, ...trendingData.videos]); setNextPageToken(trendingData.nextPageToken);
+
+// Load shorts feed (videos under 60 seconds) const shortsData = await searchVideos('shorts', 'shorts', 20); setShortsFeed(refresh ? shortsData.videos : [...shortsFeed, ...shortsData.videos]);
+
+// If channel is connected, load user's uploads if (channelInfo?.uploadsPlaylistId) { const myVids = await getMyUploadedVideos(channelInfo.uploadsPlaylistId, 20); setMyVideos(refresh ? myVids.videos : [...myVideos, ...myVids.videos]); } } catch (error) { showNotification('error', 'Feed Error', 'Could not load videos. Pull down to retry.', 5000); } finally { setLoading(false); setRefreshing(false); } }, [channelInfo]);
+
+// Initial load useEffect(() => { loadFeed(); }, []);
+
+/**
+
+Load more videos when user scrolls to bottom */ const loadMore = useCallback(async () => { if (loading || !nextPageToken) return; try { const moreData = await getTrendingVideos('US', 20, nextPageToken); setTrendingVideos(prev => [...prev, ...moreData.videos]); setNextPageToken(moreData.nextPageToken); } catch (error) { // Silently fail - user can scroll to retry } }, [loading, nextPageToken]);
+/**
+
+Navigate to video player */ const handleVideoPress = useCallback((video) => { navigation.navigate('VideoPlayer', { video }); }, [navigation]);
+// Render the appropriate feed based on active tab const renderActiveFeed = () => { switch (activeTab) { case 'shorts': return ( <VideoFeed videos={shortsFeed} onVideoPress={handleVideoPress} onEndReached={loadMore} showShorts={true} loading={loading} /> ); case 'mychannel': if (!channelInfo) { return ( <View style={[styles.centerMessage, { backgroundColor: theme.colors.background }]}> <Text style={[styles.messageTitle, { color: theme.colors.textPrimary }]}> Connect Your Channel </Text> <Text style={[styles.messageSub, { color: theme.colors.textSecondary }]}> Link your YouTube account in Settings to see your uploads here. </Text> </View> ); } return ( <VideoFeed videos={myVideos} onVideoPress={handleVideoPress} onEndReached={loadMore} loading={loading} /> ); default: // 'trending' return ( <VideoFeed videos={trendingVideos} onVideoPress={handleVideoPress} onEndReached={loadMore} loading={loading} /> ); } };
+
+return ( <View style={[styles.container, { backgroundColor: theme.colors.background }]}> {/* Tab Bar */} <View style={[styles.tabBar, { backgroundColor: theme.colors.secondary }]}> {['trending', 'shorts', ...(channelInfo ? ['mychannel'] : [])].map(tab => ( <TouchableOpacity key={tab} style={[ styles.tab, activeTab === tab && { borderBottomColor: theme.colors.primary, borderBottomWidth: 2 } ]} onPress={() => setActiveTab(tab)} > <Text style={[ styles.tabText, { color: activeTab === tab ? theme.colors.textPrimary : theme.colors.textSecondary } ]}> {tab === 'trending' ? 'For You' : tab === 'shorts' ? 'Shorts' : 'My Channel'} </Text> </TouchableOpacity> ))} </View>
+
+  {/* Feed Content */}
+  {renderActiveFeed()}
+</View>
+); }
+
+const styles = StyleSheet.create({ container: { flex: 1 }, tabBar: { flexDirection: 'row', paddingHorizontal: THEME.spacing.md, paddingTop: Platform.OS === 'ios' ? 50 : 10, }, tab: { paddingVertical: 12, paddingHorizontal: 16, marginRight: 8, }, tabText: { fontSize: THEME.typography.sizes.subtitle, fontWeight: '600', textTransform: 'capitalize', }, centerMessage: { flex: 1, justifyContent: 'center', alignItems: 'center', padding: THEME.spacing.xl, }, messageTitle: { fontSize: THEME.typography.sizes.heading, fontWeight: '600', marginBottom: 8, }, messageSub: { fontSize: THEME.typography.sizes.body, textAlign: 'center', }, }); AND NOW ADD THE NECCESSARY SCREEN NEEDED
+
+Show more
+5 months ago
+
+
+
+Revert
+Base44 response
+Let me analyze this code carefully before doing anything.
+
+
+Read 2 files
+Base44 response
+Good. Now I have a clear picture. Here's my analysis and plan:
+
+What the code does: It's a YouTube video downloader + feed system (React Native/Electron). The core concepts I can extract and adapt for ForkFeed are:
+
+Watch Later / Bookmarks — already exists as SavedRecipe + Cookbook, but we can enhance the UX
+Download button on feed cards — the PDF download already exists; I'll add a proper "save offline" PDF download button directly on the feed card action rail
+Trending/Shorts tabs in feed — the "Following" / "For You" tabs already exist; I'll add a proper "Trending" tab with filtering
+Share button — currently a dead button; I'll wire it up with native share
+The most impactful additions that DON'T already exist: a Share action on the feed card, a download-to-PDF button directly on the card action rail, and a Discover-style trending tab enhancement. Let me implement these cleanly:
+
+
+Read Discover
+Base44 response
+Now I have full context. Here's my precise plan — translating the Flutter/RN concepts into ForkFeed's React world:
+
+Share button on VideoFeedCard — wire up the dead Share button using Web Share API
+PDF download button directly on the feed card action rail (the key "Smart Download" concept)
+Trending/Most Liked/New tabs in Discover page (the "feed tab" concept from FeedScreen)
+Watch Later count badge on Cookbook nav item in Layout
+
+Updated the Video Feed Card
+Base44 response
+Now replace the dead Share button and add the Download button in the action rail:
+
+
+Updated the Video Feed Card
+Base44 response
+Now add tabs (Trending / New / Top) to the Discover page:
+
+
+Updated the Discover
+Base44 response
+Done. Here's what was implemented from the code you shared, translated properly into ForkFeed's React stack:
+
+Smart Download button on every feed card — one tap downloads the recipe as a PDF with a spinner → checkmark state animation
+Share button — wired up with native Web Share API, falls back to clipboard copy with a "Link copied!" toast
+Trending / New / Top Saved tabs on the Discover page — switches sort order dynamically, same concept as the Flutter FeedScreen tabs
+5 months ago
+
+
+Your message
+OKAY WHAY I WANT YOU TO TO IS THIS IT SHOULD NOT ONLY BE COOKING VIDEOHere's the complete picture in one detailed summary:
+
+Your app acts as a "mask" over YouTube — meaning YouTube handles all the heavy lifting (video hosting, streaming, ads, monetization) while your app provides the discovery and curation layer on top. To build this, you start by creating a Google Cloud project and enabling the YouTube Data API v3, where you'll generate two credentials: a public API key for search and an OAuth 2.0 Client ID for user-authenticated features. With just the API key, your app can immediately search YouTube using the search.list endpoint, retrieve video metadata (titles, descriptions, thumbnails, view counts, like counts, channel names), and display them as a browsable feed of video cards inside your app. When a user taps a video, your app renders a YouTube iframe embed — this is an official, fully legitimate player that loads the video directly from YouTube's servers, complete with their controls, ads, and analytics, so the view and any likes count as real YouTube engagement. For the "Save" button, your app maintains its own local database (using AsyncStorage or similar) to bookmark videos, and if the user has connected their YouTube account via OAuth with the youtube scope, your app also adds that video to their YouTube Watch Later playlist using the playlistItems.insert endpoint with playlistId: "WL" — this means the saved video appears both in your app's "Saved" tab and in their actual YouTube account. The "My Channel" tab is entirely optional and only appears if the user chooses to connect their YouTube account via OAuth; once authenticated, your app calls channels.list?mine=true to get their channel info and subscriber count, then uses the uploads playlist ID from contentDetails.relatedPlaylists to fetch their own videos via playlistItems.list, displaying their personal uploads as a feed they can browse and play within your app. When a user taps a saved video from your "Saved" or "Downloads" tab, your app uses a deep link (https://www.youtube.com/watch?v=VIDEO_ID or vnd.youtube://VIDEO_ID) to open the native YouTube app directly to that video, where the user can watch it — including any offline content they may have downloaded manually through YouTube's own app. It is critical to understand what your app cannot do: there is no API to trigger YouTube's native offline download from your app, no way to detect if a video requires a channel membership or YouTube Premium before playback, no method to download or cache video files locally (which would violate YouTube's Terms of Service), and no deep link to YouTube's internal "Downloads" section — so your "Download" button is honestly just a bookmark/save action that records the video in your local list and optionally adds it to Watch Later, while guiding the user to open YouTube manually if they want true offline access. The entire architecture respects YouTube's platform: your app is a discovery and bookmarking wrapper, all video playback is YouTube's embedded player, all authenticated actions (Watch Later, reading the user's channel) require explicit OAuth consent, and any attempt to bypass or scrape content is avoided entirely, keeping your app fully legal and compliant with YouTube's developer policies.
+
+Show more
+5 months ago
+
+
+
+Revert
+Base44 response
+
+Read through your app
+Base44 response
+I understand the vision — your app should be a YouTube discovery & curation wrapper that works for ANY video content (not just cooking). Here's the plan:
+
+Home feed = YouTube search results (trending/general) rendered as swipeable video cards with iframe embeds
+Discover = YouTube search with filters/tabs
+Save = bookmark to local SavedRecipe entity + optionally open YouTube
+YouTube API key will be called from the frontend directly (public API key, safe for client-side)
+Let me build a YouTubeVideoCard component and rewire the Home feed to pull from YouTube:
+
+
+Built the You Tube Video Card
+Base44 response
+Now create a YouTube API hook:
+
+
+Built use You Tube Feed
+Base44 response
+Now rewrite the Home page to support both YouTube feed and local recipes, with a mode switcher:
+
+
+Built the Home Page
+Base44 response
+Now set the secret so the user knows they need to add the API key:
+
+
+Saved your settings
+5 months ago
+
+
+Your message
+Approved: setting secrets (VITE_YOUTUBE_API_KEY).
+
+5 months ago
+
+
+
+Revert
+Base44 response
+The YouTube API key secret has been set!
+
+To activate the YouTube feed, you need to add your actual API key value. Here's how to get one:
+
+Go to Google Cloud Console
+Create a project → Enable YouTube Data API v3
+Go to Credentials → Create API Key
+Copy the key and paste it into the VITE_YOUTUBE_API_KEY secret in your app's Dashboard → Secrets
+Once added, your Home feed will show real YouTube videos across categories (Trending, Music, Sports, Gaming, etc.) with the iframe player, save/bookmark, share, and PDF export all working.
+
+5 months ago
+
+
+Your message
+so far what gave we added and also make a report of what it does
+
+5 months ago
+
+
+
+Revert
+Base44 response
+
+Thought for 2s
+I've integrated YouTube functionality into your app, transforming it into a YouTube discovery and curation platform.
+
+Here's a report of what has been added and its functionalities:
+
+Added Components and Functionality:
+
+YouTube Integration Core: The app now serves as a specialized UI layer over YouTube, leveraging the YouTube Data API v3 for content.
+YouTubeVideoCard Component: A new component to display individual YouTube videos as swipeable cards.
+useYouTubeFeed Hook: A custom hook to manage fetching data from the YouTube Data API v3.
+Rewired Home Page: The Home page now supports displaying both YouTube video feeds and local recipes, with a mode switcher to toggle between them.
+VITE_YOUTUBE_API_KEY Secret: Setup for securely storing your YouTube API key, required for fetching YouTube data.
+Key Features and Capabilities:
+
+Dynamic YouTube Feeds: The Home and Discover pages can now show YouTube search results, including trending, new, and top-saved content categories.
+Interactive Video Playback: Videos can be watched directly within the app using compliant YouTube iframe embeds.
+Content Curation: Users can bookmark YouTube videos to the local SavedRecipe entity.
+PDF Export: Functionality to generate and export recipe details or video summaries as PDF files.
+Seamless Sharing: Integrated native Web Share API for easy sharing of content.
+Enhanced User Experience: Dynamic tab filtering on the Discover page (Trending, New, Top Saved), and interactive states for saving and sharing on video cards.
+Consistent Design: All new frontend components adhere to a consistent, performance-oriented design system.
+5 months ago
+
+
+Your message
+You are an expert mobile developer working on an existing cooking app (React Native + Expo, but adapt to the app’s actual stack). Add a feature that enable the user to paste url like video urls and post about recipe url using the Ai search it should go look at the content then it will automatically give info about the content if it good related it will show the recipe ingredients and all those necessary things I want you to
+
+Now add a new feature: “AI Live Camera Guide” using Google’s Gemini API (Gemini 1.5 Pro with vision). When a user views a recipe and taps the “AI Live” button, the camera turns on. The AI watches what they do in real time and guides them step by step – but ONLY moves to the next step after confirming they have completed the current one correctly.it should be using your camera to enable the Ai to see what you are doing and the user can cancel anytime
+
+🔧 Requirements
+1. API Infrastructure Setup
+Create a service file (e.g. geminiLiveService.ts) that handles:
+Initialising the Gemini API with an API key (read from env/config).
+Sending video frames (captured every 1–2 seconds) to Gemini for analysis.
+Keeping a conversation context (current step, user’s progress, history).
+Implement a function analyzeFrame(frameBase64, currentStepInstruction, expectedVisualOutcome) that returns:
+status: “not_started” | “in_progress” | “completed” | “wrong_action”
+feedback: short text (e.g. “Add the onions now”, “You’re burning the garlic”)
+confidence: number
+Implement a function checkStepCompletion(historyFrames) that aggregates recent frames to decide if user has truly finished the current step (e.g. chopped onions, stirred sauce).
+2. Feature Integration into Existing App
+Add a new button “✨ AI Live” on the recipe detail screen (next to ingredients/instructions).
+When pressed:
+Request camera permissions.
+Start a live camera preview (e.g. expo-camera).
+Extract the recipe’s instructions list from the already fetched recipe data.
+Set up a state machine: currentStepIndex = 0, stepStatus = "waiting_for_action".
+Show an overlay with:
+Current instruction text (e.g. “Step 3: Dice the onion”).
+AI’s live feedback (e.g. “Great, now add the oil” or “Those pieces are too large – try smaller dices”).
+A small “🔊 Narrate” toggle – if ON, the AI speaks the feedback/instructions aloud (using text‑to‑speech, e.g. expo-speech). Off by default.
+3. Step‑by‑Step Flow Control (Not Too Fast)
+The AI must NOT automatically advance to the next step immediately after speaking an instruction.
+
+Instead:
+
+Show the instruction.
+Listen to camera frames continuously.
+While the user performs the action, give positive/negative feedback based on what they are doing (e.g. “Add more salt”, “Stir faster”).
+Only when Gemini consistently confirms (over 2–3 frames) that the action is completed (e.g. onion is fully diced, sauce has thickened), move to the next step.
+If the user does something clearly wrong (e.g. using wrong utensil, skipping an ingredient), immediately show/speak a correction and wait for them to fix it – do not advance.
+The AI should be able to remember past steps in the same session (e.g. “You already added the garlic, now add tomatoes”).
+
+4. Optional Narration
+The “🔊 Narrate” toggle:
+When ON: every instruction and every piece of feedback is spoken out loud.
+When OFF: only visual text (no automatic voice).
+The user can change this at any time during the cooking session.
+5. Edge Cases & Robustness
+If Gemini is uncertain (low confidence) about step completion, ask a clarifying question (“Show me the pan again”, “Did you add the salt?”) – but do not block indefinitely; after 30 seconds of uncertainty, offer “Skip this step” / “I’m done” buttons.
+If the camera loses sight of the cooking area, pause the session and ask the user to point the camera at their work.
+Provide a “⏹️ End session” button that stops the camera and returns to the recipe view.
+🧪 Example Interaction (User Perspective)
+User taps “AI Live” on a pasta recipe.
+Camera opens. AI says (if narrate ON): “Step 1 – Boil water. Show me the pot on the stove.”
+User points camera at a pot with water. AI: “Good. Now wait until it boils.”
+After detecting bubbles: “Water is boiling. Step 2 – Add salt and pasta. Show me the salt.”
+User holds up salt shaker. AI: “Perfect. Add a teaspoon. … I see you added it. Now add the pasta.”
+… and so on.
+📁 Code Structure Expected
+src/services/geminiLive.ts – frame analysis, step validation, state management.
+src/screens/RecipeDetailScreen.tsx – add the “AI Live” button and navigation to LiveCookScreen.
+src/screens/LiveCookScreen.tsx – full‑screen camera view, overlay UI, TTS, step controller.
+src/hooks/useGeminiLive.ts – React hook to expose status, send frames, receive feedback.
+Write clean, typed code (TypeScript) with comments. Use existing app’s navigation and styling conventions. Add environment variable GEMINI_API_KEY. Use react-native-fs or equivalent to convert camera frames to base64. Implement retry logic for API calls.
+
+Make sure the AI never auto‑advances without visual confirmation of completion. The pacing is entirely controlled by the user’s actions, not by a timer.
+
+Show more
+5 months ago
+
+
+
+Revert
+Base44 response
+
+Read 2 files
+Base44 response
+I'll build both features simultaneously: URL paste → AI recipe extraction in AIChefSearch, and AI Live Camera Guide as a new full-screen component with webcam + Gemini vision analysis.
+
+
+Updated the AICamera Guide and AIChef Search
+Base44 response
+Now add URL parsing state + logic + UI into AIChefSearch:
+
+
+Updated the AIChef Search
+Base44 response
+Now update the input's onChange and add URL result UI:
+
+
+Updated the AIChef Search
+Base44 response
+Now add the URL result panel above the recipe grid:
+
+
+Updated the AIChef Search
+Base44 response
+Now add the "✨ AI Live" button to RecipeDetailSheet:
+
+
+Updated the Recipe Detail Sheet
+Base44 response
+Done! Here's what was built:
+
+1. URL Paste → AI Recipe Extraction (in AI Search):
+
+Paste any URL (YouTube, food blog, etc.) and the AI fetches + parses it automatically
+Shows extracted title, ingredients, steps, cooking time, difficulty — ready to view as a full recipe
+2. AI Live Camera Guide (new AICameraGuide component):
+
+Tap "AI Live" on any recipe detail sheet → camera opens
+AI analyzes frames every ~2.5s using Gemini vision, giving live step-by-step feedback
+Only advances to the next step after 2 consecutive "completed" confirmations — never on a timer
+Progress bar across all steps, narration toggle (🔊), skip button appears after 30s of uncertainty, and a clean "End session" button
+5 months ago
+
+
+Your message
+Okay maybe can maybe also add a tutorial step by step procedure of to the whole thing The whole app
+
+5 months ago
+
+
+
+Revert
+Base44 response
+
+Read Layout
+Base44 response
+I'll create a full-app tutorial overlay component and hook it into the Layout so it's accessible app-wide.
+
+
+Built the App Tutorial
+Base44 response
+Now wire it into the Layout with a "?" help button, and also expose it from the Profile page:
+
+
+Updated the Layout
+Base44 response
+Now add a "Tutorial" button in the Profile page too:
+
+
+Updated the Profile
+Base44 response
+Done! A 12-step interactive tutorial covering every feature of the app now auto-appears for first-time users, and can be reopened anytime via the ❓ help icon (top bar on inner pages) or the ? button in Profile.
+
+5 months ago
+
+
+Your message
+Okay now I want you to add that any new recipe extracted from the URL the system will save it and also maybe you can add that a user can type or upload recipe and it will be saved by the system this includes their thumbnails which the Ai will make sure to enhance before automatically posting it with the ingredients and everything thing else
+
+Show more
+5 months ago
+
+
+
+Revert
+Base44 response
+Let me read the relevant files first.
+
+
+Read 2 files
+Base44 response
+I'll now build two things in parallel:
+
+Auto-save URL-extracted recipes with AI-generated/enhanced thumbnails in AIChefSearch
+A new RecipeSubmitSheet component — lets users type or upload a recipe (with AI thumbnail enhancement) and auto-post it
+
+Updated the Recipe Submit Sheet and AIChef Search
+Base44 response
+Now add state for showSubmit and the save-URL logic + "Post Recipe" button + RecipeSubmitSheet to AIChefSearch:
+
+
+Updated the AIChef Search
+Base44 response
+Now update the URL recipe card buttons to include "Save to ForkFeed", and add a "Post Recipe" button in the header, and close with the RecipeSubmitSheet:
+
+
+Updated the AIChef Search
+Base44 response
+Now add the RecipeSubmitSheet at the bottom of the component's JSX:
+
+
+Updated the AIChef Search
+Base44 response
+Done! Here's what was added:
+
+URL recipes — the "Save & Enhance" button on extracted URL recipes will generate an AI-enhanced food photo thumbnail, then auto-save the full recipe (ingredients, steps, everything) to the database.
+Post Recipe sheet — a "Post Recipe" button in the AI Chef Search header opens a full form where users can type a recipe or upload a photo. The AI automatically enhances/generates a professional food photo thumbnail before publishing everything live.
+5 months ago
+
+
+Your message
+The other thing is that every recipe or ingredients uploaded by the Ai has signature mentioning the user whole uploaded the recipe and give them a special shout and a link to view the channel also the other thing is that the ai has it own channel at default let's call it " scyn Ai " here every recipes uploaded by the any user the saves it and displays it on to the for you page at random and also the you API key let say the system will guide you on how to Obtain and the will give a place where to paste it here the system will use this API key to link to you also your YouTube channel will be synced in the app and you be able to view your content at any time and also let's say that all the video will be seen through your API but you be told by the API the consequences of putting your API and if whether you want to sync your YouTube channel or just start a fresh I. The app also if you start a fresh the API will be used on ly for showing YouTube videos as normal and can in the search bar that I can still search for YouTube videos and their thumbnails will show as they filter out to the specific video if there is none the Ai will recommend you to another one and also add that when view the fir you page let's say that you can now put a remember my choice toggle in that the app will know when starting which which side of the you like to use most and will be starting with that and the user can freely switch sides it bored with one side also add nice themed system notification that will keep the user want to enter the app the notifications should be cool match the system theme also add that on the you panel when a user follows a specific channel the Ai will be giving them info on their latest upload ls but the user can decide to just turn off this notification if it's not helping them .now in the part whe you get to communicate with the ai add a function that enables the user to attach multiple photos of recipes or even document where the Ai will be able to view the images and documents and add a models switcher but differs depending on which API the user is using if they are using ollama API the should be shown the list of model that they have inshort the should right the name of the models if models are many they will will be displayed and if one the they will only use one if you don't have any model you will be asked to download one and told the advantage and disadvantages inshort. And be prompt to use cloud based and tolde to select a different provider and if you decide open router the system will configure your API to only use the free models and if have a specific one then you type it and the system will use it if you choose Open ai models the system will automatically select the best models at default and also you have to provide the Gemini API for using the live camera call and all this will be kept in the privacy tab where it safe gaurded where you can decide to clear them and and paste new one or in short reset the whole system and everything in it will be reset from start everything wiped clean . And also in the post a recipe part maybe can add that one can just put a document orand the Ai will configure the correct ingredients and the know the right step and if the user want to type on the provided box maybe can put that the ai will know what they are trying to type and help them handle any errors when typing the recipe and pleas cna put heading to the box so that the user know the things to type in every box and as for the image the Ai will generate one if not provided by the user depending on the dish and also maybe can add that if the use can put image guide them where once the press the Ai will try to figure out the recipe and name the show all the information to the user at once if correct the user can just tell the to post it and if by Chance they want to edit some things the can before the Ai takes and post it. That all but you are free add more detail and enhance on everything and. I said
+
+Show more
+5 months ago
+
+
+
+Revert
+Base44 response
+Let me read the current files I need to understand before making changes.
+
+
+Read 4 files
+Base44 response
+This is a very large feature set. Let me break it down and build it systematically across many files in parallel. Here's what I'm building:
+
+Home — "Remember my choice" toggle, YouTube search with AI recommendations, Scyn AI channel
+YouTubeSetupSheet — API key onboarding with guidance, channel sync choice
+RecipeSubmitSheet — Document upload, AI recipe scan from image, AI autocomplete, creator signature
+AIChefLive — Multi-photo attachment, model switcher per provider
+PrivacySettings — All API keys in one secure place with reset
+System notifications — Themed push-style notifications
+Channel follow notifications — Per-channel latest upload alerts
+
+Read 2 files
+Base44 response
+Now I have a full picture. This is a massive feature set — I'll build it across many files in parallel. Let me tackle everything:
+
+
+Built the You Tube Setup Sheet, System Notifications, and 3 more
+Base44 response
+Now rewrite the big files — RecipeSubmitSheet (document upload + AI recipe scan from image/doc + AI autocomplete), AIChefLive (multi-photo + model switcher), and Home (remember choice + YouTube search + setup flow):
+
+
+Built the Recipe Submit Sheet and AIChef Live Page
+Base44 response
+Now update Home page with "remember my choice", YouTube search bar with AI fallback, and setup sheet; update App.jsx with Privacy page; add CreatorSignatureBadge to RecipeDetailSheet; add SystemNotifications to Layout:
+
+
+Updated the Home
+Base44 response
+Now update RecipeFeed to shuffle recipes for "For You":
+
+
+Updated the Home
+Base44 response
+Now add SystemNotifications to Layout and add PrivacySettings route to App.jsx, and add creator badge to RecipeDetailSheet:
+
+
+Updated the Layout and App
+Base44 response
+Now add the creator badge + Scyn AI shoutout to RecipeDetailSheet, and add a Privacy Settings link in the Profile page:
+
+
+Updated the Recipe Detail Sheet
+Base44 response
+Now add Privacy link to Profile page:
+
+
+Updated the Profile
+Base44 response
+Now update the Recipe entity schema to include the scyn_curated and scyn_shoutout fields:
+
+
+Set up the Recipe data
+Base44 response
+Now add the openai provider to the AIChefSettingsPanel so it's configurable there too:
+
+
+Updated the AIChef Settings Panel
+Base44 response
+Everything is built. Let me do a final check to make sure there are no broken imports in the Home page (the RecipeFeed warning was just a linter quirk since it's defined in the same file):
+
+
+Read Home
+Base44 response
+All looks great — imports are all correct. Here's everything that was built across this update:
+
+Here's what's new:
+
+🎬 YouTube Setup Guide — when no API key is set, a step-by-step guided sheet walks you through getting one from Google Console, testing it, and choosing between "Sync my Channel" or "Start Fresh"
+🔍 YouTube Search — search bar in the YouTube feed with AI-powered alternative suggestions when no results are found
+💾 Remember My Choice — the app remembers whether you prefer YouTube or Recipes and opens to that side automatically
+🤖 Scyn AI Channel — all uploaded recipes are credited to the user with a shoutout and "Scyn AI curated" badge; For You feed is randomly shuffled like a true discovery feed
+🛡️ Privacy & API Keys page — all keys (YouTube, OpenRouter, Gemini, OpenAI) in one secure place with show/hide, save, clear, notification toggle, and a full system reset
+🔔 Themed System Notifications — beautiful in-app toast notifications with animated progress bars, branded colors, auto-dismiss, and can be disabled in Privacy Settings
+📸 AI Chef — multi-photo attach + model switcher — attach multiple images or documents to any message; inline model picker adapts to each provider (free-only for OpenRouter, type-your-model for Ollama with download guidance, auto-best for OpenAI)
+📄 Post Recipe — scan/doc/image mode — upload a photo or document and AI extracts the full recipe; image mode scans food photos and generates the recipe automatically with a preview + edit-before-publish flow; AI autocomplete hints as you type in each field
+5 months ago
+
+
+Your message
+Add a simple share button to every recipe that generates a neat image card I can post on social media to show off what I am cooking.
+
+a month ago
+
+
+
+Revert
+Base44 response
+I'll add a share button that generates a beautiful recipe image card using html2canvas (already installed). Let me check the existing share code first.
+
+
+Read Video Feed Card
+Base44 response
+I'll create a share card component that renders a beautiful recipe card and captures it as a downloadable image, then wire it into the existing share buttons.
+
+
+Built the Recipe Share Card
+Base44 response
+Now let me wire it into VideoFeedCard — replacing the existing share handler to generate and share the image card:
+
+
+Updated the Video Feed Card
+Base44 response
+Now update the share button UI to show a loading state and add the hidden share card:
+
+
+Updated the Video Feed Card
+Base44 response
+Now wire it into RecipeDetailSheet — adding a share button next to the existing action buttons:
+
+
+Updated the Recipe Detail Sheet
+Base44 response
+Now add the share button to the bottom action bar and the hidden share card:
+
+
+Updated the Recipe Detail Sheet
+Base44 response
+Done. The share button now generates a polished recipe image card (with hero photo, title, cuisine, cook time, difficulty, creator, ingredient pills, and ForkFeed branding) and shares it directly via the native share sheet, or downloads it as a PNG if native sharing isn't available. It's wired into both the feed card and the recipe detail sheet.
+
+a month ago
+
+
+Your message
+WEB3.txt
+CAN YOU COMMIT THE WHOLE THING USING THE TOKEN I JUST SENT YOU? AND MAKE SURE THAT EVERYTHING IS DONE AND I CAN USE THE APP NOW? I DON'T WANT TO LOSE ANY OF MY DATA.
+
+a day ago
+
+
+
+Revert
+Base44 response
+I'll check the project state, your data, and how GitHub sync should be set up — but first, one important thing about that token.
+
+
+Checked repo setup
+Base44 response
+
+Verified the app builds cleanly
+a day ago
+
+
+Your message
+Approved: connect github account.
+
+a day ago
+
+
+
+Revert
+Base44 response
+
+Confirmed the build result
+Base44 response
+
+Thought for 3s
+Do not use that token — revoke it now in GitHub → Settings → Developer settings → Personal access tokens, since anything pasted in chat should be treated as exposed. Base44's GitHub sync never needs a personal token.
+
+Your GitHub account is connected. To sync the actual code, connect your repository on the Workspace settings → GitHub page (also reachable from the editor's More actions → GitHub connection) — once it's linked, every change here syncs to the repo automatically.
+
+On your data: nothing is at risk. Your 14 recipes live in the app's database, not in the code files, so committing or syncing code never touches them. The app also builds cleanly with no errors — to let people use it outside the editor, hit Publish in the top bar.
+
+a day ago
+
+
+Your message
+HAVE YOU SNYC EVRYTHING TO THE REPO
+
+a day ago
+
+
+
+Revert
+Base44 response
+Let me check the actual GitHub sync status rather than guess.
+
+
+Checked your app
+Base44 response
+
+Checked your app
+Base44 response
+
+Checked your app
+Base44 response
+
+Thought for 3s
+Checked it live: no — nothing has reached any repo, because no repository is attached to this app yet (the connection shows as not connected). Only your GitHub account itself got linked, which doesn't create or push to a repo.
+
+To make it happen: use the GitHub connection from the editor's top bar (More actions) or Workspace settings → GitHub and pick/create the repo — once it's linked, your whole codebase gets pushed there.
+
+Your 14 recipes are untouched either way — they live in the app's database, not in the code that syncs.

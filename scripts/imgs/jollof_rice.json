@@ -1,0 +1,26 @@
+🚀 Initializing Z-AI SDK...
+🔎 Searching images: "jollof rice nigerian dish dark moody food photography"
+✅ Got 2 images
+{
+  "success": true,
+  "query": "jollof rice nigerian dish dark moody food photography",
+  "count": 2,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/af8de17d77f6.jpg",
+      "caption": "",
+      "source": "Saveur",
+      "original_width": "2000px",
+      "original_height": "1500px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/43b4f07bfeab.jpg",
+      "caption": "",
+      "source": "Ev's Eats",
+      "original_width": "890px",
+      "original_height": "1112px"
+    }
+  ]
+}

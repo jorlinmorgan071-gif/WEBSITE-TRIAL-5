@@ -1,0 +1,26 @@
+🚀 Initializing Z-AI SDK...
+🔎 Searching images: "creamy spaghetti carbonara in black bowl dark food photography"
+✅ Got 2 images
+{
+  "success": true,
+  "query": "creamy spaghetti carbonara in black bowl dark food photography",
+  "count": 2,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6a3cff955c6a.jpg",
+      "caption": "",
+      "source": "Chef Sous Chef",
+      "original_width": "1200px",
+      "original_height": "1800px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/8d901e2dbc20.jpeg",
+      "caption": "",
+      "source": "Pexels",
+      "original_width": "3375px",
+      "original_height": "6000px"
+    }
+  ]
+}

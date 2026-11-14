@@ -1,0 +1,26 @@
+🚀 Initializing Z-AI SDK...
+🔎 Searching images: "ramen bowl steaming dark moody food photography"
+✅ Got 2 images
+{
+  "success": true,
+  "query": "ramen bowl steaming dark moody food photography",
+  "count": 2,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b6121ebd35f5.jpg",
+      "caption": "",
+      "source": "Hedra",
+      "original_width": "1024px",
+      "original_height": "1024px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f9da7934b706.jpg",
+      "caption": "",
+      "source": "黑哥AI黑哥AI",
+      "original_width": "1024px",
+      "original_height": "1280px"
+    }
+  ]
+}

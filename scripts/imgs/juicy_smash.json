@@ -1,0 +1,26 @@
+🚀 Initializing Z-AI SDK...
+🔎 Searching images: "juicy smash burger cheese dark background food photography"
+✅ Got 2 images
+{
+  "success": true,
+  "query": "juicy smash burger cheese dark background food photography",
+  "count": 2,
+  "ranked": false,
+  "captioned_count": 0,
+  "results": [
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3765278b5f5f.jpeg",
+      "caption": "",
+      "source": "Pexels",
+      "original_width": "6000px",
+      "original_height": "4000px"
+    },
+    {
+      "original_url": "https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/e7c05ab484a6.jpg",
+      "caption": "",
+      "source": "Alamy",
+      "original_width": "866px",
+      "original_height": "1390px"
+    }
+  ]
+}
