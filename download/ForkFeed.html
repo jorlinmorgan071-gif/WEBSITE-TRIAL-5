@@ -786,6 +786,7 @@ function toggleLike(id, el){
   if(nowLiked){ S.liked[id]=1; r.likes++; burstHeart(el); }
   else { delete S.liked[id]; r.likes--; }
   save();
+  if(SYNC.online && SYNC.token) SYNC.like(id); // write-through to server
   if(el){ el.closest('.railbtn')?.classList.toggle('liked', nowLiked); const c=el.closest('.railbtn')?.querySelector('span'); if(c) c.textContent=fmtK(r.likes); }
   const c2 = document.querySelector(`#feedcard-${id} .like-count`); if(c2) c2.textContent = fmtK(r.likes);
 }
@@ -801,10 +802,11 @@ function burstHeart(el){
 function toggleSave(id){
   const i = S.saved.indexOf(id);
   if(i>=0){ S.saved.splice(i,1); toast('📖','Removed from Cookbook','Recipe removed from your saved collection.'); }
-  else { S.saved.push(id); toast('📖','Saved to Cookbook','Find it anytime under the Cookbook tab.','#5ad48a'.length?'#5ad48a':'#5ad48a'); updateNotiBadge();
-    pushNoti({ico:'📖',title:'Saved to Cookbook',msg:`${S.recipes.find(r=>r.id===id)?.title||'Recipe'} is waiting for you.`});
+  else { S.saved.push(id); toast('📖','Saved to Cookbook','Find it anytime under the Cookbook tab.','#5ad48a'); updateNotiBadge();
+    if(!(SYNC.online&&SYNC.token)) pushNoti({ico:'📖',title:'Saved to Cookbook',msg:`${S.recipes.find(r=>r.id===id)?.title||'Recipe'} is waiting for you.`});
   }
   save();
+  if(SYNC.online && SYNC.token) SYNC.saveRecipe(id); // write-through
   document.querySelectorAll(`[data-saved="${id}"]`).forEach(b=>{ b.classList.toggle('active', S.saved.includes(id)); const s=b.querySelector('span'); if(s) s.textContent = S.saved.includes(id)?'Saved':'Save'; });
   const rc = $('#recipe-sheet-save'); if(rc){ rc.textContent = S.saved.includes(id)?'✓ In Cookbook':'🔖 Save'; }
   updateNotiBadge();
@@ -812,8 +814,9 @@ function toggleSave(id){
 function toggleFollow(handle){
   const now = !S.follows[handle]; if(now) S.follows[handle]=1; else delete S.follows[handle];
   save();
+  if(SYNC.online && SYNC.token) SYNC.follow(handle); // server notifies the followee
   document.querySelectorAll(`[data-follow="${handle}"]`).forEach(b=>{ b.classList.toggle('following', now); b.textContent = now?'✓ Following':'+ Follow'; });
-  if(now){ pushNoti({ico:'👤',title:`Following ${handle}`,msg:'You\'ll get alerts on their latest uploads. Turn off anytime in the You panel.',group:'today'}); toast('👥','Following '+handle,'Their uploads will surface in your feed.'); }
+  if(now){ toast('👥','Following '+handle,'Their uploads will surface in your feed.'); }
 }
 function pushNoti(n){ S.notifications.unshift(Object.assign({id:Date.now(),ts:Date.now(),read:false,group:'today'},n)); save(); updateNotiBadge(); }
 function updateNotiBadge(){ const u=S.notifications.filter(n=>!n.read).length; const b=$('#noti-badge'); if(b){ b.style.display = u? 'flex':'none'; b.textContent=u; } }
@@ -1008,6 +1011,11 @@ function healthScore(n){
 
 // ---- provider dispatch ----
 async function aiChat(userMsg, ctx, onToken){
+  // online: route through the server (keys live server-side, CORS-safe)
+  if(SYNC.online){
+    const reply = await SYNC.ai(userMsg, ctx);
+    if(reply) return reply;
+  }
   const conf = S.ai; const provider = conf.provider;
   const tone = TONE_PRESETS.find(t=>t.id===conf.tone)||TONE_PRESETS[0];
   const sys = AI_SYS + ' TONE: ' + tone.style;
@@ -1042,8 +1050,12 @@ async function aiChat(userMsg, ctx, onToken){
   return builtinChefReply(userMsg, ctx);
 }
 
-// ---------- URL recipe extraction (simulated fetch+parse, real structure) ----------
+// ---------- URL recipe extraction: real fetch+parse on the server, local canned offline ----------
 async function extractRecipeFromURL(url){
+  if(SYNC.online){
+    const rec = await SYNC.extract(url);
+    if(rec) return Object.assign({id:'url'+Date.now(), creator:'Extracted Recipe', creatorHandle:'@link', hashtags:['#fromlink'], likes:0, commentsCount:0, saves:0, image:rec.image||IMG.ramen, scynCurated:true, extracted:true}, rec);
+  }
   await new Promise(r=>setTimeout(r,900));
   const canned = [
     {title:'Creamy Tuscan Chicken', cuisine:'Italian', time:30, difficulty:'Easy', servings:4,
@@ -1179,7 +1191,7 @@ function renderFeed(){
   bindFeedEvents();
   restoreFeedPosition();
 }
-function setFeedMode(m){ feedMode=m; if(S.taste.remember){ S.taste.mode=m; save(); } renderFeed(); toast('🔁','Mode: '+m, m==='youtube'?'Paste your YouTube API key in Privacy 🛡️ to power real search.':'Vertical recipe feed with full cards.'); }
+function setFeedMode(m){ feedMode=m; if(S.taste.remember){ S.taste.mode=m; save(); } renderFeed(); toast('🔁','Mode: '+m, m==='youtube'?(SYNC.online?'Search runs through the server — key is managed by the admin.':'Paste your YouTube API key in Privacy 🛡️ to power real search.'):'Vertical recipe feed with full cards.'); }
 function restoreFeedPosition(){ if(S.feedIndex>0){ requestAnimationFrame(()=>{ const f=$('#feed'); if(f) f.scrollTop = S.feedIndex * f.clientHeight; }); } }
 function bindFeedEvents(){
   const f = $('#feed'); if(!f) return;
@@ -1208,7 +1220,7 @@ function renderYouTubeMode(){
   const key = S.ai.keys.youtube || '';
   let html='';
   const recs = S.recipes.filter(r=>r.ytId);
-  if(!key && !S.bookmarks.length){
+  if(!key && !S.bookmarks.length && !(S.ytResults||[]).length){
     YT_SEEDS.forEach(y=>{
       html += `
       <div class="yt-card">
@@ -1245,9 +1257,14 @@ function ytSearchBarHTML(){
 }
 async function ytSearch(){
   const q = $('#yt-q')?.value?.trim(); if(!q) return;
-  const key = S.ai.keys.youtube;
-  if(!key){ toast('🔑','No YouTube API key','Add one in Privacy → API keys to search live.'); return; }
   toast('🔎','Searching YouTube…','“'+q+'”');
+  if(SYNC.online){
+    const vids = await SYNC.ytSearch(q);
+    if(vids && vids.length){ S.ytResults = vids; save(); renderFeed(); toast('✅', vids.length+' results','Pulled through the server-side YouTube key.'); return; }
+    if(vids===null){ toast('🔑','No YouTube key on server','Ask the admin to set it: POST /admin/keys {"youtube":"AIza…"}', 5000, '#ffb86b'); return; }
+  }
+  const key = S.ai.keys.youtube;
+  if(!key){ toast('🔑','No YouTube API key','Add one in Privacy → API keys, or connect to the server where the admin manages it.'); return; }
   try{
     const r = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&type=video&q=${encodeURIComponent(q)}&key=${key}`);
     const j = await r.json();
@@ -1297,6 +1314,7 @@ function renderRecipeSheet(){
         <button class="${RS.tab==='steps'?'active':''}" onclick="RS.tab='steps';renderRecipeSheet()">📝 Steps</button>
         <button class="${RS.tab==='nutrition'?'active':''}" onclick="RS.tab='nutrition';renderRecipeSheet()">📊 Nutrition</button>
         <button class="${RS.tab==='video'?'active':''}" onclick="RS.tab='video';renderRecipeSheet()">🎬 Video</button>
+        <button class="${RS.tab==='chat'?'active':''}" onclick="RS.tab='chat';renderRecipeSheet()">💬 ${fmtK(r.commentsCount)}</button>
       </div>
       ${RS.tab==='ingredients'?`
         <div class="scaler">
@@ -1337,6 +1355,13 @@ function renderRecipeSheet(){
         </div>
         <div class="card" style="font-size:12.5px;color:var(--muted);line-height:1.6">Streaming links come from creators. Tap <b>Live</b> in the feed for active cooking streams, or paste any recipe/video URL into <b>✨ AI Search</b> to extract a recipe from it.</div>
       `:''}
+      ${RS.tab==='chat'?`
+        <div id="rc-comments" style="margin-bottom:12px"></div>
+        <div class="ai-input" style="padding:0;border:none">
+          <input id="rc-comment-in" placeholder="${SYNC.online&&SYNC.token?('Comment as '+esc(SYNC.me?SYNC.me.username:'you')+'…'):'Sign in to comment…'}" ${SYNC.online&&SYNC.token?'':'disabled'}>
+          <button class="snd" onclick="submitRecipeComment('${r.id}')">↑</button>
+        </div>
+      `:''}
       <div class="divider"></div>
       <div style="display:flex;gap:16px;align-items:center;justify-content:center;font-size:12px;color:var(--muted);padding-bottom:8px">
         <span>❤️ ${fmtK(r.likes)}</span><span>💬 ${fmtK(r.commentsCount)}</span><span>🔖 ${fmtK(r.saves+S.saved.length)}</span>
@@ -1344,6 +1369,34 @@ function renderRecipeSheet(){
     </div>`;
   bindSheetVeil('sheet-recipe');
   sheet.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
+  if(RS.tab==='chat') loadRecipeComments(r.id);
+}
+// ---- comments tab ----
+async function loadRecipeComments(rid){
+  const list = document.getElementById('rc-comments');
+  if(!list) return;
+  if(SYNC.online && SYNC.token){
+    const cs = await SYNC.recipeComments(rid);
+    if(cs && cs.length){ RS.comments = cs; renderRecipeComments(); return; }
+  }
+  if(!RS.comments){ RS.comments = []; }
+  renderRecipeComments();
+}
+function renderRecipeComments(){
+  const list = document.getElementById('rc-comments'); if(!list) return;
+  const cs = RS.comments || [];
+  list.innerHTML = (SYNC.online && SYNC.token)? (cs.length? cs.map(c=>`
+    <div class="noti"><div class="n-ico">💬</div><div style="flex:1"><div class="n-tt">${esc(c.who||'chef')} <span style="color:var(--faint);font-weight:600;font-size:10px">${timeAgo(c.ts||Date.now())}</span></div><div class="n-ms">${esc(c.text)}</div></div></div>`).join('')
+    : `<div class="empty" style="padding:24px"><div class="e-ico">💬</div><div class="e-tt">No comments yet</div><div style="font-size:12px">Be the first — comment ${SYNC.me?('as '+SYNC.me.username):''}.</div></div>`)
+    : `<div class="empty" style="padding:24px"><div class="e-ico">💬</div><div class="e-tt">Sign in to join the chat</div><div style="font-size:12px">Live comments are stored on the server — ${SYNC.online?'register or login from Profile.':'connect to the ForkFeed server for shared comments.'}</div></div>`;
+}
+async function submitRecipeComment(rid){
+  const inp = document.getElementById('rc-comment-in'); if(!inp) return;
+  const text = inp.value.trim(); if(!text){ toast('✍️','Write something first','Empty comments never helped anyone cook.'); return; }
+  if(!(SYNC.online && SYNC.token)){ toast('🔗','Sign in to comment','Server-synced chat needs an account — Profile → Login.'); return; }
+  const c = await SYNC.comment(rid, text);
+  if(c){ RS.comments = RS.comments||[]; RS.comments.unshift(c); const r=S.recipes.find(x=>x.id===rid); if(r) r.commentsCount++; inp.value=''; renderRecipeComments(); toast('💬','Comment posted','Live on the server for everyone.'); }
+  else toast('⚠️','Could not post','Server said: '+(SYNC.lastErr||'unknown'), 4000, '#ff6b6b');
 }
 function nutritionVerdict(r){
   const n=r.nutrition; const h=healthScore(n);
@@ -1601,7 +1654,8 @@ async function submitRecipe(){
   };
   S.recipes.unshift(rec); S.user.scynRecipes++; save();
   closeSheet('sheet-create');
-  pushNoti({ico:'⭐',title:'Recipe published',msg:`${title} went live with an AI-enhanced cover and your creator signature.`,group:'today'});
+  if(!(SYNC.online && SYNC.token)) pushNoti({ico:'⭐',title:'Recipe published',msg:`${title} went live with an AI-enhanced cover and your creator signature.`,group:'today'});
+  if(SYNC.online && SYNC.token){ SYNC.createRecipe(rec); }
   toast('⭐','Recipe is live!','Scyn AI curated it onto For You with your signature + shoutout.', 4200);
   renderFeed(); go('cookbook');
 }
@@ -1663,13 +1717,14 @@ function filterPick(q){ q=q.toLowerCase(); $$('#pick-list .pickrow').forEach(r=>
 function assignSlot(dayKey,k,rid){
   if(!S.mealPlan[dayKey]) S.mealPlan[dayKey]={};
   S.mealPlan[dayKey][k]=rid; save();
+  if(SYNC.online && SYNC.token) SYNC.setPlanSlot(dayKey,k,rid);
   closeSheet('sheet-pick');
   const r=S.recipes.find(x=>x.id===rid);
   toast('🗓️','Planned','“'+r.title+'” for '+k+' — grocery list updated.', 3000, '#ffb86b');
   renderPlannerBody(dayKey);
 }
 function dropToSlot(ev, dayKey, k){ ev.preventDefault(); if(!MP.dragId) return; assignSlot(dayKey,k,MP.dragId); MP.dragId=null; }
-function clearSlot(dayKey,k){ delete S.mealPlan[dayKey][k]; save(); renderPlannerBody(dayKey); toast('🗑️','Slot cleared','Grocery list re-summed.'); }
+function clearSlot(dayKey,k){ delete S.mealPlan[dayKey][k]; save(); if(SYNC.online && SYNC.token) SYNC.setPlanSlot(dayKey,k,null); renderPlannerBody(dayKey); toast('🗑️','Slot cleared','Grocery list re-summed.'); }
 
 // =============== PROFILE ===============
 function renderProfile(){
@@ -1694,6 +1749,15 @@ function renderProfile(){
       <button class="btn sm ghost" onclick="openSheet('sheet-privacy')">🛡️ Privacy &amp; Keys</button>
       <button class="btn sm ghost" onclick="startTutorial()">❓ Tutorial</button>
     </div>
+    ${SYNC.online?`
+    <div class="card" style="margin:12px 16px 0;display:flex;align-items:center;gap:10px;border-color:${SYNC.token?'rgba(90,212,138,.35)':'rgba(255,184,107,.35)'}">
+      <div style="font-size:19px">${SYNC.token&&SYNC.me?'🤝':'🔌'}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:800">${SYNC.token&&SYNC.me?('Signed in as '+esc(SYNC.me.username)):'Connected — guest mode'}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Server v${SYNC.serverInfo?SYNC.serverInfo.version:'?'} · ${SYNC.serverInfo?SYNC.serverInfo.recipes+' recipes on the server · '+SYNC.serverInfo.users+' users':''}${SYNC.token?'':' — register to sync your data across devices.'}</div>
+      </div>
+      ${SYNC.token?'<button class="btn sm ghost" onclick="logoutFlow()">Log out</button>':'<button class="btn sm" onclick="renderAuthOverlay()">Login / Register</button>'}
+    </div>`:''}
     <div class="sec-h"><h2 style="font-size:15px">My recipes ${mine.length?`<span class="scyn-badge" style="margin-left:6px">⭐ ${mine.length} Scyn AI curated</span>`:''}</h2></div>
     ${mine.length? `<div class="rec-grid" style="padding:0 16px">${mine.map(r=>`
       <div class="rec-card" onclick="openRecipe('${r.id}')"><img src="${r.image}" alt="">
@@ -1720,28 +1784,41 @@ function saveBio(){
   S.user.name=$('#bio-name').value.trim()||'You';
   S.user.handle=$('#bio-handle').value.trim()||'@you';
   S.user.bio=$('#bio-bio').value.trim();
-  save(); closeSheet('sheet-bio'); renderProfile(); toast('✅','Profile saved','Looking good, chef.');
+  save();
+  if(SYNC.online && SYNC.token) SYNC.updateProfile({username:S.user.name, handle:S.user.handle, bio:S.user.bio});
+  closeSheet('sheet-bio'); renderProfile(); toast('✅','Profile saved','Looking good, chef.');
 }
 
 // =============== NOTIFICATIONS ===============
 function renderNoti(){
-  const w=$('#sheet-noti');
-  const groups={today:[],week:[],older:[]};
-  S.notifications.forEach(n=>groups[n.group==='today'?'today':n.group==='week'?'week':'older'].push(n));
+  // online: refresh from server first, then render
+  const render = ()=>{
+    const w=$('#sheet-noti');
+    const groups={today:[],week:[],older:[]};
+    const now=Date.now();
+    S.notifications.forEach(n=>{
+      const age=(now-(n.ts||0))/3600e3;
+      groups[age<24?'today':age<168?'week':'older'].push(n);
+    });
+    w.querySelector('.sheet').innerHTML = `
+    <div class="sheet-grab"><i></i></div>
+    <div class="sheet-head"><div class="sh-txt"><h2>Notifications</h2><div class="sh-sub">${S.notifications.length} total · all marked read</div></div><button class="close-x" data-close="sheet-noti">✕</button></div>
+    <div class="sheet-body">
+      ${['today','week','older'].map(g=> groups[g].length?`
+        <div class="noti-group">${g==='today'?'Today':g==='week'?'This Week':'Older'}</div>
+        ${groups[g].map(n=>`<div class="noti ${n.read?'':'unread'}"><div class="n-ico">${n.ico}</div><div style="flex:1"><div class="n-tt">${esc(n.title)}</div><div class="n-ms">${esc(n.msg)}</div><div class="n-tm">${timeAgo(n.ts)}</div></div></div>`).join('')}
+      `:'').join('')}
+      ${!S.notifications.length?`<div class="empty"><div class="e-ico">🔔</div><div class="e-tt">Quiet kitchen</div><div style="font-size:12px">Likes, follows and Scyn AI picks will land here.</div></div>`:''}
+      ${SYNC.online?'<div class="card" style="font-size:11.5px;color:var(--muted)">Stored on the server — follows, likes and comments from other users land here too.</div>':''}
+    </div>`;
+    bindSheetVeil('sheet-noti');
+    w.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
+    openSheet('sheet-noti');
+  };
   S.notifications.forEach(n=>n.read=true); save(); updateNotiBadge();
-  w.querySelector('.sheet').innerHTML = `
-  <div class="sheet-grab"><i></i></div>
-  <div class="sheet-head"><div class="sh-txt"><h2>Notifications</h2><div class="sh-sub">${S.notifications.length} total · all marked read</div></div><button class="close-x" data-close="sheet-noti">✕</button></div>
-  <div class="sheet-body">
-    ${['today','week','older'].map(g=> groups[g].length?`
-      <div class="noti-group">${g==='today'?'Today':g==='week'?'This Week':'Older'}</div>
-      ${groups[g].map(n=>`<div class="noti ${n.read?'':'unread'}"><div class="n-ico">${n.ico}</div><div style="flex:1"><div class="n-tt">${esc(n.title)}</div><div class="n-ms">${esc(n.msg)}</div><div class="n-tm">${timeAgo(n.ts)}</div></div></div>`).join('')}
-    `:'').join('')}
-    ${!S.notifications.length?`<div class="empty"><div class="e-ico">🔔</div><div class="e-tt">Quiet kitchen</div><div style="font-size:12px">Likes, follows and Scyn AI picks will land here.</div></div>`:''}
-  </div>`;
-  bindSheetVeil('sheet-noti');
-  w.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
-  openSheet('sheet-noti');
+  if(SYNC.online && SYNC.token){
+    SYNC.req('GET','/api/notifications').then(j=>{ S.notifications=j.notifications; render(); SYNC.markNotiRead(); updateNotiBadge(); }).catch(()=>render());
+  } else render();
 }
 
 // ForkFeed AI experiences: chat overlay, AI search, voice chef, camera guide, onboarding, tutorial, privacy
@@ -2238,9 +2315,16 @@ function openPrivacy(){
   const w=$('#sheet-privacy');
   w.querySelector('.sheet').innerHTML = `
   <div class="sheet-grab"><i></i></div>
-  <div class="sheet-head"><div class="sh-txt"><h2>🛡️ Privacy &amp; API Keys</h2><div class="sh-sub">All keys stay on this device only</div></div><button class="close-x" data-close="sheet-privacy">✕</button></div>
+  <div class="sheet-head"><div class="sh-txt"><h2>🛡️ Privacy &amp; API Keys</h2><div class="sh-sub">${SYNC.online?'Server-managed keys + this device only':'All keys stay on this device only'}</div></div><button class="close-x" data-close="sheet-privacy">✕</button></div>
   <div class="sheet-body">
-    <div class="card" style="font-size:12px;color:var(--muted);line-height:1.6">Keys live in your browser's localStorage — never sent to any ForkFeed server. Show, hide, clear, replace, or wipe everything below.</div>
+    ${SYNC.online?`
+    <div class="card" style="font-size:12px;color:var(--muted);line-height:1.6;border-color:rgba(90,212,138,.3)">
+      <b style="color:var(--green)">Connected to the ForkFeed server.</b> AI chat, YouTube search and link extraction run through the server with keys the admin configured — nothing private leaves your browser. ${(SYNC.serverKeysHint().length)?('Server keys present: '+SYNC.serverKeysHint().join(', ')+'.'):('No server keys yet — the built-in chef answers everything meanwhile.')}
+      <div style="margin-top:6px;font-size:11px;color:var(--faint)">Admin sets server keys: <span class="kbd">curl -X POST /admin/keys -H "Authorization: Bearer &lt;admin&gt;" -d '{"openai":"sk-…"}'</span></div>
+    </div>
+    <div class="divider"></div>
+    <div style="font-size:11.5px;font-weight:800;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin:2px 0 8px">This-device keys (used in guest/offline mode)</div>`:`
+    <div class="card" style="font-size:12px;color:var(--muted);line-height:1.6">Keys live in your browser's localStorage — never sent to any ForkFeed server. Show, hide, clear, replace, or wipe everything below.</div>`}
     ${[['youtube','▶️ YouTube Data v3','AIza…','Powers the YouTube feed + search'],['openai','🟢 OpenAI','sk-…','AI chat'],['openrouter','🆓 OpenRouter','sk-or-v1-…','Free-model AI chat'],['gemini','✦ Gemini','AIza…','AI chat + live camera vision'],['ollamaModel','🦙 Ollama model name','llama3.2','Local model name at localhost:11434']].map(([k,name,ph,desc])=>`
       <div class="field"><label>${name}</label>
       <div style="display:flex;gap:8px"><input id="pk-${k}" type="password" value="${esc(S.ai.keys[k]||'')}" placeholder="${ph}" oninput="S.ai.keys['${k}']=this.value;save()"><button class="btn sm ghost" onclick="const i=document.getElementById('pk-${k}');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='password'?'👁':'🙈'">👁</button></div>
@@ -2307,10 +2391,25 @@ function boot(){
   $('#btn-privacy')?.addEventListener('click', openPrivacy);
   // feed input
   const f=$('#feed');
-  if(!S.onboarded){ setTimeout(startOnboarding, 500); }
-  else if(!S.tutDone){ setTimeout(startTutorial, 600); }
   renderFeed(); updateNotiBadge();
   if(S.taste.remember && S.taste.mode) feedMode = S.taste.mode==='youtube'?'youtube':'recipes';
+  // ---- online path: probe server, restore session or show auth gate ----
+  SYNC.probe().then(online=>{
+    if(online){
+      if(SYNC.token){
+        SYNC.req('GET','/api/auth/me').then(()=>SYNC.pullAll()).then(()=>{
+          renderFeed(); renderProfile(); updateNotiBadge();
+          toast('🤝','Back online','Signed in as '+SYNC.me.username+' — server data loaded.', 3200, '#5ad48a');
+        }).catch(()=>{ SYNC.token=''; try{localStorage.removeItem('ff_token');}catch(e){} renderAuthOverlay(); });
+      } else {
+        renderAuthOverlay(); // server users pick: login, register, or guest
+      }
+      return;
+    }
+    // ---- offline path (file:// or no backend): classic local flow ----
+    if(!S.onboarded){ setTimeout(startOnboarding, 500); }
+    else if(!S.tutDone){ setTimeout(startTutorial, 600); }
+  });
   // keyboard: enter sends AI chat
   document.addEventListener('keydown', e=>{ if(e.key==='Enter' && $('#aiwrap').classList.contains('open') && document.activeElement===$('#ai-in')) aiSend(); });
   // drag recipes from cookbook into planner: make cookbook rows draggable
@@ -2437,6 +2536,155 @@ function overlayHTML(){
   </div>`;
 }
 document.addEventListener('DOMContentLoaded', boot);
+
+// ForkFeed online sync layer — talks to the backend when served by server.js, pure-local otherwise.
+const SYNC = {
+  online: false, base: '', token: '', me: null, lastErr: null,
+  probe() {
+    // When opened as file:// (no server) or a non-backend host, stay in local mode.
+    if (location.protocol === 'file:') return Promise.resolve(false);
+    return fetch('/api/health', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(j => {
+      SYNC.online = !!j; SYNC.serverInfo = j;
+      if (j) { try { SYNC.token = localStorage.getItem('ff_token') || ''; } catch {} }
+      return !!j;
+    }).catch(() => false);
+  },
+  req(method, path, body) {
+    const headers = { 'Content-Type': 'application/json' };
+    if (SYNC.token) headers['Authorization'] = 'Bearer ' + SYNC.token;
+    return fetch(path, { method, headers, body: body ? JSON.stringify(body) : undefined })
+      .then(async r => { const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.error || r.status); return j; });
+  },
+  register(username, password) {
+    return SYNC.req('POST', '/api/auth/register', { username, password }).then(j => { SYNC.token = j.token; SYNC.me = j.user; try { localStorage.setItem('ff_token', j.token); } catch {} return j; });
+  },
+  login(username, password) {
+    return SYNC.req('POST', '/api/auth/login', { username, password }).then(j => { SYNC.token = j.token; SYNC.me = j.user; try { localStorage.setItem('ff_token', j.token); } catch {} return j; });
+  },
+  logout() {
+    const p = SYNC.req('POST', '/api/auth/logout', {}).catch(() => {});
+    SYNC.token = ''; SYNC.me = null; try { localStorage.removeItem('ff_token'); } catch {}
+    return p;
+  },
+  // ---- data hydration ----
+  pullAll() {
+    return Promise.all([
+      SYNC.req('GET', '/api/recipes'),
+      SYNC.req('GET', '/api/notifications'),
+      SYNC.req('GET', '/api/mealplan'),
+      SYNC.req('GET', '/api/auth/me')
+    ]).then(([recs, noti, plan, me]) => {
+      S.recipes = recs.recipes.map(normalizeServerRecipe);
+      S.notifications = noti.notifications;
+      S.mealPlan = plan.plan;
+      S.user = { name: me.user.username, handle: me.user.handle, bio: me.user.bio, followers: me.user.stats.followers, following: me.user.stats.following, scynRecipes: me.user.stats.recipes };
+      S.saved = recs.recipes.filter(r => r.savedByMe).map(r => r.id).concat(
+        S.recipes.filter(r => r.savedByMe).map(r => r.id)).filter((v, i, a) => a.indexOf(v) === i);
+      S.liked = {}; S.recipes.forEach(r => { if (r.likedByMe) S.liked[r.id] = 1; });
+      S.onboarded = true; // server users skip local onboarding; taste prefs stay local
+      save();
+      return true;
+    });
+  },
+  // ---- write-through ----
+  like(id) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('POST', '/api/recipes/' + id + '/like', {}).then(j => { const r = S.recipes.find(x => x.id === id); if (r && j.likes !== undefined) r.likes = j.likes; save(); return j; }).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  saveRecipe(id) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('POST', '/api/recipes/' + id + '/save', {}).then(j => { const r = S.recipes.find(x => x.id === id); if (r && j.saves !== undefined) r.saves = j.saves; return j; }).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  follow(handle) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('POST', '/api/users/' + encodeURIComponent(handle) + '/follow', {}).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  comment(id, text) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('POST', '/api/recipes/' + id + '/comments', { text }).then(j => j.comment).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  recipeComments(id) { if (!SYNC.online || !SYNC.token) return Promise.resolve([]); return SYNC.req('GET', '/api/recipes/' + id).then(j => j.comments).catch(() => []); },
+  createRecipe(rec) {
+    if (!SYNC.online || !SYNC.token) return Promise.resolve(null);
+    return SYNC.req('POST', '/api/recipes', rec).then(j => { S.recipes.unshift(normalizeServerRecipe(j.recipe)); save(); renderFeed(); return j.recipe; }).catch(e => { SYNC.lastErr = e.message; return null; });
+  },
+  deleteRecipe(id) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('DELETE', '/api/recipes/' + id, {}).then(() => { S.recipes = S.recipes.filter(r => r.id !== id); save(); }).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  setPlanSlot(dayKey, slot, recipeId) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('PUT', '/api/mealplan', { dayKey, slot, recipeId }).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  updateProfile(patch) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('PATCH', '/api/auth/me', patch).then(j => { SYNC.me = j.user; return j; }).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  markNotiRead() { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('POST', '/api/notifications/read', {}).catch(() => null); },
+  // ---- AI / extraction / youtube through server ----
+  ai(message, ctx) {
+    if (!SYNC.online) return Promise.resolve(null);
+    return SYNC.req('POST', '/api/ai/chat', { message, provider: S.ai.provider, model: S.ai.model, tone: S.ai.tone, recipeId: ctx && ctx.id }).then(j => j.reply).catch(e => { SYNC.lastErr = e.message; return null; });
+  },
+  extract(url) { if (!SYNC.online) return Promise.resolve(null); return SYNC.req('POST', '/api/ai/extract', { url }).then(j => j.recipe).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  ytSearch(q) { if (!SYNC.online) return Promise.resolve(null); return SYNC.req('GET', '/api/youtube/search?q=' + encodeURIComponent(q)).then(j => j.videos).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  serverKeysHint() {
+    // which providers have server-side keys (admin-configured) — shown in UI
+    if (!SYNC.online || !SYNC.serverInfo) return [];
+    return (SYNC.serverInfo.providerKeys || []).map(k => ({ openai: 'OpenAI', openrouter: 'OpenRouter', gemini: 'Gemini', ollamaModel: 'Ollama', youtube: 'YouTube' }[k] || k));
+  }
+};
+function normalizeServerRecipe(r) {
+  return {
+    id: r.id, title: r.title, creator: r.creator, creatorHandle: r.creatorHandle, cuisine: r.cuisine,
+    time: r.time, difficulty: r.difficulty, servings: r.servings, likes: r.likes, commentsCount: r.commentsCount,
+    saves: r.saves, image: r.image || IMG.ramen, hashtags: r.hashtags || [], desc: r.desc || '',
+    ingredients: r.ingredients || [], steps: r.steps || [], nutrition: r.nutrition || {},
+    ytId: r.ytId || '', live: !!r.live, viewers: r.viewers || 0, userMade: !!r.userMade,
+    scynCurated: !!r.scynCurated, created: r.created || 0
+  };
+}
+
+// ---------- login / register overlay ----------
+function renderAuthOverlay() {
+  const w = document.createElement('div');
+  w.id = 'authwrap';
+  w.style.cssText = 'position:absolute;inset:0;z-index:650;background:linear-gradient(175deg,#16100e,#0a0808 60%,#0d0708);display:flex;flex-direction:column;';
+  w.innerHTML = `
+  <div style="flex:1;overflow-y:auto;padding:74px 26px 20px;display:flex;flex-direction:column">
+    <div style="font-size:42px">🍳</div>
+    <div style="font-size:26px;font-weight:800;margin:6px 0 4px">ForkFeed <span style="font-size:13px;font-weight:700;color:var(--amber);vertical-align:middle">server</span></div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:18px">Connected to the ForkFeed backend — accounts, recipes, likes and meal plans are stored on the server. ${SYNC.serverInfo ? 'Server v' + SYNC.serverInfo.version + ' · ' + SYNC.serverInfo.recipes + ' recipes · ' + SYNC.serverInfo.users + ' users.' : ''}</div>
+    <div class="seg" id="auth-tabs"><button class="active" data-m="login">Login</button><button data-m="register">Register</button></div>
+    <div class="field"><label>Username</label><input id="auth-user" autocomplete="username" placeholder="chef_amara"></div>
+    <div class="field"><label>Password</label><input id="auth-pass" type="password" autocomplete="current-password" placeholder="6+ characters"></div>
+    <div id="auth-err" style="font-size:12px;color:var(--red);min-height:16px;margin-bottom:8px"></div>
+    <button class="btn block" id="auth-go">Login</button>
+    <button class="btn ghost block" style="margin-top:10px" id="auth-guest">Continue as guest (local only)</button>
+    <div style="font-size:11px;color:var(--faint);margin-top:14px;line-height:1.5">Guest mode works exactly like the offline file: everything stored in this browser only. Register to sync across devices.</div>
+  </div>`;
+  document.getElementById('phone').appendChild(w);
+  let mode = 'login';
+  w.querySelectorAll('#auth-tabs button').forEach(b => b.addEventListener('click', () => {
+    mode = b.dataset.m;
+    w.querySelectorAll('#auth-tabs button').forEach(x => x.classList.toggle('active', x === b));
+    document.getElementById('auth-go').textContent = mode === 'login' ? 'Login' : 'Create account';
+  }));
+  const go = async () => {
+    const u = document.getElementById('auth-user').value.trim();
+    const p = document.getElementById('auth-pass').value;
+    const err = document.getElementById('auth-err');
+    err.textContent = '';
+    if (!u || !p) { err.textContent = 'Username and password, please.'; return; }
+    document.getElementById('auth-go').textContent = '⏳';
+    try {
+      await (mode === 'login' ? SYNC.login(u, p) : SYNC.register(u, p));
+      await SYNC.pullAll();
+      w.remove();
+      renderFeed(); renderProfile(); updateNotiBadge();
+      toast('🤝', 'Welcome, ' + SYNC.me.username, 'Your kitchen now syncs to the server.', 3600, '#5ad48a');
+    } catch (e) { err.textContent = e.message; document.getElementById('auth-go').textContent = mode === 'login' ? 'Login' : 'Create account'; }
+  };
+  document.getElementById('auth-go').addEventListener('click', go);
+  document.getElementById('auth-pass').addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+  document.getElementById('auth-guest').addEventListener('click', () => { w.remove(); toast('👤', 'Guest mode', 'Local data only — register anytime from Profile.'); });
+}
+function ensureAuthUI() {
+  if (!SYNC.online || !SYNC.token || !SYNC.me) return false;
+  return true;
+}
+function logoutFlow() {
+  SYNC.logout().then(() => {
+    // reset local state, return to auth overlay
+    localStorage.removeItem('ff_token');
+    resetAllSoft();
+    renderAuthOverlay();
+  });
+}
+function resetAllSoft() {
+  const keep = { ai: S.ai, taste: S.taste };
+  S = freshState(); S.ai = keep.ai; S.taste = keep.taste;
+  save(); renderFeed(); renderProfile(); updateNotiBadge();
+}
 
 </script>
 </body>

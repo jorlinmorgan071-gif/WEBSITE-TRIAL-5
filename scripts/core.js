@@ -44,6 +44,7 @@ function toggleLike(id, el){
   if(nowLiked){ S.liked[id]=1; r.likes++; burstHeart(el); }
   else { delete S.liked[id]; r.likes--; }
   save();
+  if(SYNC.online && SYNC.token) SYNC.like(id); // write-through to server
   if(el){ el.closest('.railbtn')?.classList.toggle('liked', nowLiked); const c=el.closest('.railbtn')?.querySelector('span'); if(c) c.textContent=fmtK(r.likes); }
   const c2 = document.querySelector(`#feedcard-${id} .like-count`); if(c2) c2.textContent = fmtK(r.likes);
 }
@@ -59,10 +60,11 @@ function burstHeart(el){
 function toggleSave(id){
   const i = S.saved.indexOf(id);
   if(i>=0){ S.saved.splice(i,1); toast('📖','Removed from Cookbook','Recipe removed from your saved collection.'); }
-  else { S.saved.push(id); toast('📖','Saved to Cookbook','Find it anytime under the Cookbook tab.','#5ad48a'.length?'#5ad48a':'#5ad48a'); updateNotiBadge();
-    pushNoti({ico:'📖',title:'Saved to Cookbook',msg:`${S.recipes.find(r=>r.id===id)?.title||'Recipe'} is waiting for you.`});
+  else { S.saved.push(id); toast('📖','Saved to Cookbook','Find it anytime under the Cookbook tab.','#5ad48a'); updateNotiBadge();
+    if(!(SYNC.online&&SYNC.token)) pushNoti({ico:'📖',title:'Saved to Cookbook',msg:`${S.recipes.find(r=>r.id===id)?.title||'Recipe'} is waiting for you.`});
   }
   save();
+  if(SYNC.online && SYNC.token) SYNC.saveRecipe(id); // write-through
   document.querySelectorAll(`[data-saved="${id}"]`).forEach(b=>{ b.classList.toggle('active', S.saved.includes(id)); const s=b.querySelector('span'); if(s) s.textContent = S.saved.includes(id)?'Saved':'Save'; });
   const rc = $('#recipe-sheet-save'); if(rc){ rc.textContent = S.saved.includes(id)?'✓ In Cookbook':'🔖 Save'; }
   updateNotiBadge();
@@ -70,8 +72,9 @@ function toggleSave(id){
 function toggleFollow(handle){
   const now = !S.follows[handle]; if(now) S.follows[handle]=1; else delete S.follows[handle];
   save();
+  if(SYNC.online && SYNC.token) SYNC.follow(handle); // server notifies the followee
   document.querySelectorAll(`[data-follow="${handle}"]`).forEach(b=>{ b.classList.toggle('following', now); b.textContent = now?'✓ Following':'+ Follow'; });
-  if(now){ pushNoti({ico:'👤',title:`Following ${handle}`,msg:'You\'ll get alerts on their latest uploads. Turn off anytime in the You panel.',group:'today'}); toast('👥','Following '+handle,'Their uploads will surface in your feed.'); }
+  if(now){ toast('👥','Following '+handle,'Their uploads will surface in your feed.'); }
 }
 function pushNoti(n){ S.notifications.unshift(Object.assign({id:Date.now(),ts:Date.now(),read:false,group:'today'},n)); save(); updateNotiBadge(); }
 function updateNotiBadge(){ const u=S.notifications.filter(n=>!n.read).length; const b=$('#noti-badge'); if(b){ b.style.display = u? 'flex':'none'; b.textContent=u; } }
@@ -266,6 +269,11 @@ function healthScore(n){
 
 // ---- provider dispatch ----
 async function aiChat(userMsg, ctx, onToken){
+  // online: route through the server (keys live server-side, CORS-safe)
+  if(SYNC.online){
+    const reply = await SYNC.ai(userMsg, ctx);
+    if(reply) return reply;
+  }
   const conf = S.ai; const provider = conf.provider;
   const tone = TONE_PRESETS.find(t=>t.id===conf.tone)||TONE_PRESETS[0];
   const sys = AI_SYS + ' TONE: ' + tone.style;
@@ -300,8 +308,12 @@ async function aiChat(userMsg, ctx, onToken){
   return builtinChefReply(userMsg, ctx);
 }
 
-// ---------- URL recipe extraction (simulated fetch+parse, real structure) ----------
+// ---------- URL recipe extraction: real fetch+parse on the server, local canned offline ----------
 async function extractRecipeFromURL(url){
+  if(SYNC.online){
+    const rec = await SYNC.extract(url);
+    if(rec) return Object.assign({id:'url'+Date.now(), creator:'Extracted Recipe', creatorHandle:'@link', hashtags:['#fromlink'], likes:0, commentsCount:0, saves:0, image:rec.image||IMG.ramen, scynCurated:true, extracted:true}, rec);
+  }
   await new Promise(r=>setTimeout(r,900));
   const canned = [
     {title:'Creamy Tuscan Chicken', cuisine:'Italian', time:30, difficulty:'Easy', servings:4,

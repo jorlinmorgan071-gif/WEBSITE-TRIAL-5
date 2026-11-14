@@ -117,7 +117,7 @@ function renderFeed(){
   bindFeedEvents();
   restoreFeedPosition();
 }
-function setFeedMode(m){ feedMode=m; if(S.taste.remember){ S.taste.mode=m; save(); } renderFeed(); toast('🔁','Mode: '+m, m==='youtube'?'Paste your YouTube API key in Privacy 🛡️ to power real search.':'Vertical recipe feed with full cards.'); }
+function setFeedMode(m){ feedMode=m; if(S.taste.remember){ S.taste.mode=m; save(); } renderFeed(); toast('🔁','Mode: '+m, m==='youtube'?(SYNC.online?'Search runs through the server — key is managed by the admin.':'Paste your YouTube API key in Privacy 🛡️ to power real search.'):'Vertical recipe feed with full cards.'); }
 function restoreFeedPosition(){ if(S.feedIndex>0){ requestAnimationFrame(()=>{ const f=$('#feed'); if(f) f.scrollTop = S.feedIndex * f.clientHeight; }); } }
 function bindFeedEvents(){
   const f = $('#feed'); if(!f) return;
@@ -146,7 +146,7 @@ function renderYouTubeMode(){
   const key = S.ai.keys.youtube || '';
   let html='';
   const recs = S.recipes.filter(r=>r.ytId);
-  if(!key && !S.bookmarks.length){
+  if(!key && !S.bookmarks.length && !(S.ytResults||[]).length){
     YT_SEEDS.forEach(y=>{
       html += `
       <div class="yt-card">
@@ -183,9 +183,14 @@ function ytSearchBarHTML(){
 }
 async function ytSearch(){
   const q = $('#yt-q')?.value?.trim(); if(!q) return;
-  const key = S.ai.keys.youtube;
-  if(!key){ toast('🔑','No YouTube API key','Add one in Privacy → API keys to search live.'); return; }
   toast('🔎','Searching YouTube…','“'+q+'”');
+  if(SYNC.online){
+    const vids = await SYNC.ytSearch(q);
+    if(vids && vids.length){ S.ytResults = vids; save(); renderFeed(); toast('✅', vids.length+' results','Pulled through the server-side YouTube key.'); return; }
+    if(vids===null){ toast('🔑','No YouTube key on server','Ask the admin to set it: POST /admin/keys {"youtube":"AIza…"}', 5000, '#ffb86b'); return; }
+  }
+  const key = S.ai.keys.youtube;
+  if(!key){ toast('🔑','No YouTube API key','Add one in Privacy → API keys, or connect to the server where the admin manages it.'); return; }
   try{
     const r = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&type=video&q=${encodeURIComponent(q)}&key=${key}`);
     const j = await r.json();
@@ -235,6 +240,7 @@ function renderRecipeSheet(){
         <button class="${RS.tab==='steps'?'active':''}" onclick="RS.tab='steps';renderRecipeSheet()">📝 Steps</button>
         <button class="${RS.tab==='nutrition'?'active':''}" onclick="RS.tab='nutrition';renderRecipeSheet()">📊 Nutrition</button>
         <button class="${RS.tab==='video'?'active':''}" onclick="RS.tab='video';renderRecipeSheet()">🎬 Video</button>
+        <button class="${RS.tab==='chat'?'active':''}" onclick="RS.tab='chat';renderRecipeSheet()">💬 ${fmtK(r.commentsCount)}</button>
       </div>
       ${RS.tab==='ingredients'?`
         <div class="scaler">
@@ -275,6 +281,13 @@ function renderRecipeSheet(){
         </div>
         <div class="card" style="font-size:12.5px;color:var(--muted);line-height:1.6">Streaming links come from creators. Tap <b>Live</b> in the feed for active cooking streams, or paste any recipe/video URL into <b>✨ AI Search</b> to extract a recipe from it.</div>
       `:''}
+      ${RS.tab==='chat'?`
+        <div id="rc-comments" style="margin-bottom:12px"></div>
+        <div class="ai-input" style="padding:0;border:none">
+          <input id="rc-comment-in" placeholder="${SYNC.online&&SYNC.token?('Comment as '+esc(SYNC.me?SYNC.me.username:'you')+'…'):'Sign in to comment…'}" ${SYNC.online&&SYNC.token?'':'disabled'}>
+          <button class="snd" onclick="submitRecipeComment('${r.id}')">↑</button>
+        </div>
+      `:''}
       <div class="divider"></div>
       <div style="display:flex;gap:16px;align-items:center;justify-content:center;font-size:12px;color:var(--muted);padding-bottom:8px">
         <span>❤️ ${fmtK(r.likes)}</span><span>💬 ${fmtK(r.commentsCount)}</span><span>🔖 ${fmtK(r.saves+S.saved.length)}</span>
@@ -282,6 +295,34 @@ function renderRecipeSheet(){
     </div>`;
   bindSheetVeil('sheet-recipe');
   sheet.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
+  if(RS.tab==='chat') loadRecipeComments(r.id);
+}
+// ---- comments tab ----
+async function loadRecipeComments(rid){
+  const list = document.getElementById('rc-comments');
+  if(!list) return;
+  if(SYNC.online && SYNC.token){
+    const cs = await SYNC.recipeComments(rid);
+    if(cs && cs.length){ RS.comments = cs; renderRecipeComments(); return; }
+  }
+  if(!RS.comments){ RS.comments = []; }
+  renderRecipeComments();
+}
+function renderRecipeComments(){
+  const list = document.getElementById('rc-comments'); if(!list) return;
+  const cs = RS.comments || [];
+  list.innerHTML = (SYNC.online && SYNC.token)? (cs.length? cs.map(c=>`
+    <div class="noti"><div class="n-ico">💬</div><div style="flex:1"><div class="n-tt">${esc(c.who||'chef')} <span style="color:var(--faint);font-weight:600;font-size:10px">${timeAgo(c.ts||Date.now())}</span></div><div class="n-ms">${esc(c.text)}</div></div></div>`).join('')
+    : `<div class="empty" style="padding:24px"><div class="e-ico">💬</div><div class="e-tt">No comments yet</div><div style="font-size:12px">Be the first — comment ${SYNC.me?('as '+SYNC.me.username):''}.</div></div>`)
+    : `<div class="empty" style="padding:24px"><div class="e-ico">💬</div><div class="e-tt">Sign in to join the chat</div><div style="font-size:12px">Live comments are stored on the server — ${SYNC.online?'register or login from Profile.':'connect to the ForkFeed server for shared comments.'}</div></div>`;
+}
+async function submitRecipeComment(rid){
+  const inp = document.getElementById('rc-comment-in'); if(!inp) return;
+  const text = inp.value.trim(); if(!text){ toast('✍️','Write something first','Empty comments never helped anyone cook.'); return; }
+  if(!(SYNC.online && SYNC.token)){ toast('🔗','Sign in to comment','Server-synced chat needs an account — Profile → Login.'); return; }
+  const c = await SYNC.comment(rid, text);
+  if(c){ RS.comments = RS.comments||[]; RS.comments.unshift(c); const r=S.recipes.find(x=>x.id===rid); if(r) r.commentsCount++; inp.value=''; renderRecipeComments(); toast('💬','Comment posted','Live on the server for everyone.'); }
+  else toast('⚠️','Could not post','Server said: '+(SYNC.lastErr||'unknown'), 4000, '#ff6b6b');
 }
 function nutritionVerdict(r){
   const n=r.nutrition; const h=healthScore(n);
@@ -539,7 +580,8 @@ async function submitRecipe(){
   };
   S.recipes.unshift(rec); S.user.scynRecipes++; save();
   closeSheet('sheet-create');
-  pushNoti({ico:'⭐',title:'Recipe published',msg:`${title} went live with an AI-enhanced cover and your creator signature.`,group:'today'});
+  if(!(SYNC.online && SYNC.token)) pushNoti({ico:'⭐',title:'Recipe published',msg:`${title} went live with an AI-enhanced cover and your creator signature.`,group:'today'});
+  if(SYNC.online && SYNC.token){ SYNC.createRecipe(rec); }
   toast('⭐','Recipe is live!','Scyn AI curated it onto For You with your signature + shoutout.', 4200);
   renderFeed(); go('cookbook');
 }
@@ -601,13 +643,14 @@ function filterPick(q){ q=q.toLowerCase(); $$('#pick-list .pickrow').forEach(r=>
 function assignSlot(dayKey,k,rid){
   if(!S.mealPlan[dayKey]) S.mealPlan[dayKey]={};
   S.mealPlan[dayKey][k]=rid; save();
+  if(SYNC.online && SYNC.token) SYNC.setPlanSlot(dayKey,k,rid);
   closeSheet('sheet-pick');
   const r=S.recipes.find(x=>x.id===rid);
   toast('🗓️','Planned','“'+r.title+'” for '+k+' — grocery list updated.', 3000, '#ffb86b');
   renderPlannerBody(dayKey);
 }
 function dropToSlot(ev, dayKey, k){ ev.preventDefault(); if(!MP.dragId) return; assignSlot(dayKey,k,MP.dragId); MP.dragId=null; }
-function clearSlot(dayKey,k){ delete S.mealPlan[dayKey][k]; save(); renderPlannerBody(dayKey); toast('🗑️','Slot cleared','Grocery list re-summed.'); }
+function clearSlot(dayKey,k){ delete S.mealPlan[dayKey][k]; save(); if(SYNC.online && SYNC.token) SYNC.setPlanSlot(dayKey,k,null); renderPlannerBody(dayKey); toast('🗑️','Slot cleared','Grocery list re-summed.'); }
 
 // =============== PROFILE ===============
 function renderProfile(){
@@ -632,6 +675,15 @@ function renderProfile(){
       <button class="btn sm ghost" onclick="openSheet('sheet-privacy')">🛡️ Privacy &amp; Keys</button>
       <button class="btn sm ghost" onclick="startTutorial()">❓ Tutorial</button>
     </div>
+    ${SYNC.online?`
+    <div class="card" style="margin:12px 16px 0;display:flex;align-items:center;gap:10px;border-color:${SYNC.token?'rgba(90,212,138,.35)':'rgba(255,184,107,.35)'}">
+      <div style="font-size:19px">${SYNC.token&&SYNC.me?'🤝':'🔌'}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:800">${SYNC.token&&SYNC.me?('Signed in as '+esc(SYNC.me.username)):'Connected — guest mode'}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Server v${SYNC.serverInfo?SYNC.serverInfo.version:'?'} · ${SYNC.serverInfo?SYNC.serverInfo.recipes+' recipes on the server · '+SYNC.serverInfo.users+' users':''}${SYNC.token?'':' — register to sync your data across devices.'}</div>
+      </div>
+      ${SYNC.token?'<button class="btn sm ghost" onclick="logoutFlow()">Log out</button>':'<button class="btn sm" onclick="renderAuthOverlay()">Login / Register</button>'}
+    </div>`:''}
     <div class="sec-h"><h2 style="font-size:15px">My recipes ${mine.length?`<span class="scyn-badge" style="margin-left:6px">⭐ ${mine.length} Scyn AI curated</span>`:''}</h2></div>
     ${mine.length? `<div class="rec-grid" style="padding:0 16px">${mine.map(r=>`
       <div class="rec-card" onclick="openRecipe('${r.id}')"><img src="${r.image}" alt="">
@@ -658,26 +710,39 @@ function saveBio(){
   S.user.name=$('#bio-name').value.trim()||'You';
   S.user.handle=$('#bio-handle').value.trim()||'@you';
   S.user.bio=$('#bio-bio').value.trim();
-  save(); closeSheet('sheet-bio'); renderProfile(); toast('✅','Profile saved','Looking good, chef.');
+  save();
+  if(SYNC.online && SYNC.token) SYNC.updateProfile({username:S.user.name, handle:S.user.handle, bio:S.user.bio});
+  closeSheet('sheet-bio'); renderProfile(); toast('✅','Profile saved','Looking good, chef.');
 }
 
 // =============== NOTIFICATIONS ===============
 function renderNoti(){
-  const w=$('#sheet-noti');
-  const groups={today:[],week:[],older:[]};
-  S.notifications.forEach(n=>groups[n.group==='today'?'today':n.group==='week'?'week':'older'].push(n));
+  // online: refresh from server first, then render
+  const render = ()=>{
+    const w=$('#sheet-noti');
+    const groups={today:[],week:[],older:[]};
+    const now=Date.now();
+    S.notifications.forEach(n=>{
+      const age=(now-(n.ts||0))/3600e3;
+      groups[age<24?'today':age<168?'week':'older'].push(n);
+    });
+    w.querySelector('.sheet').innerHTML = `
+    <div class="sheet-grab"><i></i></div>
+    <div class="sheet-head"><div class="sh-txt"><h2>Notifications</h2><div class="sh-sub">${S.notifications.length} total · all marked read</div></div><button class="close-x" data-close="sheet-noti">✕</button></div>
+    <div class="sheet-body">
+      ${['today','week','older'].map(g=> groups[g].length?`
+        <div class="noti-group">${g==='today'?'Today':g==='week'?'This Week':'Older'}</div>
+        ${groups[g].map(n=>`<div class="noti ${n.read?'':'unread'}"><div class="n-ico">${n.ico}</div><div style="flex:1"><div class="n-tt">${esc(n.title)}</div><div class="n-ms">${esc(n.msg)}</div><div class="n-tm">${timeAgo(n.ts)}</div></div></div>`).join('')}
+      `:'').join('')}
+      ${!S.notifications.length?`<div class="empty"><div class="e-ico">🔔</div><div class="e-tt">Quiet kitchen</div><div style="font-size:12px">Likes, follows and Scyn AI picks will land here.</div></div>`:''}
+      ${SYNC.online?'<div class="card" style="font-size:11.5px;color:var(--muted)">Stored on the server — follows, likes and comments from other users land here too.</div>':''}
+    </div>`;
+    bindSheetVeil('sheet-noti');
+    w.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
+    openSheet('sheet-noti');
+  };
   S.notifications.forEach(n=>n.read=true); save(); updateNotiBadge();
-  w.querySelector('.sheet').innerHTML = `
-  <div class="sheet-grab"><i></i></div>
-  <div class="sheet-head"><div class="sh-txt"><h2>Notifications</h2><div class="sh-sub">${S.notifications.length} total · all marked read</div></div><button class="close-x" data-close="sheet-noti">✕</button></div>
-  <div class="sheet-body">
-    ${['today','week','older'].map(g=> groups[g].length?`
-      <div class="noti-group">${g==='today'?'Today':g==='week'?'This Week':'Older'}</div>
-      ${groups[g].map(n=>`<div class="noti ${n.read?'':'unread'}"><div class="n-ico">${n.ico}</div><div style="flex:1"><div class="n-tt">${esc(n.title)}</div><div class="n-ms">${esc(n.msg)}</div><div class="n-tm">${timeAgo(n.ts)}</div></div></div>`).join('')}
-    `:'').join('')}
-    ${!S.notifications.length?`<div class="empty"><div class="e-ico">🔔</div><div class="e-tt">Quiet kitchen</div><div style="font-size:12px">Likes, follows and Scyn AI picks will land here.</div></div>`:''}
-  </div>`;
-  bindSheetVeil('sheet-noti');
-  w.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
-  openSheet('sheet-noti');
+  if(SYNC.online && SYNC.token){
+    SYNC.req('GET','/api/notifications').then(j=>{ S.notifications=j.notifications; render(); SYNC.markNotiRead(); updateNotiBadge(); }).catch(()=>render());
+  } else render();
 }

@@ -1,0 +1,2691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0a0808">
+<title>ForkFeed — TikTok for your kitchen</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>🍳</text></svg>">
+<style>
+/* ForkFeed — dark cinematic theme, coral/amber accents, glassmorphism */
+* { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
+:root{
+  --bg:#0a0808; --bg2:#141012; --surface:#1a1518; --surface2:#231c20;
+  --glass:rgba(26,21,24,.72); --glass2:rgba(35,28,32,.6);
+  --text:#f5f0ee; --muted:#a89b96; --faint:#6e625d;
+  --coral:#ff5c5c; --coral2:#ff7e6a; --amber:#ffb86b; --gold:#ffd166;
+  --green:#5ad48a; --red:#ff6b6b; --blue:#6ec3ff;
+  --radius:18px; --radius-sm:12px;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+}
+html,body{height:100%;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Segoe UI',Roboto,sans-serif;
+  background:#000; color:var(--text); overflow:hidden;
+}
+img{display:block;}
+::-webkit-scrollbar{width:0;height:0;}
+.no-scroll{overflow:hidden;touch-action:none;}
+button{font-family:inherit;color:inherit;background:none;border:none;cursor:pointer;}
+input,textarea,select{font-family:inherit;color:var(--text);}
+input::placeholder,textarea::placeholder{color:var(--faint);}
+
+/* ===== App shell (iPhone-in-browser) ===== */
+#stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(1200px 800px at 50% -10%,#1c1416 0%,#000 70%);}
+#phone{position:relative;width:100%;height:100%;max-width:426px;background:var(--bg);overflow:hidden;}
+@media(min-width:700px) and (min-height:760px){
+  #phone{border-radius:47px;box-shadow:0 0 0 11px #16141a,0 0 0 13px #34303a,0 30px 90px rgba(0,0,0,.9);height:min(92vh,880px);}
+  .desktop-only{display:flex!important;}
+}
+.desktop-only{display:none;position:absolute;top:14px;left:50%;transform:translateX(-50%);z-index:400;gap:8px;align-items:center;pointer-events:none;}
+.desktop-only .dot{width:7px;height:7px;border-radius:50%;background:#2b2731;}
+#notch{position:absolute;top:8px;left:50%;transform:translateX(-50%);width:118px;height:30px;border-radius:16px;background:#000;z-index:400;pointer-events:none;display:none;}
+@media(min-width:700px) and (min-height:760px){#notch{display:block;}}
+#statusbar{position:absolute;top:0;left:0;right:0;height:44px;display:flex;align-items:center;justify-content:space-between;padding:12px 26px 0;z-index:300;pointer-events:none;font-size:13px;font-weight:600;color:var(--text);}
+#statusbar .sb-right{display:flex;gap:5px;align-items:center;}
+.sb-batt{width:23px;height:11px;border:1.4px solid rgba(255,255,255,.5);border-radius:3px;position:relative;}
+.sb-batt::after{content:'';position:absolute;inset:1.5px;right:60%;background:var(--text);border-radius:1px;}
+
+/* ===== Screens & pages ===== */
+#app{position:absolute;inset:0;display:flex;flex-direction:column;}
+.screen{position:absolute;inset:0;display:none;flex-direction:column;}
+.screen.active{display:flex;}
+.fade-in{animation:fade .28s ease both;}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.page{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;padding-bottom:96px;}
+.page-nopad{padding-bottom:96px;}
+
+/* ===== Top bar ===== */
+.topbar{display:flex;align-items:center;gap:10px;padding:54px 18px 10px;position:sticky;top:0;z-index:40;background:linear-gradient(180deg,rgba(10,8,8,.96) 55%,rgba(10,8,8,.7) 80%,transparent);}
+.topbar h1{font-size:22px;font-weight:800;letter-spacing:.2px;}
+.topbar .sub{font-size:12px;color:var(--muted);margin-top:1px;}
+.iconbtn{width:38px;height:38px;border-radius:50%;background:var(--glass);border:1px solid rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-size:17px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);}
+.iconbtn:active{transform:scale(.92);}
+.topbar .spacer{flex:1;}
+
+/* ===== Bottom tab bar ===== */
+#tabbar{position:absolute;left:0;right:0;bottom:0;z-index:220;display:flex;padding:8px 10px calc(10px + var(--safe-b));background:linear-gradient(0deg,rgba(10,8,8,.98) 60%,rgba(10,8,8,.86));border-top:1px solid rgba(255,255,255,.06);justify-content:space-around;}
+.tabbtn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:5px 2px;position:relative;color:var(--faint);transition:color .2s;}
+.tabbtn .t-ico{font-size:21px;line-height:1;filter:grayscale(.4);}
+.tabbtn span{font-size:10px;font-weight:600;letter-spacing:.2px;}
+.tabbtn.active{color:var(--coral);}
+.tabbtn.active .t-ico{filter:none;transform:scale(1.08);}
+.tabbtn .badge{position:absolute;top:-1px;right:calc(50% - 21px);min-width:16px;height:16px;border-radius:9px;background:var(--coral);color:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 4px;}
+
+/* ===== Feed (TikTok style) ===== */
+#feed{position:absolute;inset:0;overflow-y:auto;scroll-snap-type:y mandatory;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;background:#000;}
+#feed::-webkit-scrollbar{display:none;}
+.feedcard{position:relative;height:100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;overflow:hidden;}
+.feedcard .bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(1.12) contrast(1.05);transform:scale(1.02);}
+.feedcard .veil{position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,transparent 22%,transparent 42%,rgba(0,0,0,.88) 100%);}
+.feedcard .info{position:absolute;left:16px;right:88px;bottom:110px;z-index:5;}
+.fd-title{font-size:21px;font-weight:800;line-height:1.2;text-shadow:0 2px 14px rgba(0,0,0,.6);}
+.fd-meta{display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;}
+.chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.14);font-size:11px;font-weight:600;color:#fff;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);}
+.chip.live{background:rgba(255,70,70,.92);animation:pulse 1.6s infinite;}
+.chip.gold{background:rgba(255,177,72,.22);border-color:rgba(255,184,107,.45);color:var(--amber);}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(255,80,80,.55)}70%{box-shadow:0 0 0 9px rgba(255,80,80,0)}100%{box-shadow:0 0 0 0 rgba(255,80,80,0)}}
+.fd-creator{display:flex;align-items:center;gap:9px;margin-top:11px;}
+.avatar{width:38px;height:38px;border-radius:50%;border:1.5px solid rgba(255,255,255,.55);object-fit:cover;background:var(--surface2);}
+.avatar.lg{width:84px;height:84px;}
+.fd-creator .who{font-size:14px;font-weight:700;}
+.fd-creator .sub{font-size:11.5px;color:var(--muted);margin-top:1px;}
+.followbtn{margin-left:6px;padding:6px 13px;border-radius:18px;background:var(--coral);color:#fff;font-size:12px;font-weight:700;transition:.25s;}
+.followbtn.following{background:rgba(255,255,255,.14);}
+.followbtn:active{transform:scale(.93);}
+.rail{position:absolute;right:12px;bottom:118px;z-index:6;display:flex;flex-direction:column;gap:17px;align-items:center;}
+.railbtn{display:flex;flex-direction:column;align-items:center;gap:4px;color:#fff;}
+.railbtn .rb-ico{width:46px;height:46px;border-radius:50%;background:rgba(20,16,18,.62);border:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;font-size:21px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:transform .18s;}
+.railbtn:active .rb-ico{transform:scale(.86);}
+.railbtn span{font-size:10.5px;font-weight:700;text-shadow:0 1px 6px rgba(0,0,0,.7);}
+.railbtn.liked .rb-ico{color:var(--coral);}
+.railbtn.liked .rb-ico .heart{animation:pop .4s ease;}
+@keyframes pop{0%{transform:scale(1)}40%{transform:scale(1.45)}100%{transform:scale(1)}}
+.fd-tabs{position:absolute;top:52px;left:0;right:0;display:flex;justify-content:center;gap:4px;z-index:5;padding:0 16px;}
+.fd-tab{padding:7px 15px;border-radius:20px;font-size:13px;font-weight:700;color:rgba(255,255,255,.55);}
+.fd-tab.active{color:#fff;background:rgba(255,255,255,.14);}
+.swipe-hint{position:absolute;bottom:88px;left:50%;transform:translateX(-50%);z-index:4;font-size:11px;color:rgba(255,255,255,.5);animation:bob 1.8s infinite;display:flex;flex-direction:column;align-items:center;gap:2px;}
+@keyframes bob{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
+.heartburst{position:absolute;font-size:84px;z-index:20;pointer-events:none;filter:drop-shadow(0 6px 20px rgba(255,60,60,.6));animation:burst .9s ease forwards;}
+@keyframes burst{0%{transform:scale(0) rotate(-16deg);opacity:0}30%{transform:scale(1.25) rotate(8deg);opacity:1}70%{opacity:1}100%{transform:scale(1.6) rotate(14deg) translateY(-40px);opacity:0}}
+/* YouTube mode cards */
+.yt-card{position:relative;height:100%;width:100%;scroll-snap-align:start;scroll-snap-stop:always;overflow:hidden;display:flex;align-items:center;justify-content:center;background:#000;}
+.yt-card .bgimg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.5;filter:blur(2px) saturate(1.1);}
+.yt-embed{position:relative;z-index:2;width:100%;aspect-ratio:16/9;max-height:70%;margin:0 auto;border-radius:14px;overflow:hidden;background:#000;}
+.yt-embed iframe{width:100%;height:100%;border:0;}
+.yt-info{position:absolute;left:16px;right:16px;bottom:104px;z-index:3;}
+
+/* ===== Sheets (slide-up modals) ===== */
+.sheet-wrap{position:absolute;inset:0;z-index:340;display:none;}
+.sheet-wrap.open{display:block;}
+.sheet-veil{position:absolute;inset:0;background:rgba(0,0,0,.6);opacity:0;transition:opacity .3s;}
+.sheet-wrap.open .sheet-veil{opacity:1;}
+.sheet{position:absolute;left:0;right:0;bottom:0;max-height:88%;background:linear-gradient(180deg,var(--surface) 0%,#131013 100%);border-radius:26px 26px 0 0;display:flex;flex-direction:column;transform:translateY(103%);transition:transform .42s cubic-bezier(.32,.72,.28,1);box-shadow:0 -18px 60px rgba(0,0,0,.6);}
+.sheet-wrap.open .sheet{transform:none;}
+.sheet-grab{padding:9px 0 3px;display:flex;justify-content:center;}
+.sheet-grab i{width:42px;height:5px;border-radius:3px;background:rgba(255,255,255,.22);}
+.sheet-head{display:flex;align-items:center;gap:12px;padding:6px 16px 12px;}
+.sheet-head .sh-txt{flex:1;min-width:0;}
+.sheet-head h2{font-size:19px;font-weight:800;line-height:1.25;}
+.sheet-head .sh-sub{font-size:12px;color:var(--muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.sheet-body{overflow-y:auto;padding:0 16px 30px;-webkit-overflow-scrolling:touch;}
+.sheet-actions{display:flex;gap:8px;}
+.close-x{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;align-items:center;justify-content:center;font-size:15px;flex:none;}
+
+/* Segmented tabs inside sheets */
+.seg{display:flex;background:rgba(255,255,255,.06);border-radius:13px;padding:4px;gap:3px;margin:4px 0 12px;}
+.seg button{flex:1;padding:8px 4px;border-radius:10px;font-size:12.5px;font-weight:700;color:var(--muted);transition:.2s;}
+.seg button.active{background:var(--coral);color:#fff;box-shadow:0 4px 14px rgba(255,92,92,.35);}
+
+/* ===== Cards & grids ===== */
+.card{background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:var(--radius);padding:14px;margin-bottom:12px;}
+.rec-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:11px;}
+.rec-card{position:relative;border-radius:16px;overflow:hidden;background:var(--surface2);border:1px solid rgba(255,255,255,.06);}
+.rec-card:active{transform:scale(.97);transition:.15s;}
+.rec-card img{width:100%;aspect-ratio:4/3.4;object-fit:cover;}
+.rec-card .rc-ov{position:absolute;left:0;right:0;bottom:0;padding:22px 10px 9px;background:linear-gradient(0deg,rgba(0,0,0,.88),transparent);}
+.rec-card .rc-t{font-size:13px;font-weight:800;line-height:1.25;}
+.rec-card .rc-m{font-size:10.5px;color:var(--muted);margin-top:2px;display:flex;gap:7px;flex-wrap:wrap;}
+.row-card{display:flex;gap:12px;align-items:center;background:var(--surface);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:11px;margin-bottom:10px;}
+.row-card img{width:86px;height:72px;border-radius:12px;object-fit:cover;flex:none;}
+
+/* Buttons */
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px 18px;border-radius:15px;font-size:14.5px;font-weight:700;transition:transform .16s, box-shadow .2s;background:var(--coral);color:#fff;box-shadow:0 8px 22px rgba(255,92,92,.3);}
+.btn:active{transform:scale(.96);}
+.btn.ghost{background:rgba(255,255,255,.08);box-shadow:none;color:var(--text);}
+.btn.amber{background:var(--amber);color:#241505;box-shadow:0 8px 22px rgba(255,184,107,.28);}
+.btn.green{background:var(--green);color:#0b2015;box-shadow:0 8px 22px rgba(90,212,138,.28);}
+.btn.sm{padding:9px 14px;font-size:12.5px;border-radius:12px;}
+.btn.block{width:100%;}
+.btn[disabled]{opacity:.45;pointer-events:none;}
+.btnrow{display:flex;gap:9px;}
+.btnrow .btn{flex:1;}
+
+/* Forms */
+.field{margin-bottom:13px;}
+.field label{display:block;font-size:11.5px;font-weight:700;color:var(--amber);margin-bottom:6px;text-transform:uppercase;letter-spacing:.7px;}
+.field input,.field textarea,.field select{width:100%;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.09);border-radius:13px;padding:12px 13px;font-size:14px;color:var(--text);outline:none;resize:vertical;transition:border .2s;}
+.field input:focus,.field textarea:focus{border-color:var(--coral);}
+.field textarea{min-height:80px;}
+.hint{font-size:11px;color:var(--faint);margin-top:4px;}
+
+/* Pills */
+.pills{display:flex;gap:7px;overflow-x:auto;padding:2px 0 8px;}
+.pill{flex:none;padding:7px 13px;border-radius:20px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.09);font-size:12px;font-weight:700;color:var(--muted);transition:.2s;white-space:nowrap;}
+.pill.active{background:var(--coral);color:#fff;border-color:transparent;}
+.pill.gold.active{background:var(--amber);color:#241505;}
+
+/* Ingredient rows & steps */
+.ing-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:13px;background:rgba(255,255,255,.045);margin-bottom:7px;border:1px solid rgba(255,255,255,.05);}
+.ing-row.done .ing-name{text-decoration:line-through;color:var(--faint);}
+.ing-row .ing-name{flex:1;font-size:14px;}
+.ing-row .ing-qty{font-size:13px;font-weight:800;color:var(--amber);white-space:nowrap;}
+.cbx{width:24px;height:24px;border-radius:8px;border:1.6px solid rgba(255,255,255,.25);display:flex;align-items:center;justify-content:center;font-size:13px;flex:none;transition:.2s;}
+.cbx.on{background:var(--green);border-color:var(--green);color:#08281a;}
+.subst{display:block;font-size:11.5px;color:var(--green);margin-top:3px;font-style:italic;}
+.step-row{display:flex;gap:11px;margin-bottom:12px;}
+.step-num{flex:none;width:27px;height:27px;border-radius:50%;background:linear-gradient(135deg,var(--coral),var(--coral2));display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800;color:#fff;}
+.step-txt{font-size:14px;line-height:1.55;color:var(--text);}
+.step-txt b{color:var(--amber);}
+
+/* Serving scaler */
+.scaler{display:flex;align-items:center;gap:14px;background:rgba(255,255,255,.06);border-radius:16px;padding:9px 13px;margin-bottom:12px;justify-content:center;}
+.scaler .sbtn{width:37px;height:37px;border-radius:50%;background:rgba(255,255,255,.1);font-size:19px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+.scaler .sbtn:active{background:var(--coral);}
+.scaler .sv{font-size:15px;font-weight:800;min-width:96px;text-align:center;}
+.scaler .sv small{display:block;font-size:10px;color:var(--muted);font-weight:600;}
+
+/* Nutrition bars */
+.nutri-row{display:flex;align-items:center;gap:10px;margin-bottom:11px;}
+.nutri-row .nl{width:86px;font-size:12px;color:var(--muted);font-weight:600;flex:none;}
+.nutri-row .nbar{flex:1;height:9px;border-radius:5px;background:rgba(255,255,255,.08);overflow:hidden;}
+.nutri-row .nfill{height:100%;border-radius:5px;transition:width .6s cubic-bezier(.22,.9,.3,1);}
+.nutri-row .nv{width:64px;text-align:right;font-size:12.5px;font-weight:800;flex:none;}
+.health-score{display:flex;align-items:center;gap:13px;background:rgba(90,212,138,.1);border:1px solid rgba(90,212,138,.25);border-radius:15px;padding:12px;margin-bottom:14px;}
+.hs-ring{width:62px;height:62px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:17px;position:relative;background:conic-gradient(var(--green) calc(var(--v)*1%),rgba(255,255,255,.09) 0);}
+.hs-ring::after{content:'';position:absolute;inset:5px;border-radius:50%;background:#141013;}
+
+/* ===== Toasts ===== */
+#toasts{position:absolute;top:56px;left:0;right:0;z-index:500;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;padding:0 16px;}
+.toast{pointer-events:auto;display:flex;gap:10px;align-items:center;width:100%;max-width:360px;background:var(--glass);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:11px 14px;backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);box-shadow:0 14px 40px rgba(0,0,0,.5);animation:toastIn .38s cubic-bezier(.21,1,.32,1) both;position:relative;overflow:hidden;}
+.toast.out{animation:toastOut .3s ease both;}
+.toast .t-ico{font-size:20px;flex:none;}
+.toast .t-tt{font-size:13px;font-weight:800;}
+.toast .t-ms{font-size:11.5px;color:var(--muted);margin-top:1px;line-height:1.4;}
+.toast .t-bar{position:absolute;left:0;bottom:0;height:2.5px;background:var(--coral);animation:tbar linear forwards;}
+@keyframes toastIn{from{opacity:0;transform:translateY(-16px) scale(.96)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateY(-12px) scale(.96)}}
+@keyframes tbar{from{width:100%}to{width:0}}
+
+/* ===== AI chat overlay ===== */
+#aiwrap{position:absolute;inset:0;z-index:420;display:none;}
+#aiwrap.open{display:flex;}
+#aiwrap .ai-veil{position:absolute;inset:0;background:rgba(0,0,0,.55);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);}
+.ai-card{position:absolute;left:10px;right:10px;top:64px;bottom:86px;background:linear-gradient(180deg,#1d1719,#141013);border:1px solid rgba(255,255,255,.1);border-radius:24px;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.7);animation:aiIn .45s cubic-bezier(.2,.9,.27,1) both;}
+@keyframes aiIn{from{opacity:0;transform:translateY(30px) scale(.97)}to{opacity:1;transform:none}}
+.ai-head{display:flex;align-items:center;gap:10px;padding:13px 15px;border-bottom:1px solid rgba(255,255,255,.07);}
+.ai-orb{width:38px;height:38px;border-radius:50%;background:conic-gradient(from 210deg,var(--coral),var(--amber),#ff9ac1,var(--coral));display:flex;align-items:center;justify-content:center;font-size:18px;animation:spin 7s linear infinite;flex:none;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.ai-head .ai-tt{font-size:15px;font-weight:800;}
+.ai-head .ai-sub{font-size:10.5px;color:var(--amber);font-weight:600;}
+.ai-msgs{flex:1;overflow-y:auto;padding:13px 14px;display:flex;flex-direction:column;gap:11px;}
+.msg{max-width:86%;padding:10px 13px;border-radius:17px;font-size:13.5px;line-height:1.55;animation:fade .3s ease both;}
+.msg.user{align-self:flex-end;background:linear-gradient(135deg,var(--coral),#e8494f);border-bottom-right-radius:5px;color:#fff;}
+.msg.ai{align-self:flex-start;background:rgba(255,255,255,.07);border-bottom-left-radius:5px;}
+.msg.ai.thinking{color:var(--muted);font-style:italic;}
+.typing{display:inline-flex;gap:4px;align-items:center;}
+.typing i{width:6px;height:6px;border-radius:50%;background:var(--amber);animation:blink 1.1s infinite;}
+.typing i:nth-child(2){animation-delay:.18s}.typing i:nth-child(3){animation-delay:.36s}
+@keyframes blink{0%,80%,100%{opacity:.25;transform:scale(.85)}40%{opacity:1;transform:scale(1.1)}}
+.ai-presets{display:flex;gap:6px;overflow-x:auto;padding:8px 12px 4px;}
+.ai-preset{flex:none;padding:7px 12px;border-radius:16px;background:rgba(255,184,107,.13);border:1px solid rgba(255,184,107,.3);font-size:11.5px;font-weight:700;color:var(--amber);white-space:nowrap;}
+.ai-input{display:flex;gap:8px;padding:10px 12px calc(10px + var(--safe-b));border-top:1px solid rgba(255,255,255,.07);align-items:flex-end;}
+.ai-input input{flex:1;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:17px;padding:10px 14px;font-size:13.5px;outline:none;}
+.ai-input .snd{width:40px;height:40px;border-radius:50%;background:var(--coral);display:flex;align-items:center;justify-content:center;font-size:16px;flex:none;}
+.ai-att{display:flex;gap:6px;padding:0 12px 6px;overflow-x:auto;}
+.att-thumb{position:relative;flex:none;width:52px;height:52px;border-radius:11px;overflow:hidden;border:1px solid rgba(255,255,255,.15);}
+.att-thumb img{width:100%;height:100%;object-fit:cover;}
+.att-thumb .x{position:absolute;top:1px;right:1px;width:16px;height:16px;border-radius:50%;background:rgba(0,0,0,.7);font-size:9px;display:flex;align-items:center;justify-content:center;}
+
+/* ===== Onboarding ===== */
+#onboard{position:absolute;inset:0;z-index:600;background:linear-gradient(175deg,#16100e 0%,#0a0808 55%,#0d0708 100%);display:none;flex-direction:column;}
+#onboard.open{display:flex;}
+.ob-body{flex:1;overflow-y:auto;padding:70px 26px 20px;display:flex;flex-direction:column;}
+.ob-progress{height:4px;border-radius:2px;background:rgba(255,255,255,.09);margin:0 26px 6px;overflow:hidden;}
+.ob-progress i{display:block;height:100%;background:linear-gradient(90deg,var(--coral),var(--amber));border-radius:2px;transition:width .4s cubic-bezier(.22,.9,.3,1);}
+.ob-step{display:none;animation:fade .4s ease both;}
+.ob-step.active{display:flex;flex-direction:column;flex:1;}
+.ob-logo{font-size:44px;margin-bottom:8px;}
+.ob-title{font-size:27px;font-weight:800;line-height:1.2;margin-bottom:8px;}
+.ob-title em{font-style:normal;background:linear-gradient(90deg,var(--coral2),var(--amber));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;}
+.ob-desc{font-size:14px;color:var(--muted);line-height:1.6;margin-bottom:22px;}
+.optlist{display:flex;flex-direction:column;gap:9px;}
+.opt{display:flex;align-items:center;gap:11px;padding:13px 15px;border-radius:15px;background:rgba(255,255,255,.055);border:1.4px solid rgba(255,255,255,.09);transition:.2s;font-size:14px;}
+.opt .o-ico{font-size:20px;}
+.opt .o-tt{font-weight:700;}
+.opt .o-sub{font-size:11.5px;color:var(--muted);margin-top:1px;}
+.opt.sel{border-color:var(--coral);background:rgba(255,92,92,.13);}
+.ob-foot{display:flex;gap:10px;padding:14px 26px calc(22px + var(--safe-b));}
+
+/* ===== Tutorial ===== */
+#tutorial{position:absolute;inset:0;z-index:560;display:none;}
+#tutorial.open{display:block;}
+.tut-spot{position:absolute;border-radius:18px;box-shadow:0 0 0 3000px rgba(0,0,0,.72);transition:all .45s cubic-bezier(.22,.9,.3,1);pointer-events:none;}
+.tut-card{position:absolute;left:14px;right:14px;background:linear-gradient(180deg,#241b1e,#181316);border:1px solid rgba(255,255,255,.12);border-radius:20px;padding:16px;box-shadow:0 24px 60px rgba(0,0,0,.65);animation:fade .35s ease both;z-index:570;}
+.tut-card h3{font-size:16px;font-weight:800;display:flex;gap:8px;align-items:center;}
+.tut-card p{font-size:13px;color:var(--muted);line-height:1.55;margin:8px 0 13px;}
+.tut-dots{display:flex;gap:5px;margin-bottom:11px;}
+.tut-dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.18);}
+.tut-dots i.on{background:var(--coral);width:16px;border-radius:3px;}
+
+/* ===== Notifications page ===== */
+.noti-group{margin:14px 16px 4px;font-size:11.5px;font-weight:800;color:var(--faint);letter-spacing:1px;text-transform:uppercase;}
+.noti{display:flex;gap:11px;padding:12px;border-radius:15px;background:var(--surface);border:1px solid rgba(255,255,255,.05);margin:0 16px 8px;align-items:flex-start;}
+.noti.unread{border-color:rgba(255,92,92,.4);background:rgba(255,92,92,.07);}
+.noti .n-ico{width:38px;height:38px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:17px;flex:none;background:rgba(255,255,255,.07);}
+.noti .n-tt{font-size:13px;font-weight:700;}
+.noti .n-ms{font-size:12px;color:var(--muted);margin-top:2px;line-height:1.45;}
+.noti .n-tm{font-size:10px;color:var(--faint);margin-top:3px;}
+
+/* ===== Meal planner ===== */
+.week-strip{display:flex;gap:6px;padding:6px 16px 12px;overflow-x:auto;}
+.day-tab{flex:none;min-width:52px;padding:9px 6px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.07);display:flex;flex-direction:column;align-items:center;gap:2px;}
+.day-tab .d-nm{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase;}
+.day-tab .d-dt{font-size:16px;font-weight:800;}
+.day-tab.active{background:var(--coral);border-color:transparent;}
+.day-tab.active .d-nm{color:rgba(255,255,255,.85);}
+.slot{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:rgba(255,255,255,.045);border:1.4px dashed rgba(255,255,255,.16);margin-bottom:8px;min-height:56px;transition:.2s;}
+.slot.filled{border-style:solid;border-color:rgba(255,184,107,.35);background:rgba(255,184,107,.08);}
+.slot .slot-nm{font-size:10.5px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:.8px;width:66px;flex:none;}
+.slot .slot-rec{flex:1;font-size:13px;font-weight:600;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.slot .slot-ico{font-size:19px;}
+.slot.dragover{border-color:var(--coral);background:rgba(255,92,92,.14);}
+.gro-row{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:12px;background:rgba(255,255,255,.045);margin-bottom:6px;}
+.gro-row .g-n{flex:1;font-size:13px;}
+.gro-row .g-q{font-size:12px;font-weight:800;color:var(--amber);}
+
+/* ===== Misc ===== */
+.empty{display:flex;flex-direction:column;align-items:center;gap:8px;padding:52px 30px;color:var(--faint);text-align:center;}
+.empty .e-ico{font-size:44px;}
+.empty .e-tt{font-size:16px;font-weight:700;color:var(--muted);}
+.stat-row{display:flex;gap:9px;}
+.stat{flex:1;background:rgba(255,255,255,.05);border-radius:14px;padding:11px 6px;text-align:center;border:1px solid rgba(255,255,255,.06);}
+.stat .s-v{font-size:17px;font-weight:800;}
+.stat .s-l{font-size:9.5px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:2px;}
+.sec-h{display:flex;align-items:center;gap:8px;margin:20px 16px 11px;}
+.sec-h h2{font-size:17px;font-weight:800;}
+.sec-h .more{margin-left:auto;font-size:12px;color:var(--coral);font-weight:700;}
+.searchbar{display:flex;align-items:center;gap:9px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.09);border-radius:17px;padding:11px 14px;margin:0 16px 10px;}
+.searchbar input{flex:1;background:none;border:none;outline:none;font-size:14px;}
+.live-dot{width:8px;height:8px;border-radius:50%;background:var(--red);animation:pulse 1.4s infinite;flex:none;}
+.divider{height:1px;background:rgba(255,255,255,.07);margin:14px 0;}
+.kbd{font-size:11px;background:rgba(255,255,255,.09);padding:2px 7px;border-radius:6px;font-weight:700;}
+.tag{display:inline-block;font-size:11px;font-weight:700;color:var(--blue);background:rgba(110,195,255,.12);padding:3px 9px;border-radius:12px;}
+.scyn-badge{display:inline-flex;align-items:center;gap:5px;font-size:10.5px;font-weight:800;color:#c9f0ff;background:linear-gradient(90deg,rgba(110,195,255,.18),rgba(255,156,193,.18));border:1px solid rgba(110,195,255,.35);padding:4px 10px;border-radius:14px;}
+.creator-badge{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-size:11.5px;color:var(--muted);}
+.creator-badge .cb-name{font-weight:700;color:var(--amber);}
+.shop-flag{font-size:19px;}
+.shop-row{display:flex;align-items:center;gap:11px;padding:11px 12px;border-radius:13px;background:rgba(255,255,255,.05);margin-bottom:7px;border:1px solid rgba(255,255,255,.06);}
+.shop-row:active{background:rgba(255,92,92,.12);}
+.shop-row .sh-nm{flex:1;font-size:13.5px;font-weight:700;}
+.shop-row .sh-ct{font-size:11px;color:var(--muted);}
+.modelpick{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px;}
+.modelpick .mp{padding:7px 11px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);font-size:11px;font-weight:700;color:var(--muted);}
+.modelpick .mp.active{background:rgba(110,195,255,.15);border-color:var(--blue);color:var(--blue);}
+/* camera guide */
+#camwrap{position:absolute;inset:0;z-index:520;background:#000;display:none;flex-direction:column;}
+#camwrap.open{display:flex;}
+#camwrap video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;}
+.cam-ov{position:absolute;left:0;right:0;bottom:0;padding:16px 16px calc(24px + var(--safe-b));background:linear-gradient(0deg,rgba(0,0,0,.92),rgba(0,0,0,.45) 45%,transparent);z-index:3;}
+.cam-step{font-size:12px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;}
+.cam-ins{font-size:17px;font-weight:800;line-height:1.35;margin-bottom:7px;}
+.cam-fb{font-size:13px;color:var(--green);min-height:19px;margin-bottom:10px;}
+.cam-prog{height:5px;border-radius:3px;background:rgba(255,255,255,.14);overflow:hidden;margin-bottom:12px;}
+.cam-prog i{display:block;height:100%;background:linear-gradient(90deg,var(--coral),var(--amber));transition:width .5s;}
+.cam-top{position:absolute;top:56px;left:16px;right:16px;z-index:3;display:flex;align-items:center;gap:8px;}
+/* voice chef */
+#voicewrap{position:absolute;inset:0;z-index:520;background:radial-gradient(700px 500px at 50% 30%,#221418,#0a0808);display:none;flex-direction:column;}
+#voicewrap.open{display:flex;}
+.vc-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:20px;}
+.vc-ring{width:168px;height:168px;border-radius:50%;background:conic-gradient(var(--coral) calc(var(--p)*1%),rgba(255,255,255,.08) 0);display:flex;align-items:center;justify-content:center;position:relative;}
+.vc-ring::after{content:'';position:absolute;inset:14px;border-radius:50%;background:radial-gradient(#1c1518,#120e11);}
+.vc-ring span{position:relative;z-index:2;font-size:44px;}
+.vc-ring.listening{animation:pulse 1.6s infinite;}
+.vc-txt{font-size:15.5px;font-weight:700;text-align:center;line-height:1.5;max-width:300px;}
+.vc-sub{font-size:12.5px;color:var(--muted);text-align:center;}
+.vc-btns{display:flex;gap:9px;justify-content:center;padding:0 22px calc(26px + var(--safe-b));flex-wrap:wrap;}
+
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+// ForkFeed data layer — recipes, stores, grocery platforms, substitutions, nutrition
+const IMG = {
+  tacos:'https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/983b8a40dd20.jpg',
+  carbonara:'https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/6a3cff955c6a.jpg',
+  butter:'https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b397cbf0ce57.jpg',
+  burger:'https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/3765278b5f5f.jpeg',
+  sushi:'https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/f4ff3daf707b.jpg',
+  jollof:'https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/af8de17d77f6.jpg',
+  tatin:'https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/a36703ce5c2e.jpg',
+  ramen:'https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/b6121ebd35f5.jpg',
+  live:'https://z-cdn.chatglm.cn/image-search-mcp/images-ppt/9bdd9782d26e.jpg'
+};
+
+const SEED_RECIPES = [
+  {
+    id:'r1', title:'Street Tacos al Pastor', creator:'Chef Marisol', creatorHandle:'@marisol.cooks',
+    cuisine:'Mexican', time:35, difficulty:'Medium', servings:4, likes:128400, commentsCount:2103, saves:8421,
+    image:IMG.tacos, hashtags:['#tacos','#mexican','#streetfood'],
+    desc:'Charred pineapple, adobo-marinated pork, and charred tortillas — the Mexico City street classic.',
+    ingredients:[
+      {qty:600,unit:'g',name:'pork shoulder, thinly sliced'},
+      {qty:3,unit:'tbsp',name:'achiote adobo paste'},
+      {qty:120,unit:'ml',name:'pineapple juice'},
+      {qty:1,unit:'',name:'pineapple, sliced into rounds'},
+      {qty:12,unit:'',name:'corn tortillas'},
+      {qty:1,unit:'',name:'white onion, finely diced'},
+      {qty:15,unit:'g',name:'cilantro, chopped'},
+      {qty:2,unit:'limes',name:'juiced'},
+      {qty:1,unit:'tsp',name:'dried oregano'}
+    ],
+    steps:[
+      'Blend adobo paste, pineapple juice, oregano and a splash of vinegar into a marinade.',
+      'Marinate the pork slices for at least 1 hour (overnight is better).',
+      'Sear the pork in a screaming-hot pan until edges caramelise, about 3 minutes per side.',
+      'Char the pineapple rounds in the same pan until bruised and golden.',
+      'Warm the tortillas directly over the flame for 15 seconds a side.',
+      'Chop pork + pineapple together on the board, pile onto tortillas.',
+      'Finish with onion, cilantro, and a big squeeze of lime.'
+    ],
+    nutrition:{cal:420,protein:26,carbs:38,fat:16,fiber:6,sugar:9,sodium:620},
+    ytId:'' , live:false
+  },
+  {
+    id:'r2', title:'True Carbonara', creator:'Nonna Lucia', creatorHandle:'@lucia.kitchen',
+    cuisine:'Italian', time:20, difficulty:'Easy', servings:2, likes:98100, commentsCount:1490, saves:6650,
+    image:IMG.carbonara, hashtags:['#carbonara','#pasta','#italian'],
+    desc:'Four ingredients, zero cream, one silky emulsion. Rome\'s proudest pasta.',
+    ingredients:[
+      {qty:200,unit:'g',name:'spaghetti'},
+      {qty:120,unit:'g',name:'guanciale, cut into lardons'},
+      {qty:2,unit:'',name:'egg yolks (extra-large)'},
+      {qty:40,unit:'g',name:'Pecorino Romano, finely grated'},
+      {qty:1,unit:'tsp',name:'black pepper, coarsely ground'}
+    ],
+    steps:[
+      'Boil the spaghetti in well-salted water.',
+      'Crisp the guanciale slowly in a dry pan until glassy and golden; kill the heat.',
+      'Whisk yolks, pecorino and pepper into a thick paste in a bowl.',
+      'Toss the drained pasta (keep a cup of starchy water) into the guanciale fat off heat.',
+      'Add the egg paste with a splash of pasta water and toss violently until glossy and creamy — never back on high heat.',
+      'Serve immediately with more pecorino and pepper.'
+    ],
+    nutrition:{cal:560,protein:24,carbs:64,fat:24,fiber:2,sugar:2,sodium:780},
+    ytId:'', live:false
+  },
+  {
+    id:'r3', title:'Butter Chicken', creator:'Ravi Singh', creatorHandle:'@ravi.spices',
+    cuisine:'Indian', time:50, difficulty:'Medium', servings:4, likes:156300, commentsCount:3210, saves:11002,
+    image:IMG.butter, hashtags:['#indian','#curry','#butterchicken'],
+    desc:'Velvet tomato gravy, charred tandoori chicken, and a finishing swirl of cream and kasuri methi.',
+    ingredients:[
+      {qty:700,unit:'g',name:'chicken thighs, boneless'},
+      {qty:150,unit:'g',name:'plain yogurt'},
+      {qty:2,unit:'tbsp',name:'tandoori masala'},
+      {qty:400,unit:'g',name:'canned tomatoes'},
+      {qty:60,unit:'g',name:'butter'},
+      {qty:120,unit:'ml',name:'heavy cream'},
+      {qty:1,unit:'tsp',name:'kasuri methi (dried fenugreek leaves)'},
+      {qty:1,unit:'tbsp',name:'ghee'},
+      {qty:2,unit:'',name:'onions, roughly chopped'}
+    ],
+    steps:[
+      'Marinate the chicken in yogurt, tandoori masala and salt for 2 hours.',
+      'Char the chicken under a hot grill until edges blacken slightly, about 8 minutes.',
+      'Fry the onions in ghee until deep golden, add tomatoes and simmer 15 minutes.',
+      'Blend the sauce silky smooth, then return to low heat with the butter.',
+      'Add the chicken, simmer 10 minutes, finish with cream and crushed kasuri methi.',
+      'Rest 5 minutes off heat, serve with naan or basmati rice.'
+    ],
+    nutrition:{cal:610,protein:38,carbs:14,fat:44,fiber:3,sugar:8,sodium:690},
+    ytId:'', live:false
+  },
+  {
+    id:'r4', title:'Smash Burgers', creator:'Dex Grillmaster', creatorHandle:'@dex.grills',
+    cuisine:'American', time:15, difficulty:'Easy', servings:2, likes:204500, commentsCount:4402, saves:15800,
+    image:IMG.burger, hashtags:['#burger','#smashburger','#american'],
+    desc:'Paper-thin patties smashed on scorching steel, melted cheese, potato roll. Two minutes per side.',
+    ingredients:[
+      {qty:400,unit:'g',name:'ground beef (20% fat)'},
+      {qty:4,unit:'',name:'American cheese slices'},
+      {qty:2,unit:'',name:'potato rolls'},
+      {qty:2,unit:'tbsp',name:'mayonnaise'},
+      {qty:1,unit:'tbsp',name:'mustard'},
+      {qty:0.5,unit:'',name:'onion, shaved paper-thin'},
+      {qty:6,unit:'',name:'pickle slices'}
+    ],
+    steps:[
+      'Roll the beef into 4 loose balls — do not compress.',
+      'Toast the potato rolls cut-side down in butter.',
+      'Smash each ball flat on a ripping-hot griddle with a stiff spatula; salt hard.',
+      'After 90 seconds, flip once, cheese immediately, stack two patties.',
+      'Mix mayo + mustard, spread on the rolls.',
+      'Build: sauce, pickles, onion, double patty, crown.'
+    ],
+    nutrition:{cal:780,protein:42,carbs:38,fat:52,fiber:2,sugar:7,sodium:1120},
+    ytId:'', live:false
+  },
+  {
+    id:'r5', title:'Dragon Roll', creator:'Kenji Sato', creatorHandle:'@kenji.sushi',
+    cuisine:'Japanese', time:45, difficulty:'Hard', servings:3, likes:88700, commentsCount:1120, saves:7304,
+    image:IMG.sushi, hashtags:['#sushi','#japanese','#dragonroll'],
+    desc:'Shrimp tempura and avocado rolled out, draped with eel, and lacquered with sweet soy.',
+    ingredients:[
+      {qty:300,unit:'g',name:'sushi rice, cooked'},
+      {qty:4,unit:'tbsp',name:'rice vinegar'},
+      {qty:6,unit:'',name:'large shrimp'},
+      {qty:1,unit:'',name:'avocado, ripe'},
+      {qty:4,unit:'sheets',name:'nori'},
+      {qty:100,unit:'g',name:'tempura batter mix'},
+      {qty:60,unit:'ml',name:'unagi sauce'},
+      {qty:1,unit:'tsp',name:'wasabi'}
+    ],
+    steps:[
+      'Season the warm rice with vinegar, sugar and salt; fold with a wooden paddle while cooling.',
+      'Butterfly the shrimp, skewer, and fry in tempura batter until crisp.',
+      'Lay rice on nori, flip, and place tempura + avocado strips on the seaweed side.',
+      'Roll tight with the bamboo mat into an inside-out roll.',
+      'Fan-slice the avocado and drape over the roll; top with tobiko.',
+      'Cut into 8 pieces with a wet knife, glaze with unagi sauce.'
+    ],
+    nutrition:{cal:480,protein:18,carbs:58,fat:19,fiber:5,sugar:9,sodium:830},
+    ytId:'', live:false
+  },
+  {
+    id:'r6', title:'Party Jollof Rice', creator:'Amara Okafor', creatorHandle:'@amara.eats',
+    cuisine:'Nigerian', time:70, difficulty:'Medium', servings:6, likes:142800, commentsCount:2608, saves:12450,
+    image:IMG.jollof, hashtags:['#jollof','#nigerian','#partyfood'],
+    desc:'Smoky, deeply-reduced party jollof with the crispy bottom everyone fights over.',
+    ingredients:[
+      {qty:4,unit:'cups',name:'long grain parboiled rice'},
+      {qty:700,unit:'g',name:'blended tomatoes + red bell pepper + scotch bonnet'},
+      {qty:1,unit:'',name:'onion, sliced'},
+      {qty:3,unit:'tbsp',name:'groundnut oil'},
+      {qty:2,unit:'',name:'stock cubes'},
+      {qty:1,unit:'tsp',name:'thyme'},
+      {qty:1,unit:'tsp',name:'curry powder'},
+      {qty:100,unit:'ml',name:'chicken stock'}
+    ],
+    steps:[
+      'Fry the sliced onion in groundnut oil until browned at the edges.',
+      'Pour in the pepper blend and fry hard for 12 minutes until the rawness cooks out and it darkens.',
+      'Add stock, cubes, thyme and curry powder; simmer 5 minutes.',
+      'Stir in the washed rice, reduce heat, cover with foil.',
+      'Cook 35 minutes without stirring — the bottom needs to catch slightly for that smoky party flavour.',
+      'Fluff from the bottom up and let it steam off heat 10 minutes.'
+    ],
+    nutrition:{cal:520,protein:11,carbs:82,fat:14,fiber:4,sugar:6,sodium:540},
+    ytId:'', live:false
+  },
+  {
+    id:'r7', title:'Tarte Tatin', creator:'Claire Fontaine', creatorHandle:'@claire.patisserie',
+    cuisine:'French', time:60, difficulty:'Medium', servings:8, likes:76200, commentsCount:980, saves:5210,
+    image:IMG.tatin, hashtags:['#french','#dessert','#apple'],
+    desc:'Caramelised apples, butter pastry, flipped in one dramatic move. Failure is impossible if the caramel is deep amber.',
+    ingredients:[
+      {qty:8,unit:'',name:'apples, halved and cored'},
+      {qty:150,unit:'g',name:'sugar'},
+      {qty:80,unit:'g',name:'butter'},
+      {qty:1,unit:'sheet',name:'puff pastry'},
+      {qty:1,unit:'',name:'vanilla bean, seeds scraped'}
+    ],
+    steps:[
+      'Pack the apple halves tight, round-side down, in a buttered tatin mould.',
+      'Sprinkle sugar and dot butter evenly, add vanilla seeds.',
+      'Cook over medium heat until the caramel turns deep amber, 18 minutes.',
+      'Cover with the pastry round, tuck the edges down with a spoon.',
+      'Bake at 200°C for 28 minutes until the pastry is deep gold.',
+      'Rest 10 minutes, then flip onto a plate with conviction.'
+    ],
+    nutrition:{cal:380,protein:3,carbs:56,fat:16,fiber:3,sugar:38,sodium:120},
+    ytId:'', live:false
+  },
+  {
+    id:'r8', title:'Midnight Ramen', creator:'Yuki Tanaka', creatorHandle:'@yuki.slurps',
+    cuisine:'Japanese', time:40, difficulty:'Easy', servings:2, likes:112900, commentsCount:1840, saves:9120,
+    image:IMG.ramen, hashtags:['#ramen','#noodles','#midnight'],
+    desc:'A 40-minute shoyu broth that tastes like it simmered all day. Soft egg, charred pork, springy noodles.',
+    ingredients:[
+      {qty:800,unit:'ml',name:'chicken stock'},
+      {qty:2,unit:'tbsp',name:'soy sauce'},
+      {qty:1,unit:'tbsp',name:'mirin'},
+      {qty:2,unit:'',name:'ramen noodles, fresh'},
+      {qty:2,unit:'',name:'eggs'},
+      {qty:150,unit:'g',name:'chashu pork, sliced'},
+      {qty:2,unit:'',name:'scallions, sliced'},
+      {qty:1,unit:'sheet',name:'nori'}
+    ],
+    steps:[
+      'Soft-boil the eggs exactly 6½ minutes, ice bath, halve.',
+      'Sear the chashu slices until the edges crisp.',
+      'Simmer the stock with soy and mirin; keep it just below a boil.',
+      'Cook the noodles 90 seconds; drain hard.',
+      'Build the bowl: broth, noodles, pork, egg, scallions, nori.',
+      'Slurp immediately — ramen waits for no one.'
+    ],
+    nutrition:{cal:490,protein:28,carbs:54,fat:17,fiber:3,sugar:5,sodium:1450},
+    ytId:'', live:false
+  },
+  {
+    id:'r9', title:'LIVE: Flambé Night — Beef Bourguignon', creator:'Chef Marisol', creatorHandle:'@marisol.cooks',
+    cuisine:'French', time:120, difficulty:'Hard', servings:6, likes:23100, commentsCount:486, saves:1990,
+    image:IMG.live, hashtags:['#livecooking','#french','#bourguignon'],
+    desc:'Streaming the full two-hour build: wine, flame, and a very patient braise. Ask questions in the chat.',
+    ingredients:[
+      {qty:1.2,unit:'kg',name:'beef chuck, cubed'},
+      {qty:750,unit:'ml',name:'red Burgundy'},
+      {qty:150,unit:'g',name:'bacon lardons'},
+      {qty:12,unit:'',name:'pearl onions'},
+      {qty:400,unit:'g',name:'cremini mushrooms'},
+      {qty:2,unit:'tbsp',name:'flour'},
+      {qty:2,unit:'sprigs',name:'thyme'}
+    ],
+    steps:[
+      'Render the bacon; brown the beef in batches — patience here decides everything.',
+      'Flambé the wine, scraping every brown bit off the bottom.',
+      'Add stock, thyme, and the garlic head; cover and braise low for 2 hours.',
+      'Sauté the onions and mushrooms separately, add for the final 20 minutes.',
+      'Thicken with a beurre manié and serve over potato purée.'
+    ],
+    nutrition:{cal:680,protein:52,carbs:18,fat:38,fiber:4,sugar:6,sodium:810},
+    ytId:'', live:true, viewers:3412
+  }
+];
+
+const CUISINES = ['All','Mexican','Italian','Indian','American','Japanese','Nigerian','French'];
+
+const GROCERS = [
+  {flag:'🇺🇸',name:'Instacart',country:'United States',url:'https://www.instacart.com/store'},
+  {flag:'🇺🇸',name:'Walmart Grocery',country:'United States',url:'https://www.walmart.com/grocery'},
+  {flag:'🇺🇸',name:'Amazon Fresh',country:'United States',url:'https://www.amazon.com/fresh'},
+  {flag:'🇬🇧',name:'Tesco',country:'United Kingdom',url:'https://www.tesco.com/groceries'},
+  {flag:'🇬🇧',name:'Sainsbury\'s',country:'United Kingdom',url:'https://www.sainsburys.co.uk/gol-ui/groceries'},
+  {flag:'🇨🇦',name:'Loblaws',country:'Canada',url:'https://www.loblaws.ca'},
+  {flag:'🇦🇺',name:'Woolworths',country:'Australia',url:'https://www.woolworths.com.au/shop'},
+  {flag:'🇰🇪',name:'Jumia',country:'Kenya',url:'https://www.jumia.co.ke/groceries'},
+  {flag:'🇳🇬',name:'Jumia',country:'Nigeria',url:'https://www.jumia.com.ng/groceries'},
+  {flag:'🇮🇳',name:'BigBasket',country:'India',url:'https://www.bigbasket.com'},
+  {flag:'🇮🇳',name:'Blinkit',country:'India',url:'https://blinkit.com'},
+  {flag:'🇩🇪',name:'REWE',country:'Germany',url:'https://www.rewe.de'},
+  {flag:'🇫🇷',name:'Carrefour',country:'France',url:'https://www.carrefour.fr'},
+  {flag:'🇿🇦',name:'Checkers',country:'South Africa',url:'https://shop.checkers.co.za'},
+  {flag:'🇧🇷',name:'Mercado Livre',country:'Brazil',url:'https://mercado.com.br'},
+  {flag:'🇦🇪',name:'Carrefour UAE',country:'UAE',url:'https://www.carrefouruae.com'}
+];
+
+const SUBSTITUTIONS = {
+  'spaghetti':['rice noodles','gluten-free pasta','zucchini noodles'],
+  'guanciale':['smoked bacon','pancetta','turkey bacon'],
+  'heavy cream':['coconut cream','cashew cream','oat cream'],
+  'butter':['vegan butter','ghee','olive oil'],
+  'ground beef (20% fat)':['ground turkey','plant-based mince','ground chicken'],
+  'American cheese slices':['dairy-free cheddar','Swiss cheese','provolone'],
+  'plain yogurt':['coconut yogurt','soy yogurt','cashew yogurt'],
+  'chicken thighs, boneless':['firm tofu','cauliflower florets','chickpeas'],
+  'eggs':['flax egg (1 tbsp flax + 3 tbsp water)','aquafaba','just egg'],
+  'egg yolks (extra-large)':['1.5 tbsp cashew cream + ½ tsp black salt per yolk'],
+  'puff pastry':['gluten-free puff pastry','filo dough'],
+  'ramen noodles, fresh':['rice ramen','gluten-free ramen','kelp noodles'],
+  'parboiled rice':['cauliflower rice','brown rice','quinoa'],
+  'corn tortillas':['lettuce cups','grain-free tortillas'],
+  'cheddar':['nutritional yeast blend','dairy-free cheddar'],
+  'flour':['gluten-free flour blend','cornstarch','almond flour']
+};
+
+const DIET_PILLS = [
+  {key:'gf',label:'🌾 Gluten-Free'},
+  {key:'df',label:'🥛 Dairy-Free'},
+  {key:'vegan',label:'🌿 Vegan'},
+  {key:'keto',label:'🥩 Keto'}
+];
+
+const TONE_PRESETS = [
+  {id:'warm',name:'Warm Chef',emoji:'🧑‍🍳',desc:'Friendly, encouraging',style:'Speak warmly like a mentor chef who believes in the home cook.'},
+  {id:'gordon',name:'Gordon Mode',emoji:'🔥',desc:'Intense, no-nonsense',style:'Be a fiery intense chef. Blunt, dramatic, but never actually insulting. Push standards high.'},
+  {id:'sensei',name:'Calm Sensei',emoji:'🥋',desc:'Zen, precise',style:'Speak slowly and calmly like a tea master. Short precise sentences. One wisdom per answer.'},
+  {id:'hype',name:'Hype Friend',emoji:'🎉',desc:'Hype-man energy',style:'You are the user\'s hype friend. High energy, exclamation marks, celebrate every step.'},
+  {id:'grandma',name:'Grandma',emoji:'👵',desc:'Loving, nostalgic',style:'You are a loving grandmother chef. Nostalgic, tender, mention smells and family memories. Pinch of this, fistful of that.'}
+];
+
+const AI_PROVIDERS = [
+  {id:'builtin',name:'Built-in Chef AI',needsKey:false,models:[{id:'forkfeed-mini',name:'ForkFeed Mini (built-in)'}],free:true},
+  {id:'openai',name:'OpenAI',needsKey:true,models:[
+    {id:'gpt-4o-mini',name:'GPT-4o mini'},{id:'gpt-4o',name:'GPT-4o'},{id:'gpt-4.1-mini',name:'GPT-4.1 mini'}
+  ],keyHint:'sk-...'},
+  {id:'openrouter',name:'OpenRouter (free models)',needsKey:true,models:[
+    {id:'meta-llama/llama-3.1-8b-instruct:free',name:'Llama 3.1 8B (free)'},
+    {id:'meta-llama/llama-3.3-70b-instruct:free',name:'Llama 3.3 70B (free)'},
+    {id:'google/gemma-2-9b-it:free',name:'Gemma 2 9B (free)'},
+    {id:'qwen/qwen-2.5-72b-instruct:free',name:'Qwen 2.5 72B (free)'},
+    {id:'mistralai/mistral-7b-instruct:free',name:'Mistral 7B (free)'}
+  ],keyHint:'sk-or-v1-...'},
+  {id:'ollama',name:'Ollama (local)',needsKey:false,models:[
+    {id:'llama3.2',name:'llama3.2'},{id:'mistral',name:'mistral'},{id:'qwen2.5',name:'qwen2.5'},{id:'custom',name:'✍️ type your own…'}
+  ],keyHint:''},
+  {id:'gemini',name:'Google Gemini',needsKey:true,models:[
+    {id:'gemini-1.5-flash',name:'Gemini 1.5 Flash'},{id:'gemini-1.5-pro',name:'Gemini 1.5 Pro (vision)'}
+  ],keyHint:'AIza...'}
+];
+
+const PRESET_PROMPTS = [
+  {emoji:'🥗',label:'What can I cook with what I have?'},
+  {emoji:'⏱️',label:'Give me a 20-minute dinner'},
+  {emoji:'🔥',label:'Is my pan hot enough?'},
+  {emoji:' substitutions',label:'Swap this ingredient'},
+  {emoji:'📊',label:'Explain this nutrition chart'},
+  {emoji:'📍',label:'Where can I buy this near me?'},
+  {emoji:'💰',label:'Estimate the cost of this dish'},
+  {emoji:'😄',label:'Tell me a food joke'}
+];
+
+// ---------- persistence ----------
+const LS = {
+  get(k,f){ try{const v=localStorage.getItem(k); return v?JSON.parse(v):f;}catch(e){return f;} },
+  set(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} },
+  del(k){ try{localStorage.removeItem(k);}catch(e){} }
+};
+
+const DEFAULT_USER = {
+  name:'You', handle:'@you', bio:'Cooking my way through the feed. 🍳',
+  followers:128, following:86, scynRecipes:0
+};
+
+function freshState(){
+  return {
+    recipes: JSON.parse(JSON.stringify(SEED_RECIPES)),
+    liked:{}, saved:[], cookedSteps:{}, follows:{},
+    mealPlan:{}, // dayKey -> {breakfast:{...},lunch:..,dinner:..}
+    notifications:[
+      {id:1,ico:'❤️',title:'Chef Marisol liked your comment',msg:'"Finally someone who respects the char on pineapple!"',ts:Date.now()-2*3600e3,read:false,group:'today'},
+      {id:2,ico:'🔴',title:'LIVE: Flambé Night started',msg:'Chef Marisol is streaming Beef Bourguignon — 3.4k watching.',ts:Date.now()-5*3600e3,read:false,group:'today'},
+      {id:3,ico:'🤖',title:'Scyn AI curated your upload',msg:'Your Street Tacos remix was featured on the For You page.',ts:Date.now()-26*3600e3,read:false,group:'week'},
+      {id:4,ico:'👤',title:'Ravi Singh started following you',msg:'Welcome them to your kitchen.',ts:Date.now()-50*3600e3,read:true,group:'week'},
+      {id:5,ico:'✨',title:'3 new recipes match your Taste Profile',msg:'Japanese + Easy + under 30 min — see Discover.',ts:Date.now()-3*86400e3,read:true,group:'older'}
+    ],
+    taste:{cuisines:[],difficulty:'Any',diet:[],mode:'recipes',remember:true},
+    ai:{provider:'builtin',model:'forkfeed-mini',keys:{},tone:'warm',notify:true},
+    user: JSON.parse(JSON.stringify(DEFAULT_USER)),
+    bookmarks:[], // youtube mode
+    onboarded:false, tutDone:false, feedIndex:0
+  };
+}
+
+let S = load();
+function load(){
+  const stored = LS.get('forkfeed_state', null);
+  if(stored && stored.recipes && stored.recipes.length){
+    // merge seed recipes that user may have deleted? keep stored as source of truth
+    return Object.assign(freshState(), stored);
+  }
+  return freshState();
+}
+function save(){ LS.set('forkfeed_state', S); }
+function resetAll(){ LS.del('forkfeed_state'); S = freshState(); }
+
+// helpers
+const fmtK = n => n>=1e6 ? (n/1e6).toFixed(1)+'M' : n>=1e3 ? (n/1e3).toFixed(1)+'K' : String(n);
+const esc = s => String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function timeAgo(ts){ const s=(Date.now()-ts)/1e3; if(s<60)return 'just now'; const m=s/60; if(m<60)return Math.floor(m)+'m ago'; const h=m/60; if(h<24)return Math.floor(h)+'h ago'; return Math.floor(h/24)+'d ago'; }
+function scaleQty(q, base, target){ const r = target/base; const v = q*r; if(Number.isInteger(v)) return v+''; return (Math.round(v*100)/100)+''; }
+
+// ForkFeed core UI: toast system, sheets, tab bar, PDF export, share card, AI engine (builtin + providers)
+// ---------- toast ----------
+function toast(ico, title, msg, ms=3400, color='var(--coral)'){
+  const w = $('#toasts');
+  const t = document.createElement('div');
+  t.className='toast';
+  t.innerHTML = `<div class="t-ico">${ico}</div><div style="flex:1;min-width:0"><div class="t-tt">${esc(title)}</div><div class="t-ms">${esc(msg)}</div></div>`;
+  const bar = document.createElement('i'); bar.className='t-bar'; bar.style.background=color; bar.style.animationDuration=ms+'ms';
+  t.appendChild(bar); w.appendChild(t);
+  setTimeout(()=>{ t.classList.add('out'); setTimeout(()=>t.remove(),300); }, ms);
+}
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+// ---------- sheet manager ----------
+function openSheet(id, cb){ const w=$('#'+id); if(!w) return; w.classList.add('open'); if(cb) requestAnimationFrame(cb); }
+function closeSheet(id){ const w=$('#'+id); if(!w) return; w.classList.remove('open'); }
+function bindSheetVeil(id){ const w=$('#'+id); const v=w.querySelector('.sheet-veil'); if(v) v.addEventListener('click',()=>closeSheet(id)); }
+$$('.sheet-wrap').forEach(w=>bindSheetVeil(w.id));
+$$('.close-x[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
+
+// ---------- navigation ----------
+const TABS = ['home','discover','cookbook','planner','profile'];
+let currentTab='home';
+function go(tab){
+  currentTab=tab;
+  TABS.forEach(t=>{ const sc=$('#screen-'+t); if(sc) sc.classList.toggle('active', t===tab); });
+  $$('#tabbar .tabbtn').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
+  const sc=$('#screen-'+tab); if(sc){ sc.classList.remove('fade-in'); void sc.offsetWidth; sc.classList.add('fade-in'); }
+  if(tab==='cookbook') renderCookbook();
+  if(tab==='planner') renderPlanner();
+  if(tab==='profile') renderProfile();
+  if(tab==='discover') renderDiscover();
+  if(window.__pageAnchors) window.scrollTo(0,0);
+}
+
+// ---------- bottom "more" nav (notifications/create) ----------
+function openScreenSheet(id){ openSheet(id); }
+
+// ---------- like / save / follow ----------
+function toggleLike(id, el){
+  const r = S.recipes.find(x=>x.id===id); if(!r) return;
+  const nowLiked = !S.liked[id];
+  if(nowLiked){ S.liked[id]=1; r.likes++; burstHeart(el); }
+  else { delete S.liked[id]; r.likes--; }
+  save();
+  if(SYNC.online && SYNC.token) SYNC.like(id); // write-through to server
+  if(el){ el.closest('.railbtn')?.classList.toggle('liked', nowLiked); const c=el.closest('.railbtn')?.querySelector('span'); if(c) c.textContent=fmtK(r.likes); }
+  const c2 = document.querySelector(`#feedcard-${id} .like-count`); if(c2) c2.textContent = fmtK(r.likes);
+}
+function burstHeart(el){
+  const card = el.closest('.feedcard, .yt-card, .rec-card') || $('#app');
+  const h = document.createElement('div'); h.className='heartburst'; h.textContent='❤️';
+  const rect = el.getBoundingClientRect(); const cardR = card.getBoundingClientRect();
+  h.style.left = (rect.left-cardR.left + rect.width/2 - 42)+'px';
+  h.style.top = (rect.top-cardR.top - 30)+'px';
+  if(getComputedStyle(card).position==='static') card.style.position='relative';
+  card.appendChild(h); setTimeout(()=>h.remove(), 950);
+}
+function toggleSave(id){
+  const i = S.saved.indexOf(id);
+  if(i>=0){ S.saved.splice(i,1); toast('📖','Removed from Cookbook','Recipe removed from your saved collection.'); }
+  else { S.saved.push(id); toast('📖','Saved to Cookbook','Find it anytime under the Cookbook tab.','#5ad48a'); updateNotiBadge();
+    if(!(SYNC.online&&SYNC.token)) pushNoti({ico:'📖',title:'Saved to Cookbook',msg:`${S.recipes.find(r=>r.id===id)?.title||'Recipe'} is waiting for you.`});
+  }
+  save();
+  if(SYNC.online && SYNC.token) SYNC.saveRecipe(id); // write-through
+  document.querySelectorAll(`[data-saved="${id}"]`).forEach(b=>{ b.classList.toggle('active', S.saved.includes(id)); const s=b.querySelector('span'); if(s) s.textContent = S.saved.includes(id)?'Saved':'Save'; });
+  const rc = $('#recipe-sheet-save'); if(rc){ rc.textContent = S.saved.includes(id)?'✓ In Cookbook':'🔖 Save'; }
+  updateNotiBadge();
+}
+function toggleFollow(handle){
+  const now = !S.follows[handle]; if(now) S.follows[handle]=1; else delete S.follows[handle];
+  save();
+  if(SYNC.online && SYNC.token) SYNC.follow(handle); // server notifies the followee
+  document.querySelectorAll(`[data-follow="${handle}"]`).forEach(b=>{ b.classList.toggle('following', now); b.textContent = now?'✓ Following':'+ Follow'; });
+  if(now){ toast('👥','Following '+handle,'Their uploads will surface in your feed.'); }
+}
+function pushNoti(n){ S.notifications.unshift(Object.assign({id:Date.now(),ts:Date.now(),read:false,group:'today'},n)); save(); updateNotiBadge(); }
+function updateNotiBadge(){ const u=S.notifications.filter(n=>!n.read).length; const b=$('#noti-badge'); if(b){ b.style.display = u? 'flex':'none'; b.textContent=u; } }
+
+// ---------- ingredient scaling ----------
+function scaledIngredients(recipe, servings){
+  return recipe.ingredients.map(i=>({...i, disp: scaleQty(i.qty, recipe.servings, servings)}));
+}
+
+// ---------- grocery list builder ----------
+function groceryListFrom(plan){
+  // plan: {dayKey:{breakfast:recipeId|idString}}
+  const totals = {};
+  Object.values(plan).forEach(day=>{ Object.values(day).forEach(rid=>{
+    const r = typeof rid==='string' ? S.recipes.find(x=>x.id===rid) : rid;
+    if(!r) return;
+    r.ingredients.forEach(ing=>{
+      const key = ing.name.toLowerCase();
+      if(!totals[key]) totals[key]={name:ing.name, unit:ing.unit||'', qty:0};
+      totals[key].qty += Number(ing.qty)||0;
+    });
+  });});
+  return Object.values(totals).sort((a,b)=>a.name.localeCompare(b.name));
+}
+
+// ---------- PDF export (window print of hidden printable node) ----------
+function exportRecipePDF(recipe, servings){
+  const ing = scaledIngredients(recipe, servings);
+  const hidden = document.createElement('div');
+  hidden.style.cssText='position:fixed;left:-10000px;top:0;width:640px;background:#fff;color:#111;font-family:Georgia,serif;';
+  hidden.innerHTML = `
+    <div style="padding:38px 46px;">
+      <div style="font-size:12px;letter-spacing:3px;color:#c0392b;font-weight:700;">FORKFEED RECIPE</div>
+      <h1 style="font-size:30px;margin:6px 0 2px;">${esc(recipe.title)}</h1>
+      <div style="font-size:13px;color:#555;margin-bottom:4px;">by ${esc(recipe.creator)} · ${esc(recipe.creatorHandle)}</div>
+      <div style="font-size:12px;color:#777;margin-bottom:16px;">${esc(recipe.cuisine)} · ${recipe.time} min · ${recipe.difficulty} · <b>Serves ${servings}</b>${recipe.scynCurated?' · ⭐ Scyn AI curated':''}</div>
+      <div style="border-top:2px solid #c0392b;margin:0 0 18px;"></div>
+      <h2 style="font-size:15px;margin-bottom:8px;">Ingredients — serves ${servings}</h2>
+      <table style="width:100%;border-collapse:collapse;font-size:13.5px;">
+        ${ing.map(i=>`<tr><td style="padding:5px 8px 5px 0;border-bottom:1px solid #eee;width:90px;font-weight:700;">${esc(i.disp)} ${esc(i.unit)}</td><td style="padding:5px 0;border-bottom:1px solid #eee;">${esc(i.name)}</td></tr>`).join('')}
+      </table>
+      <h2 style="font-size:15px;margin:22px 0 8px;">Steps</h2>
+      <ol style="padding-left:22px;font-size:13.5px;line-height:1.7;">
+        ${recipe.steps.map(s=>`<li style="margin-bottom:8px;">${esc(s)}</li>`).join('')}
+      </ol>
+      <h2 style="font-size:15px;margin:22px 0 8px;">Nutrition (per serving)</h2>
+      <div style="font-size:13px;color:#444;">Calories ${recipe.nutrition.cal} kcal · Protein ${recipe.nutrition.protein} g · Carbs ${recipe.nutrition.carbs} g · Fat ${recipe.nutrition.fat} g · Fiber ${recipe.nutrition.fiber} g · Sodium ${recipe.nutrition.sodium} mg</div>
+      <div style="margin-top:26px;font-size:11px;color:#999;border-top:1px solid #eee;padding-top:10px;">Downloaded from ForkFeed — TikTok for your kitchen. forkfeed.app</div>
+    </div>`;
+  document.body.appendChild(hidden);
+  const w = window.open('','_blank');
+  if(!w){ toast('⚠️','Popup blocked','Allow popups to export the PDF.'); hidden.remove(); return; }
+  w.document.write(`<html><head><title>${esc(recipe.title)} — ForkFeed</title><style>body{margin:0}</style></head><body>${hidden.innerHTML.replace(/position:fixed;left:-10000px[^"]*/,'')} </body></html>`);
+  w.document.close();
+  setTimeout(()=>{ try{ w.focus(); w.print(); }catch(e){} }, 400);
+  hidden.remove();
+  toast('📄','PDF ready','Recipe exported with '+servings+' servings — check the print dialog.');
+}
+function exportGroceryPDF(list, title){
+  const hidden = document.createElement('div');
+  hidden.style.cssText='position:fixed;left:-10000px;top:0;width:640px;background:#fff;color:#111;font-family:Georgia,serif;';
+  hidden.innerHTML = `
+  <div style="padding:38px 46px;">
+    <div style="font-size:12px;letter-spacing:3px;color:#c0392b;font-weight:700;">FORKFEED GROCERY LIST</div>
+    <h1 style="font-size:26px;margin:6px 0 16px;">${esc(title)}</h1>
+    <table style="width:100%;border-collapse:collapse;font-size:14px;">
+      <tr><td style="padding:5px 0;border-bottom:2px solid #333;width:24px;">☐</td><td style="padding:5px 8px 5px 0;border-bottom:1px solid #eee;font-weight:700;width:110px;">Qty</td><td style="padding:5px 0;border-bottom:1px solid #eee;">Item</td></tr>
+      ${list.map(g=>`<tr><td style="padding:6px 0;border-bottom:1px solid #eee;">☐</td><td style="padding:6px 8px 6px 0;border-bottom:1px solid #eee;font-weight:700;">${g.qty}${g.unit? ' '+esc(g.unit):''}</td><td style="padding:6px 0;border-bottom:1px solid #eee;">${esc(g.name)}</td></tr>`).join('')}
+    </table>
+    <div style="margin-top:24px;font-size:11px;color:#999;">Generated by ForkFeed Meal Planner</div>
+  </div>`;
+  document.body.appendChild(hidden);
+  const w = window.open('','_blank');
+  if(!w){ toast('⚠️','Popup blocked','Allow popups to export the list.'); hidden.remove(); return; }
+  w.document.write(`<html><head><title>ForkFeed Grocery List</title></head><body>${hidden.innerHTML}</body></html>`);
+  w.document.close();
+  setTimeout(()=>{ try{ w.focus(); w.print(); }catch(e){} }, 400);
+  hidden.remove();
+}
+
+// ---------- share image card (canvas) ----------
+async function shareRecipeCard(recipe){
+  toast('🎨','Building your card…','Rendering a social-ready image.', 1600);
+  const W=1080,H=1350;
+  const c = document.createElement('canvas'); c.width=W; c.height=H;
+  const x = c.getContext('2d');
+  // bg
+  const g = x.createLinearGradient(0,0,0,H); g.addColorStop(0,'#171215'); g.addColorStop(1,'#0a0808');
+  x.fillStyle=g; x.fillRect(0,0,W,H);
+  // photo
+  try{
+    const img = await loadImg(recipe.image);
+    const iw=img.width, ih=img.height; const tgt= W/ih;
+    x.save(); x.beginPath(); x.roundRect(60,150,W-120,640,36); x.clip();
+    const scale=Math.max((W-120)/iw, 640/ih);
+    x.drawImage(img, 60+((W-120)-iw*scale)/2, 150+((640)-ih*scale)/2, iw*scale, ih*scale);
+    x.restore();
+  }catch(e){ x.fillStyle='#2a2226'; x.beginPath(); x.roundRect(60,150,W-120,640,36); x.fill(); }
+  // header brand
+  x.fillStyle='#ff5c5c'; x.font='800 34px -apple-system,Arial'; x.fillText('🍴 FORKFEED',60,84);
+  x.fillStyle='#a89b96'; x.font='600 26px -apple-system,Arial'; x.fillText('What I\'m cooking tonight',60,124);
+  // title
+  x.fillStyle='#fff'; x.font='800 62px -apple-system,Arial'; wrapText(x, recipe.title, 60, 880, W-120, 74, 2);
+  // meta row
+  x.font='700 28px -apple-system,Arial';
+  let mx=60; const meta=[`${recipe.cuisine}`,`${recipe.time} min`,recipe.difficulty,`★ ${fmtK(recipe.likes)} likes`];
+  meta.forEach(m=>{ const w=x.measureText(m).width; x.fillStyle='rgba(255,255,255,.12)'; x.beginPath(); x.roundRect(mx,1010,w+34,54,27); x.fill(); x.fillStyle='#ffd9b8'; x.fillText(m,mx+17,1045); mx+=w+48; });
+  // creator
+  x.fillStyle='#ffb86b'; x.font='700 30px -apple-system,Arial'; x.fillText(`by ${recipe.creator}`,60,1130);
+  // ingredient pills
+  x.font='600 24px -apple-system,Arial';
+  let px=60, py=1170;
+  recipe.ingredients.slice(0,5).forEach(i=>{
+    const t = i.name.split(',')[0].replace(/^./,ch=>ch.toUpperCase());
+    const w = x.measureText(t).width+30;
+    if(px+w > W-60){ px=60; py+=52; }
+    x.fillStyle='rgba(255,184,107,.14)'; x.beginPath(); x.roundRect(px,py,w,44,22); x.fill();
+    x.strokeStyle='rgba(255,184,107,.4)'; x.stroke();
+    x.fillStyle='#ffb86b'; x.fillText(t,px+15,py+30);
+    px += w+12;
+  });
+  // footer
+  x.fillStyle='#6e625d'; x.font='600 24px -apple-system,Arial';
+  x.fillText('Scan & cook the full recipe on ForkFeed → forkfeed.app',60,H-70);
+  // scyn badge
+  if(recipe.scynCurated){ x.fillStyle='rgba(110,195,255,.2)'; x.beginPath(); x.roundRect(W-420,H-96,360,52,26); x.fill(); x.fillStyle='#c9f0ff'; x.font='800 24px -apple-system,Arial'; x.fillText('⭐ Curated by Scyn AI',W-400,H-62); }
+  const dataURL = c.toDataURL('image/png');
+  // try native share
+  try{
+    const blob = await (await fetch(dataURL)).blob();
+    const file = new File([blob], recipe.title.replace(/\s+/g,'-').toLowerCase()+'.png',{type:'image/png'});
+    if(navigator.canShare && navigator.canShare({files:[file]})){
+      await navigator.share({files:[file], title:recipe.title+' — ForkFeed', text:recipe.desc});
+      toast('✅','Shared!','Your recipe card is out in the wild.'); return;
+    }
+  }catch(e){ /* fall through to download */ }
+  const a=document.createElement('a'); a.href=dataURL; a.download=recipe.title.replace(/\s+/g,'-').toLowerCase()+'-forkfeed.png';
+  document.body.appendChild(a); a.click(); a.remove();
+  toast('🖼️','Card saved','Recipe image card downloaded as PNG.');
+}
+function loadImg(src){ return new Promise((res,rej)=>{ const i=new Image(); i.crossOrigin='anonymous'; i.onload=()=>res(i); i.onerror=rej; i.src=src; }); }
+function wrapText(ctx, txt, x, y, maxW, lh, maxLines){
+  const words=txt.split(' '); let line='', lines=[];
+  words.forEach(w=>{ const t=line+w+' '; if(ctx.measureText(t).width>maxW && line){ lines.push(line); line=w+' '; } else line=t; });
+  lines.push(line); if(lines.length>maxLines) lines=lines.slice(0,maxLines);
+  lines.forEach((l,i)=>ctx.fillText(l.trim(),x,y+i*lh));
+  return y+lines.length*lh;
+}
+if(!CanvasRenderingContext2D.prototype.roundRect){
+  CanvasRenderingContext2D.prototype.roundRect = function(x,y,w,h,r){ this.moveTo(x+r,y); this.arcTo(x+w,y,x+w,y+h,r); this.arcTo(x+w,y+h,x,y+h,r); this.arcTo(x,y+h,x,y,r); this.arcTo(x,y,x+w,y,r); this.closePath(); return this; };
+}
+
+// ---------- AI engine ----------
+const AI_SYS = 'You are ForkFeed\'s AI Chef inside a cooking app. You know food science, technique, substitutions, nutrition and grocery pricing. Answer helpfully, practically, and with warmth. Keep answers compact (under 130 words) unless asked for a full recipe. Use metric-friendly quantities. If asked about a dish in context, reference its actual ingredients.';
+
+function builtinChefReply(msg, ctx){
+  const m = msg.toLowerCase();
+  const rec = ctx && ctx.recipe;
+  const tone = S.ai.tone || 'warm';
+  const tonePrefix = {warm:'Of course — ', gordon:'Right, LISTEN. ', sensei:'', hype:'YESSS! ', grandma:'Ah, sweetheart — '}[tone]||'';
+  const joke = 'Why did the chef quit? They just couldn\'t take the heat... but you can. 🍳';
+  if(rec){
+    if(m.includes('ingredient')||m.includes('need')){
+      return `${tonePrefix}for ${rec.title} you'll need: ${rec.ingredients.slice(0,6).map(i=>`${i.qty} ${i.unit? i.unit+' ':''}${i.name.split(',')[0]}`).join('; ')}${rec.ingredients.length>6?`, and ${rec.ingredients.length-6} more (see the Ingredients tab)`:''}. Tap Shop Ingredients and I'll route you to a grocer in your country.`;
+    }
+    if(m.includes('step')||m.includes('how')){
+      return `${tonePrefix}the flow is: ${rec.steps.slice(0,3).map((s,i)=>`(${i+1}) ${s.split('.')[0].toLowerCase()}`).join(' → ')} … full ${rec.steps.length}-step guide is in the Steps tab. Want me to guide you live on camera? Tap Chef → AI Live.`;
+    }
+    if(m.includes('calor')||m.includes('nutrition')||m.includes('healthy')){
+      const n=rec.nutrition; return `${tonePrefix}${rec.title} lands at ~${n.cal} kcal per serving — ${n.protein}g protein, ${n.carbs}g carbs, ${n.fat}g fat, ${n.fiber}g fiber. Health score ${healthScore(n)}/100. ${n.sodium>1000?'Watch the sodium — season at the table instead of the pan.':'Solid, balanced plate.'}`;
+    }
+    if(m.includes('joke')) return joke;
+    if(m.includes('cost')||m.includes('price')||m.includes('estimat')) return `${tonePrefix}rough estimate: ${rec.ingredients.length} ingredients ≈ $${(rec.ingredients.length*3.2).toFixed(0)}–${(rec.ingredients.length*4.5).toFixed(0)} total, about $${(rec.ingredients.length*3.7/rec.servings).toFixed(1)} per serving depending on your market. Tap "Shop Ingredients" for live prices at a grocer near you.`;
+  }
+  if(m.includes('joke')) return joke;
+  if(m.includes('20-minute')||m.includes('quick')){
+    const quick = S.recipes.filter(r=>!r.live && r.time<=25);
+    return `${tonePrefix}try ${quick[0]?.title||'True Carbonara'} (${quick[0]?.time||20} min) — pantry-friendly and fast. Or tell me what's in your fridge and I'll match something faster.`;
+  }
+  if(m.includes('have')||m.includes('fridge')||m.includes('leftover')){
+    return `${tonePrefix}list what's in your fridge (even messy: "eggs, old bread, half an onion") and I'll match it against the ${S.recipes.length} recipes in your feed and scale servings to what you have.`;
+  }
+  if(m.includes('hello')||m.includes('hi ')||m==='hi'||m.includes('hey')) return `${tonePrefix}I'm your ForkFeed chef. Ask me to build a grocery list, scale servings, swap an ingredient for your diet, price a dish, or coach you live while you cook.`;
+  return `${tonePrefix}I can plan meals, scale recipes, find substitutions (gluten-free, dairy-free, vegan, keto), estimate cost per serving, or coach you through ${rec?rec.title:'any recipe'} step by step with the Voice Chef. What are we cooking?`;
+}
+function healthScore(n){
+  let s=50;
+  s += Math.min(20, (n.protein||0)/2); s += Math.min(12,(n.fiber||0)*1.5);
+  s -= Math.min(15, Math.max(0,(n.cal-500))/20); s -= Math.min(12, Math.max(0,(n.sodium-600))/60); s -= Math.min(10,(n.sugar||0)/5);
+  return Math.max(5, Math.min(99, Math.round(s)));
+}
+
+// ---- provider dispatch ----
+async function aiChat(userMsg, ctx, onToken){
+  // online: route through the server (keys live server-side, CORS-safe)
+  if(SYNC.online){
+    const reply = await SYNC.ai(userMsg, ctx);
+    if(reply) return reply;
+  }
+  const conf = S.ai; const provider = conf.provider;
+  const tone = TONE_PRESETS.find(t=>t.id===conf.tone)||TONE_PRESETS[0];
+  const sys = AI_SYS + ' TONE: ' + tone.style;
+  const ctxLine = ctx && ctx.recipe ? `\n[Context: user is viewing "${ctx.recipe.title}" — ${ctx.recipe.cuisine}, ${ctx.recipe.time} min, ingredients: ${ctx.recipe.ingredients.map(i=>i.name).slice(0,6).join(', ')}]` : '';
+  const messages = [{role:'system',content:sys+ctxLine},{role:'user',content:userMsg}];
+  if(provider==='openai' && conf.keys.openai){
+    const r = await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+conf.keys.openai},body:JSON.stringify({model:conf.model,messages,max_tokens:400})});
+    if(!r.ok) throw new Error('OpenAI '+r.status);
+    const j = await r.json(); return j.choices[0].message.content;
+  }
+  if(provider==='openrouter' && conf.keys.openrouter){
+    const r = await fetch('https://openrouter.ai/api/v1/chat/completions',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+conf.keys.openrouter},body:JSON.stringify({model:conf.model,messages,max_tokens:400})});
+    if(!r.ok) throw new Error('OpenRouter '+r.status);
+    const j = await r.json(); return j.choices[0].message.content;
+  }
+  if(provider==='ollama'){
+    try{
+      const r = await fetch('http://localhost:11434/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:conf.model==='custom'?(conf.keys.ollamaModel||'llama3.2'):conf.model,messages,stream:false})});
+      if(!r.ok) throw new Error('Ollama '+r.status);
+      const j = await r.json(); return j.message.content;
+    }catch(e){
+      return '⚠️ Could not reach Ollama at localhost:11434. Make sure `ollama serve` is running and you pulled a model (e.g. `ollama pull llama3.2`). Meanwhile, here is my built-in take:\n\n'+builtinChefReply(userMsg, ctx);
+    }
+  }
+  if(provider==='gemini' && conf.keys.gemini){
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${conf.model}:generateContent?key=${conf.keys.gemini}`,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{role:'user',parts:[{text:sys+ctxLine+'\nUser: '+userMsg}]}]})});
+    if(!r.ok) throw new Error('Gemini '+r.status);
+    const j = await r.json(); return j.candidates[0].content.parts[0].text;
+  }
+  // builtin
+  await new Promise(r=>setTimeout(r, 620+Math.random()*500));
+  return builtinChefReply(userMsg, ctx);
+}
+
+// ---------- URL recipe extraction: real fetch+parse on the server, local canned offline ----------
+async function extractRecipeFromURL(url){
+  if(SYNC.online){
+    const rec = await SYNC.extract(url);
+    if(rec) return Object.assign({id:'url'+Date.now(), creator:'Extracted Recipe', creatorHandle:'@link', hashtags:['#fromlink'], likes:0, commentsCount:0, saves:0, image:rec.image||IMG.ramen, scynCurated:true, extracted:true}, rec);
+  }
+  await new Promise(r=>setTimeout(r,900));
+  const canned = [
+    {title:'Creamy Tuscan Chicken', cuisine:'Italian', time:30, difficulty:'Easy', servings:4,
+     desc:'Sun-dried tomato cream chicken that tastes like a trattoria in 30 minutes.',
+     ingredients:[{qty:600,unit:'g',name:'chicken breasts'},{qty:150,unit:'ml',name:'heavy cream'},{qty:80,unit:'g',name:'sun-dried tomatoes'},{qty:2,unit:'handfuls',name:'baby spinach'},{qty:3,unit:'cloves',name:'garlic, sliced'},{qty:40,unit:'g',name:'parmesan, grated'}],
+     steps:['Season and sear the chicken until golden, rest aside.','Sauté garlic and sun-dried tomatoes for 1 minute.','Pour in cream with parmesan, simmer until thickened.','Return chicken, wilt in the spinach, serve over pasta.'],
+     nutrition:{cal:470,protein:38,carbs:9,fat:32,fiber:2,sugar:4,sodium:590}},
+    {title:'15-Minute Garlic Butter Noodles', cuisine:'Asian', time:15, difficulty:'Easy', servings:2,
+     desc:'Silky butter-garlic noodles with a chili crisp finish.',
+     ingredients:[{qty:250,unit:'g',name:'wheat noodles'},{qty:3,unit:'tbsp',name:'butter'},{qty:4,unit:'cloves',name:'garlic, minced'},{qty:1,unit:'tbsp',name:'soy sauce'},{qty:1,unit:'tsp',name:'chili crisp'},{qty:2,unit:'',name:'scallions'}],
+     steps:['Boil noodles, reserve ½ cup water.','Brown the butter with garlic until fragrant.','Toss noodles in the butter with soy and splash of noodle water.','Finish with chili crisp and scallions.'],
+     nutrition:{cal:520,protein:12,carbs:72,fat:19,fiber:3,sugar:3,sodium:890}}
+  ];
+  return Object.assign({id:'url'+Date.now(), creator:'Extracted Recipe', creatorHandle:'@link', hashtags:['#fromlink'], likes:0, commentsCount:0, saves:0, image:IMG.ramen, scynCurated:true, extracted:true}, canned[Math.floor(Math.random()*canned.length)]);
+}
+
+// ForkFeed screens: feed, discover, cookbook, planner, profile, notifications + HTML skeleton
+const HTML_SKELETON = `
+<div id="stage"><div id="phone">
+  <div class="desktop-only"><span class="dot"></span></div>
+  <div id="notch"></div>
+  <div id="statusbar"><span>9:41</span><span class="sb-right"><span style="font-size:10px">●●●●</span><span class="sb-batt"></span></span></div>
+
+  <div id="app">
+    <!-- ================= HOME ================= -->
+    <div class="screen active" id="screen-home">
+      <div id="feed"></div>
+      <div class="swipe-hint" id="swipe-hint"><span>⌃</span><span>swipe up</span></div>
+    </div>
+
+    <!-- ================= DISCOVER ================= -->
+    <div class="screen" id="screen-discover">
+      <div class="topbar"><div><h1>Discover</h1><div class="sub">Search, filter, and stumble into your next obsession</div></div>
+        <div class="spacer"></div>
+        <button class="iconbtn" id="btn-open-ai" title="AI Search">✨</button></div>
+      <div class="searchbar">🔍 <input id="discover-q" placeholder="Search recipes, hashtags, cuisines…" autocomplete="off"></div>
+      <div class="pills" id="discover-cuisines"></div>
+      <div class="pills gold" id="discover-sort" style="padding-top:0"></div>
+      <div class="page" id="discover-body"></div>
+    </div>
+
+    <!-- ================= COOKBOOK ================= -->
+    <div class="screen" id="screen-cookbook">
+      <div class="topbar"><div><h1>Cookbook</h1><div class="sub" id="cookbook-sub">Your saved recipes &amp; creations</div></div>
+        <div class="spacer"></div>
+        <button class="iconbtn" id="btn-create">＋</button></div>
+      <div class="pills" id="cookbook-tabs"></div>
+      <div class="page" id="cookbook-body"></div>
+    </div>
+
+    <!-- ================= MEAL PLANNER ================= -->
+    <div class="screen" id="screen-planner">
+      <div class="topbar"><div><h1>Meal Planner</h1><div class="sub">Drag a recipe onto any slot — grocery list builds itself</div></div></div>
+      <div class="week-strip" id="week-strip"></div>
+      <div class="page" id="planner-body"></div>
+    </div>
+
+    <!-- ================= PROFILE ================= -->
+    <div class="screen" id="screen-profile">
+      <div class="topbar"><div><h1>Profile</h1><div class="sub">Your kitchen, your stats</div></div>
+        <div class="spacer"></div>
+        <button class="iconbtn" id="btn-noti">🔔<span class="badge" id="noti-badge" style="position:absolute;top:2px;right:2px;min-width:15px;height:15px;border-radius:8px;background:var(--coral);font-size:9px;display:none;align-items:center;justify-content:center;padding:0 3px"></span></button>
+        <button class="iconbtn" id="btn-privacy">🛡️</button></div>
+      <div class="page" id="profile-body"></div>
+    </div>
+  </div>
+
+  <!-- ================= TAB BAR ================= -->
+  <div id="tabbar">
+    <button class="tabbtn active" data-tab="home" onclick="go('home')"><span class="t-ico">🏠</span><span>For You</span></button>
+    <button class="tabbtn" data-tab="discover" onclick="go('discover')"><span class="t-ico">🔍</span><span>Discover</span></button>
+    <button class="tabbtn" data-tab="cookbook" onclick="go('cookbook')"><span class="t-ico">📖</span><span>Cookbook</span></button>
+    <button class="tabbtn" data-tab="planner" onclick="go('planner')"><span class="t-ico">🗓️</span><span>Plan</span></button>
+    <button class="tabbtn" data-tab="profile" onclick="go('profile')"><span class="t-ico">👤</span><span>Profile</span></button>
+  </div>
+
+  <div id="toasts"></div>
+</div></div>
+`;
+
+// =============== FEED ===============
+let feedMode = 'recipes'; // or 'youtube'
+function feedRecipes(){ return S.recipes.filter(r=>!r.live).concat(S.recipes.filter(r=>r.live)); }
+function renderFeed(){
+  const feed = $('#feed');
+  const recs = feedMode==='recipes' ? feedRecipes() : [];
+  let html='';
+  // mode tabs
+  html += `<div class="fd-tabs">
+    <button class="fd-tab ${feedMode==='recipes'?'active':''}" onclick="setFeedMode('recipes')">🍽️ Recipes</button>
+    <button class="fd-tab ${feedMode==='youtube'?'active':''}" onclick="setFeedMode('youtube')">▶️ YouTube</button>
+    <button class="fd-tab" onclick="openAISheet('feed')" title="AI Search">✨</button>
+  </div>`;
+  if(feedMode==='recipes'){
+    recs.forEach((r,idx)=>{
+      html += `
+      <div class="feedcard" id="feedcard-${r.id}" data-id="${r.id}">
+        <img class="bgimg" src="${r.image}" alt="${esc(r.title)}" loading="lazy">
+        <div class="veil"></div>
+        <div class="info">
+          <div style="display:flex;gap:7px;flex-wrap:wrap;margin-bottom:7px">
+            ${r.live?'<span class="chip live"><span class="live-dot" style="background:#fff"></span>LIVE · '+fmtK(r.viewers||0)+' watching</span>':''}
+            <span class="chip">${r.cuisine}</span><span class="chip">${r.time} min</span><span class="chip">${r.difficulty}</span>
+            ${r.scynCurated?'<span class="chip gold">⭐ Scyn AI</span>':''}
+          </div>
+          <div class="fd-title">${esc(r.title)}</div>
+          <div class="fd-meta">
+            <span class="chip" style="background:rgba(0,0,0,.4)">${r.hashtags.slice(0,2).map(esc).join(' ')}</span>
+            <span class="chip" style="background:rgba(0,0,0,.4)">❤️ <b class="like-count">${fmtK(r.likes)}</b></span>
+          </div>
+          <div class="fd-creator">
+            <img class="avatar" src="${r.image}" alt="">
+            <div><div class="who">${esc(r.creator)}</div><div class="sub">${esc(r.creatorHandle)}</div></div>
+            <button class="followbtn ${S.follows[r.creatorHandle]?'following':''}" data-follow="${r.creatorHandle}" onclick="event.stopPropagation();toggleFollow('${r.creatorHandle}')">${S.follows[r.creatorHandle]?'✓ Following':'+ Follow'}</button>
+          </div>
+          ${r.userMade?`<div class="creator-badge" style="margin:8px 0 0">👤 uploaded by <span class="cb-name">you</span> · shoutout by <span class="scyn-badge">⭐ Scyn AI</span></div>`:''}
+        </div>
+        <div class="rail">
+          <button class="railbtn ${S.liked[r.id]?'liked':''}" onclick="event.stopPropagation();toggleLike('${r.id}',this)"><span class="rb-ico"><span class="heart">❤️</span></span><span class="like-count">${fmtK(r.likes)}</span></button>
+          <button class="railbtn" onclick="event.stopPropagation();toggleSave('${r.id}')" data-saved="${r.id}"><span class="rb-ico">${S.saved.includes(r.id)?'🔖':'📕'}</span><span>${S.saved.includes(r.id)?'Saved':'Save'}</span></button>
+          <button class="railbtn" onclick="event.stopPropagation();openRecipe('${r.id}')"><span class="rb-ico">📋</span><span>Recipe</span></button>
+          <button class="railbtn" onclick="event.stopPropagation();openAISheet('recipe',{id:'${r.id}'})"><span class="rb-ico">✨</span><span>AI</span></button>
+          <button class="railbtn" onclick="event.stopPropagation();downloadFeedPDF('${r.id}',this)"><span class="rb-ico" id="dl-${r.id}">📄</span><span>PDF</span></button>
+          <button class="railbtn" onclick="event.stopPropagation();shareRecipeCard(S.recipes.find(r=>r.id==='${r.id}'))"><span class="rb-ico">📤</span><span>Share</span></button>
+        </div>
+      </div>`;
+    });
+  } else {
+    // YouTube mode: uses real YouTube iframe embeds via video ID + search via AI onboarding key if set
+    html += renderYouTubeMode();
+  }
+  feed.innerHTML = html;
+  bindFeedEvents();
+  restoreFeedPosition();
+}
+function setFeedMode(m){ feedMode=m; if(S.taste.remember){ S.taste.mode=m; save(); } renderFeed(); toast('🔁','Mode: '+m, m==='youtube'?(SYNC.online?'Search runs through the server — key is managed by the admin.':'Paste your YouTube API key in Privacy 🛡️ to power real search.'):'Vertical recipe feed with full cards.'); }
+function restoreFeedPosition(){ if(S.feedIndex>0){ requestAnimationFrame(()=>{ const f=$('#feed'); if(f) f.scrollTop = S.feedIndex * f.clientHeight; }); } }
+function bindFeedEvents(){
+  const f = $('#feed'); if(!f) return;
+  f.onscroll = ()=>{ const idx = Math.round(f.scrollTop / (f.clientHeight||1)); if(idx!==S.feedIndex){ S.feedIndex=idx; save(); } const hint=$('#swipe-hint'); if(hint) hint.style.opacity = f.scrollTop>40? 0:1; };
+  // double-tap like
+  $$('.feedcard').forEach(card=>{
+    let lastTap=0;
+    card.addEventListener('click', e=>{
+      if(e.target.closest('.railbtn,button,.followbtn')) return;
+      const now=Date.now();
+      if(now-lastTap<320){ toggleLike(card.dataset.id, card.querySelector('.railbtn .rb-ico .heart')||card.querySelector('.railbtn')); }
+      else { lastTap=now; setTimeout(()=>{ if(Date.now()-lastTap>=310){ openRecipe(card.dataset.id); } },320); }
+    });
+  });
+}
+function downloadFeedPDF(id, el){ const r=S.recipes.find(x=>x.id===id); if(r){ const ico=el.querySelector('.rb-ico')||el; ico.textContent='⏳'; setTimeout(()=>{ico.textContent='✅'; setTimeout(()=>ico.textContent='📄',1400);},450); exportRecipePDF(r, r.servings); } }
+
+// YouTube mode with real iframe embeds (known-safe popular cooking video IDs)
+const YT_SEEDS = [
+  {id:'hkMQdBOyrmg', title:'Ramen Goddess — 48 Hour Broth', ch:'Food Wishes'} ,
+  {id:'IFxUU7lHPto', title:'Best Tacos in the World (Al Pastor)', ch:'Border Cook'},
+  {id:'86csBsrrzGM', title:'Smash Burger Masterclass', ch:'Kenji at Home'},
+  {id:'7f-k0RjmUdA', title:'1-Minute Carbonara Magic', ch:'Pasta Grammar'}
+];
+function renderYouTubeMode(){
+  const key = S.ai.keys.youtube || '';
+  let html='';
+  const recs = S.recipes.filter(r=>r.ytId);
+  if(!key && !S.bookmarks.length && !(S.ytResults||[]).length){
+    YT_SEEDS.forEach(y=>{
+      html += `
+      <div class="yt-card">
+        <img class="bgimg" src="https://i.ytimg.com/vi/${y.id}/hqdefault.jpg" alt="">
+        <div class="yt-embed"><iframe src="https://www.youtube-nocookie.com/embed/${y.id}?rel=0" title="${esc(y.title)}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
+        <div class="yt-info"><div class="fd-title" style="font-size:17px">${esc(y.title)}</div>
+          <div class="fd-meta"><span class="chip">▶️ ${esc(y.ch)}</span><span class="chip" style="cursor:pointer" onclick="saveBookmark('${y.id}','${esc(y.title)}','${esc(y.ch)}')">🔖 Watch later</span></div></div>
+      </div>`;
+    });
+    html += `<div class="yt-card" style="display:block;padding:70px 26px;text-align:center">
+      <div style="font-size:38px">🔑</div><div style="font-size:17px;font-weight:800;margin:10px 0 6px">Unlock real YouTube search</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.6">Paste your YouTube Data API key in <b>Profile 🛡️ Privacy</b> to search all of YouTube from this feed. Get a free key at console.cloud.google.com → Enable YouTube Data API v3 → Credentials → Create API key.</div>
+      <button class="btn sm" style="margin:14px auto 0" onclick="go('profile');setTimeout(()=>openSheet('sheet-privacy'),350)">Open Privacy →</button>
+    </div>`;
+    return html;
+  }
+  // if key exists, use real API search results stored in S.ytResults
+  (S.ytResults||[]).forEach(v=>{
+    html += `
+    <div class="yt-card">
+      <div class="yt-embed"><iframe src="https://www.youtube-nocookie.com/embed/${v.id}?rel=0" title="${esc(v.title)}" allowfullscreen></iframe></div>
+      <div class="yt-info"><div class="fd-title" style="font-size:17px">${esc(v.title)}</div>
+      <div class="fd-meta"><span class="chip">▶️ ${esc(v.ch||'YouTube')}</span><span class="chip" onclick="saveBookmark('${v.id}','${esc(v.title)}','${esc(v.ch||'YouTube')}')">🔖 Watch later</span></div></div>
+    </div>`;
+  });
+  if(!(S.ytResults||[]).length) html += ytSearchBarHTML();
+  return html;
+}
+function ytSearchBarHTML(){
+  return `<div class="yt-card" style="display:block;padding:64px 26px;text-align:center">
+    <div style="font-size:38px">🔎</div><div style="font-size:17px;font-weight:800;margin:10px 0 6px">Search YouTube</div>
+    <div class="searchbar" style="margin:0"><input id="yt-q" placeholder="Search any cooking video…" onkeydown="if(event.key==='Enter')ytSearch()"><button class="btn sm" style="padding:8px 14px" onclick="ytSearch()">Go</button></div>
+  </div>`;
+}
+async function ytSearch(){
+  const q = $('#yt-q')?.value?.trim(); if(!q) return;
+  toast('🔎','Searching YouTube…','“'+q+'”');
+  if(SYNC.online){
+    const vids = await SYNC.ytSearch(q);
+    if(vids && vids.length){ S.ytResults = vids; save(); renderFeed(); toast('✅', vids.length+' results','Pulled through the server-side YouTube key.'); return; }
+    if(vids===null){ toast('🔑','No YouTube key on server','Ask the admin to set it: POST /admin/keys {"youtube":"AIza…"}', 5000, '#ffb86b'); return; }
+  }
+  const key = S.ai.keys.youtube;
+  if(!key){ toast('🔑','No YouTube API key','Add one in Privacy → API keys, or connect to the server where the admin manages it.'); return; }
+  try{
+    const r = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&type=video&q=${encodeURIComponent(q)}&key=${key}`);
+    const j = await r.json();
+    if(j.error) throw new Error(j.error.message);
+    S.ytResults = (j.items||[]).map(it=>({id:it.id.videoId,title:it.snippet.title,ch:it.snippet.channelTitle,thumb:it.snippet.thumbnails?.high?.url}));
+    save(); renderFeed();
+  }catch(e){ toast('⚠️','YouTube search failed',e.message.slice(0,80), 5000, '#ff6b6b'); }
+}
+function saveBookmark(id,title,ch){
+  if(S.bookmarks.some(b=>b.id===id)){ toast('ℹ️','Already saved','In your Cookbook → Watch Later.'); return; }
+  S.bookmarks.unshift({id,title,ch}); save(); toast('🔖','Saved to Watch Later','Find it in Cookbook → Watch Later tab.');
+}
+
+// =============== RECIPE SHEET ===============
+let RS = {id:null, servings:0, tab:'ingredients', diet:null, ingDone:{}};
+function openRecipe(id){
+  const r=S.recipes.find(x=>x.id===id); if(!r) return;
+  RS = {id, servings:r.servings, tab:'ingredients', diet:null, ingDone:{}};
+  renderRecipeSheet();
+  openSheet('sheet-recipe');
+}
+function renderRecipeSheet(){
+  const r=S.recipes.find(x=>x.id===RS.id); if(!r) return;
+  const ing = scaledIngredients(r, RS.servings);
+  const sheet=$('#sheet-recipe');
+  sheet.querySelector('.sheet').innerHTML = `
+    <div class="sheet-grab"><i></i></div>
+    <div class="sheet-head">
+      <img src="${r.image}" alt="" style="width:54px;height:54px;border-radius:14px;object-fit:cover">
+      <div class="sh-txt"><h2>${esc(r.title)}</h2><div class="sh-sub">${esc(r.creator)} · ${r.cuisine} · ${r.time} min · ${r.difficulty}</div></div>
+      <div class="sheet-actions">
+        <button class="close-x" data-close="sheet-recipe" onclick="closeSheet('sheet-recipe')">✕</button>
+      </div>
+    </div>
+    <div class="sheet-body">
+      ${r.live?`<div class="card" style="border-color:rgba(255,80,80,.4);display:flex;align-items:center;gap:10px"><span class="live-dot"></span><div style="flex:1;font-size:13px"><b>LIVE STREAMING NOW</b><br><span style="color:var(--muted)">${fmtK(r.viewers)} watching · chat enabled below</span></div></div>`:''}
+      ${r.extracted||r.userMade?`<div class="creator-badge">👤 uploaded by <span class="cb-name">${r.userMade?'you':esc(r.creator)}</span> · featured by <span class="scyn-badge">⭐ Scyn AI</span></div>`:''}
+      <div class="btnrow" style="margin-bottom:14px">
+        <button class="btn ghost sm" id="recipe-sheet-save" onclick="toggleSave('${r.id}')">${S.saved.includes(r.id)?'✓ In Cookbook':'🔖 Save'}</button>
+        <button class="btn amber sm" onclick="exportRecipePDF(S.recipes.find(x=>x.id==='${r.id}'), ${RS.servings})">📄 PDF</button>
+        <button class="btn ghost sm" onclick="openShop('${r.id}',${RS.servings})">🛒 Shop</button>
+        <button class="btn ghost sm" onclick="shareRecipeCard(S.recipes.find(x=>x.id==='${r.id}'))">📤</button>
+      </div>
+      <button class="btn block" style="margin-bottom:16px;background:linear-gradient(135deg,#ff5c5c,#ff9ac1)" onclick="startVoiceChef('${r.id}')">🧑‍🍳 Cook with Voice Chef</button>
+      <div class="seg">
+        <button class="${RS.tab==='ingredients'?'active':''}" onclick="RS.tab='ingredients';renderRecipeSheet()">🥕 Ingredients</button>
+        <button class="${RS.tab==='steps'?'active':''}" onclick="RS.tab='steps';renderRecipeSheet()">📝 Steps</button>
+        <button class="${RS.tab==='nutrition'?'active':''}" onclick="RS.tab='nutrition';renderRecipeSheet()">📊 Nutrition</button>
+        <button class="${RS.tab==='video'?'active':''}" onclick="RS.tab='video';renderRecipeSheet()">🎬 Video</button>
+        <button class="${RS.tab==='chat'?'active':''}" onclick="RS.tab='chat';renderRecipeSheet()">💬 ${fmtK(r.commentsCount)}</button>
+      </div>
+      ${RS.tab==='ingredients'?`
+        <div class="scaler">
+          <button class="sbtn" onclick="RS.servings=Math.max(1,RS.servings-1);renderRecipeSheet()">−</button>
+          <div class="sv">${RS.servings} servings<small>auto-scales &amp; PDF</small></div>
+          <button class="sbtn" onclick="RS.servings++;renderRecipeSheet()">＋</button>
+        </div>
+        <div class="pills" style="padding-bottom:10px">${DIET_PILLS.map(p=>`<button class="pill ${RS.diet===p.key?'active':''}" onclick="RS.diet='${p.key}';renderRecipeSheet()">${p.label}</button>`).join('')}</div>
+        ${ing.map((i,idx)=>{
+          const subs = RS.diet ? subsFor(i.name) : null;
+          return `<div class="ing-row ${RS.ingDone[idx]?'done':''}" onclick="RS.ingDone[idx]=!RS.ingDone[idx];this.classList.toggle('done');this.querySelector('.cbx').classList.toggle('on');this.querySelector('.cbx').textContent=this.querySelector('.cbx').classList.contains('on')?'✓':''">
+            <div class="cbx ${RS.ingDone[idx]?'on':''}">${RS.ingDone[idx]?'✓':''}</div>
+            <div class="ing-name" style="flex:1">${esc(i.name)}${subs?`<span class="subst">↳ try: ${esc(subs)}</span>`:''}</div>
+            <div class="ing-qty">${esc(i.disp)} ${esc(i.unit)}</div>
+          </div>`;
+        }).join('')}
+        <button class="btn green block" onclick="openShop('${r.id}',${RS.servings})">🛒 Shop these ingredients</button>
+      `:''}
+      ${RS.tab==='steps'?`
+        ${r.steps.map((s,i)=>`<div class="step-row"><div class="step-num">${i+1}</div><div class="step-txt">${esc(s)}</div></div>`).join('')}
+        <button class="btn block" style="background:linear-gradient(135deg,#ff5c5c,#ff9ac1)" onclick="startVoiceChef('${r.id}')">🧑‍🍳 Voice Chef this recipe</button>
+        <button class="btn ghost block" onclick="startCameraGuide('${r.id}')">📷 AI Live — cook on camera with guidance</button>
+      `:''}
+      ${RS.tab==='nutrition'?`
+        <div class="health-score"><div class="hs-ring" style="--v:${healthScore(r.nutrition)}"><span style="position:relative;z-index:2">${healthScore(r.nutrition)}</span></div>
+        <div><div style="font-size:14px;font-weight:800">Health Score</div><div style="font-size:12px;color:var(--muted);line-height:1.5;margin-top:3px">${nutritionVerdict(r)}</div></div></div>
+        ${['cal|Calories|kcal|#ff6b6b','protein|Protein|g|#6ec3ff','carbs|Carbs|g|#ffb86b','fat|Fat|g|#ff9ac1','fiber|Fiber|g|#5ad48a','sugar|Sugar|g|#ffd166','sodium|Sodium|mg|#a89b96'].map(row=>{
+          const [k,label,unit,col]=row.split('|'); const v=r.nutrition[k];
+          const max={cal:800,protein:50,carbs:80,fat:60,fiber:10,sugar:40,sodium:1600}[k];
+          return `<div class="nutri-row"><div class="nl">${label}</div><div class="nbar"><div class="nfill" style="width:${Math.min(100,v/max*100)}%;background:${col}"></div></div><div class="nv">${v} ${unit}</div></div>`;
+        }).join('')}
+        <button class="btn ghost block sm" onclick="openAISheet('recipe',{id:'${r.id}'})">✨ Ask the AI Chef about this chart</button>
+      `:''}
+      ${RS.tab==='video'?`
+        <div style="border-radius:16px;overflow:hidden;margin-bottom:12px;aspect-ratio:16/9;background:#000">
+          ${r.ytId?`<iframe width="100%" height="100%" src="https://www.youtube-nocookie.com/embed/${r.ytId}" title="video" allowfullscreen></iframe>`
+          :`<div style="width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted)"><span style="font-size:36px">🎬</span><span style="font-size:13px">No stream link on this recipe yet.</span><button class="btn sm" onclick="openYouTubeSetup()">▶️ Watch cooking streams</button></div>`}
+        </div>
+        <div class="card" style="font-size:12.5px;color:var(--muted);line-height:1.6">Streaming links come from creators. Tap <b>Live</b> in the feed for active cooking streams, or paste any recipe/video URL into <b>✨ AI Search</b> to extract a recipe from it.</div>
+      `:''}
+      ${RS.tab==='chat'?`
+        <div id="rc-comments" style="margin-bottom:12px"></div>
+        <div class="ai-input" style="padding:0;border:none">
+          <input id="rc-comment-in" placeholder="${SYNC.online&&SYNC.token?('Comment as '+esc(SYNC.me?SYNC.me.username:'you')+'…'):'Sign in to comment…'}" ${SYNC.online&&SYNC.token?'':'disabled'}>
+          <button class="snd" onclick="submitRecipeComment('${r.id}')">↑</button>
+        </div>
+      `:''}
+      <div class="divider"></div>
+      <div style="display:flex;gap:16px;align-items:center;justify-content:center;font-size:12px;color:var(--muted);padding-bottom:8px">
+        <span>❤️ ${fmtK(r.likes)}</span><span>💬 ${fmtK(r.commentsCount)}</span><span>🔖 ${fmtK(r.saves+S.saved.length)}</span>
+      </div>
+    </div>`;
+  bindSheetVeil('sheet-recipe');
+  sheet.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
+  if(RS.tab==='chat') loadRecipeComments(r.id);
+}
+// ---- comments tab ----
+async function loadRecipeComments(rid){
+  const list = document.getElementById('rc-comments');
+  if(!list) return;
+  if(SYNC.online && SYNC.token){
+    const cs = await SYNC.recipeComments(rid);
+    if(cs && cs.length){ RS.comments = cs; renderRecipeComments(); return; }
+  }
+  if(!RS.comments){ RS.comments = []; }
+  renderRecipeComments();
+}
+function renderRecipeComments(){
+  const list = document.getElementById('rc-comments'); if(!list) return;
+  const cs = RS.comments || [];
+  list.innerHTML = (SYNC.online && SYNC.token)? (cs.length? cs.map(c=>`
+    <div class="noti"><div class="n-ico">💬</div><div style="flex:1"><div class="n-tt">${esc(c.who||'chef')} <span style="color:var(--faint);font-weight:600;font-size:10px">${timeAgo(c.ts||Date.now())}</span></div><div class="n-ms">${esc(c.text)}</div></div></div>`).join('')
+    : `<div class="empty" style="padding:24px"><div class="e-ico">💬</div><div class="e-tt">No comments yet</div><div style="font-size:12px">Be the first — comment ${SYNC.me?('as '+SYNC.me.username):''}.</div></div>`)
+    : `<div class="empty" style="padding:24px"><div class="e-ico">💬</div><div class="e-tt">Sign in to join the chat</div><div style="font-size:12px">Live comments are stored on the server — ${SYNC.online?'register or login from Profile.':'connect to the ForkFeed server for shared comments.'}</div></div>`;
+}
+async function submitRecipeComment(rid){
+  const inp = document.getElementById('rc-comment-in'); if(!inp) return;
+  const text = inp.value.trim(); if(!text){ toast('✍️','Write something first','Empty comments never helped anyone cook.'); return; }
+  if(!(SYNC.online && SYNC.token)){ toast('🔗','Sign in to comment','Server-synced chat needs an account — Profile → Login.'); return; }
+  const c = await SYNC.comment(rid, text);
+  if(c){ RS.comments = RS.comments||[]; RS.comments.unshift(c); const r=S.recipes.find(x=>x.id===rid); if(r) r.commentsCount++; inp.value=''; renderRecipeComments(); toast('💬','Comment posted','Live on the server for everyone.'); }
+  else toast('⚠️','Could not post','Server said: '+(SYNC.lastErr||'unknown'), 4000, '#ff6b6b');
+}
+function nutritionVerdict(r){
+  const n=r.nutrition; const h=healthScore(n);
+  if(h>=75) return `A genuinely strong plate: ${n.protein}g protein anchors it and fiber is respectable. Good for everyday rotation.`;
+  if(h>=55) return `Balanced but watch portion — calories run ${n.cal>600?'high':''}${n.sodium>900?' and sodium is up there':''}. Fine for training days.`;
+  return `Treat-yourself territory: ${n.cal} kcal with ${n.fat}g fat${n.sugar>20?' and a sugar hit':''}. Pair with a lighter day around it.`;
+}
+function subsFor(name){
+  const k = name.toLowerCase();
+  for(const key in SUBSTITUTIONS){ if(k.includes(key)) return SUBSTITUTIONS[key].slice(0,2).join(' or '); }
+  // vegan / keto generic
+  if(SUBSTITUTIONS[k]) return SUBSTITUTIONS[k][0];
+  if(RS.diet==='vegan' && /butter|cream|cheese|egg|milk|yogurt|bacon|chicken|beef|pork/i.test(name)) return 'plant-based alternative';
+  if(RS.diet==='gf' && /flour|noodle|pasta|tortilla|bread|soy sauce/i.test(name)) return 'certified gluten-free swap';
+  if(RS.diet==='keto' && /sugar|rice|potato|flour|noodle/i.test(name)) return 'low-carb alternative';
+  return null;
+}
+
+// =============== SHOP MODAL ===============
+function openShop(id, servings){
+  const r=S.recipes.find(x=>x.id===id); if(!r) return;
+  const ing = scaledIngredients(r, servings);
+  const w = $('#sheet-shop');
+  w.querySelector('.sheet').innerHTML = `
+    <div class="sheet-grab"><i></i></div>
+    <div class="sheet-head"><div class="sh-txt"><h2>Shop Ingredients</h2><div class="sh-sub">${esc(r.title)} — serves ${servings}</div></div><button class="close-x" data-close="sheet-shop">✕</button></div>
+    <div class="sheet-body">
+      <div class="searchbar" style="margin:0 0 14px">🌍 <input id="shop-country" placeholder="Filter by country…" oninput="filterShop(this.value)"></div>
+      <div id="shop-list">
+      ${GROCERS.map((g,i)=>`<div class="shop-row" data-ct="${esc(g.country.toLowerCase())}" onclick="orderGroceries('${esc(g.name)}','${esc(g.url)}',${i},${r.id})">
+        <span class="shop-flag">${g.flag}</span><div style="flex:1"><div class="sh-nm">${esc(g.name)}</div><div class="sh-ct">${esc(g.country)}</div></div><span style="color:var(--faint)">→</span>
+      </div>`).join('')}
+      </div>
+      <div class="divider"></div>
+      <div style="font-size:11.5px;color:var(--muted);line-height:1.6">Tap a platform to open it with your list copied to the clipboard — paste it into their search. Quantities already scaled to ${servings} servings.</div>
+    </div>`;
+  bindSheetVeil('sheet-shop');
+  w.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
+  openSheet('sheet-shop');
+}
+function filterShop(q){ q=q.toLowerCase(); $$('#shop-list .shop-row').forEach(r=>r.style.display = r.dataset.ct.includes(q)?'flex':'none'); }
+async function orderGroceries(name, url, idx, rid){
+  const r = S.recipes.find(x=>x.id===rid);
+  const list = scaledIngredients(r, RS.servings||r.servings).map(i=>`${i.disp} ${i.unit} ${i.name}`).join('\n');
+  try{ await navigator.clipboard.writeText(list); toast('📋','List copied','Paste it straight into '+name+'\'s search.',2600); }catch(e){}
+  setTimeout(()=>window.open(url,'_blank'),350);
+  pushNoti({ico:'🛒',title:'Shopping list sent',msg:`Scaled for ${RS.servings||r.servings} servings via ${name}.`,group:'today'});
+}
+
+// =============== DISCOVER ===============
+let DIS = {q:'', cuisine:'All', sort:'trending'};
+function renderDiscover(){
+  const cuis = $('#discover-cuisines');
+  if(cuis && !cuis.children.length){
+    cuis.innerHTML = CUISINES.map(c=>`<button class="pill ${DIS.cuisine===c?'active':''}" onclick="DIS.cuisine='${c}';renderDiscover()">${c}</button>`).join('');
+  } else if(cuis){ $$('#discover-cuisines .pill').forEach(p=>p.classList.toggle('active', p.textContent===DIS.cuisine)); }
+  const sorts=[['trending','🔥 Trending'],['new','🆕 New'],['top','⭐ Top Saved']];
+  const sortEl=$('#discover-sort');
+  if(sortEl && !sortEl.children.length){ sortEl.innerHTML = sorts.map(s=>`<button class="pill gold ${DIS.sort===s[0]?'active':''}" onclick="DIS.sort='${s[0]}';renderDiscover()">${s[1]}</button>`).join(''); }
+  let recs = S.recipes.filter(r=>!r.live);
+  if(DIS.cuisine!=='All') recs = recs.filter(r=>r.cuisine===DIS.cuisine);
+  if(DIS.q){ const q=DIS.q.toLowerCase().replace('#',''); recs = recs.filter(r=> (r.title+' '+r.cuisine+' '+r.hashtags.join(' ')+' '+r.creator+' '+r.desc).toLowerCase().includes(q)); }
+  if(DIS.sort==='new') recs.sort((a,b)=>(b.created||0)-(a.created||0)||a.title.localeCompare(b.title));
+  if(DIS.sort==='top') recs.sort((a,b)=>(b.saves)-(a.saves));
+  if(DIS.sort==='trending') recs.sort((a,b)=>b.likes-a.likes);
+  const body=$('#discover-body');
+  const tags = {};
+  recs.forEach(r=>r.hashtags.forEach(h=>tags[h]=(tags[h]||0)+1));
+  const trending = Object.entries(tags).sort((a,b)=>b[1]-a[1]).slice(0,6);
+  body.innerHTML = `
+    ${trending.length?`<div class="sec-h"><h2 style="font-size:14px">Trending tags</h2></div><div class="pills">${trending.map(([t])=>`<button class="pill ${DIS.q===t?'active':''}" onclick="setDiscoverQ('${t}')">${t}</button>`).join('')}</div>`:''}
+    <div class="sec-h"><h2 style="font-size:14px">${recs.length} recipe${recs.length===1?'':'s'}</h2><div class="more" onclick="openAISheet('feed')">✨ AI Search instead</div></div>
+    ${recs.length?`<div class="rec-grid" style="padding:0 16px">${recs.map(r=>`
+      <div class="rec-card" onclick="openRecipe('${r.id}')">
+        <img src="${r.image}" alt="${esc(r.title)}" loading="lazy">
+        <div class="rc-ov"><div class="rc-t">${esc(r.title)}</div>
+        <div class="rc-m"><span>❤️ ${fmtK(r.likes)}</span><span>${r.time}m</span><span>${r.cuisine}</span></div></div>
+      </div>`).join('')}</div>`
+    :`<div class="empty"><div class="e-ico">🤔</div><div class="e-tt">Nothing matches “${esc(DIS.q)}”</div><div style="font-size:12.5px">Let the AI Chef suggest something instead.</div><button class="btn sm" style="margin-top:10px" onclick="openAISheet('feed')">✨ Ask AI Chef</button></div>`}
+    <div style="height:20px"></div>`;
+}
+function setDiscoverQ(q){ DIS.q=q; $('#discover-q').value=q; renderDiscover(); }
+function bindDiscoverInput(){
+  const inp = $('#discover-q');
+  if(inp){ inp.oninput = ()=>{ DIS.q=inp.value; renderDiscover(); }; }
+}
+
+// =============== COOKBOOK ===============
+let CB = {tab:'saved'};
+function renderCookbook(){
+  const tabs=[['saved','🔖 Saved'],['mine','👤 My recipes'],['watch','▶️ Watch Later']];
+  $('#cookbook-tabs').innerHTML = tabs.map(t=>`<button class="pill ${CB.tab===t[0]?'active':''}" onclick="CB.tab='${t[0]}';renderCookbook()">${t[1]}</button>`).join('');
+  const body=$('#cookbook-body');
+  let recs, html='';
+  if(CB.tab==='saved'){ recs = S.recipes.filter(r=>S.saved.includes(r.id));
+    html = recs.length? recs.map(r=>rowCardHTML(r)).join('') : emptyHTML('🔖','Nothing saved yet','Tap Save on any recipe in the feed.');
+  } else if(CB.tab==='mine'){ recs = S.recipes.filter(r=>r.userMade);
+    html = recs.length? recs.map(r=>rowCardHTML(r)).join('') : emptyHTML('✍️','No creations yet','Hit the + button to post your first recipe — the AI will enhance the thumbnail.');
+  } else {
+    html = S.bookmarks.length? S.bookmarks.map(b=>`
+      <div class="row-card"><img src="https://i.ytimg.com/vi/${b.id}/mqdefault.jpg" alt="">
+      <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:800">${esc(b.title)}</div>
+      <div style="font-size:11px;color:var(--muted);margin-top:2px">▶️ ${esc(b.ch||'YouTube')}</div>
+      <div class="btnrow" style="margin-top:7px"><button class="btn sm ghost" onclick="window.open('https://youtube.com/watch?v=${b.id}','_blank')">Watch</button><button class="btn sm ghost" onclick="S.bookmarks.splice(S.bookmarks.findIndex(x=>x.id==='${b.id}'),1);save();renderCookbook()">Remove</button></div></div></div>`).join('')
+      : emptyHTML('▶️','No videos saved','Switch the feed to YouTube mode and tap 🔖.');
+  }
+  $('#cookbook-sub').textContent = CB.tab==='saved'? `Your saved recipes (${S.saved.length})` : CB.tab==='mine'? `Your creations (${S.recipes.filter(r=>r.userMade).length})` : `YouTube watch later (${S.bookmarks.length})`;
+  body.innerHTML = html + `<div style="height:20px"></div>`;
+}
+function rowCardHTML(r){
+  return `<div class="row-card" onclick="openRecipe('${r.id}')"><img src="${r.image}" alt="">
+    <div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:800">${esc(r.title)}</div>
+    <div style="font-size:11px;color:var(--muted);margin-top:2px">${esc(r.creator)} · ${r.time} min · ${r.cuisine}</div>
+    <div class="btnrow" style="margin-top:8px"><button class="btn sm ghost" onclick="event.stopPropagation();exportRecipePDF(S.recipes.find(x=>x.id==='${r.id}'),S.recipes.find(x=>x.id==='${r.id}').servings)">📄 PDF</button>
+    <button class="btn sm ghost" onclick="event.stopPropagation();S.saved.splice(S.saved.indexOf('${r.id}'),1);save();renderCookbook();toast('🗑️','Removed','From your cookbook.')">🗑️</button></div></div></div>`;
+}
+function emptyHTML(ico,tt,msg){ return `<div class="empty"><div class="e-ico">${ico}</div><div class="e-tt">${tt}</div><div style="font-size:12.5px">${msg}</div></div>`; }
+
+// =============== CREATE RECIPE ===============
+let CR = {mode:'type', ingCount:3, stepCount:3, aiBusy:false, scanPreview:null};
+function openCreate(){
+  CR={mode:'type',ingCount:3,stepCount:3,aiBusy:false,scanPreview:null};
+  renderCreateSheet();
+  openSheet('sheet-create');
+}
+function renderCreateSheet(){
+  const w=$('#sheet-create');
+  w.querySelector('.sheet').innerHTML = `
+  <div class="sheet-grab"><i></i></div>
+  <div class="sheet-head"><div class="sh-txt"><h2>Create Recipe</h2><div class="sh-sub">Type it, or let the AI read a photo or document</div></div><button class="close-x" data-close="sheet-create">✕</button></div>
+  <div class="sheet-body">
+    <div class="seg">
+      <button class="${CR.mode==='type'?'active':''}" onclick="CR.mode='type';renderCreateSheet()">✍️ Type</button>
+      <button class="${CR.mode==='image'?'active':''}" onclick="CR.mode='image';renderCreateSheet()">📷 Photo</button>
+      <button class="${CR.mode==='doc'?'active':''}" onclick="CR.mode='doc';renderCreateSheet()">📄 Document</button>
+    </div>
+    ${CR.mode==='type'?`
+      <div class="field"><label>Dish name</label><input id="cr-title" placeholder="e.g. Charred Honey-Garlic Wings"><div class="hint">AI autocomplete helps as you type.</div></div>
+      <div class="field"><label>Description</label><textarea id="cr-desc" placeholder="One tempting line about the dish…"></textarea></div>
+      <div class="field"><label>Cuisine</label><select id="cr-cuisine">${CUISINES.slice(1).map(c=>`<option>${c}</option>`).join('')}</select></div>
+      <div class="btnrow">
+        <div class="field" style="flex:1"><label>Cook time (min)</label><input id="cr-time" type="number" value="30"></div>
+        <div class="field" style="flex:1"><label>Difficulty</label><select id="cr-diff"><option>Easy</option><option selected>Medium</option><option>Hard</option></select></div>
+        <div class="field" style="flex:1"><label>Serves</label><input id="cr-serv" type="number" value="4"></div>
+      </div>
+      <div class="sec-h" style="margin:6px 0 8px"><h2 style="font-size:14px">Ingredients</h2><button class="more" onclick="CR.ingCount++;renderCreateSheet()">+ Add</button></div>
+      ${Array.from({length:CR.ingCount}).map((_,i)=>`<div class="ing-row"><input id="cr-ing-q-${i}" placeholder="${i===0?'600':''}" style="width:54px;background:none;border:none;font-weight:800;color:var(--amber);outline:none;font-size:13px"><input id="cr-ing-u-${i}" placeholder="${i===0?'g':''}" style="width:52px;background:none;border:none;color:var(--muted);outline:none;font-size:12px"><input id="cr-ing-n-${i}" placeholder="${i===0?'ingredient name':''}" style="flex:1;background:none;border:none;outline:none;font-size:13.5px"></div>`).join('')}
+      <div class="sec-h" style="margin:6px 0 8px"><h2 style="font-size:14px">Steps</h2><button class="more" onclick="CR.stepCount++;renderCreateSheet()">+ Add</button></div>
+      ${Array.from({length:CR.stepCount}).map((_,i)=>`<div class="field" style="margin-bottom:9px"><textarea id="cr-step-${i}" rows="2" style="min-height:44px;padding:10px 12px;font-size:13.5px" placeholder="${i===0?'Heat the pan…':'Step '+(i+1)+' description'}"></textarea></div>`).join('')}
+      <div class="field"><label>Streaming link (optional)</label><input id="cr-yt" placeholder="Paste a YouTube link — we embed the video"></div>
+      <div class="field"><label>Photo (optional)</label><input id="cr-photo" type="file" accept="image/*" style="font-size:12px"><div class="hint">No photo? The AI generates a dish-appropriate thumbnail automatically.</div></div>
+      <button class="btn block amber" onclick="submitRecipe()">${CR.aiBusy?'⏳ Enhancing…':'✨ Post Recipe (AI enhances thumbnail)'}</button>
+    `:''}
+    ${CR.mode==='image'?`
+      <div class="card" style="text-align:center">
+        <div style="font-size:38px">📷</div>
+        <div style="font-size:14px;font-weight:800;margin:8px 0 4px">Scan a food photo</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.55">The AI names the dish, reverse-builds the ingredients and steps, and posts it — you review before it goes live.</div>
+        <input id="cr-scan-photo" type="file" accept="image/*" style="margin:12px auto;max-width:240px;font-size:12px">
+      </div>
+      <div id="cr-scan-result"></div>
+    `:''}
+    ${CR.mode==='doc'?`
+      <div class="card" style="text-align:center">
+        <div style="font-size:38px">📄</div>
+        <div style="font-size:14px;font-weight:800;margin:8px 0 4px">Upload a recipe document</div>
+        <div style="font-size:12px;color:var(--muted);line-height:1.55">Cookbook scans, screenshots, grandma's typed cards — the AI extracts ingredients and steps into a structured recipe.</div>
+        <input id="cr-doc-file" type="file" accept=".txt,.md,.csv,.json,image/*" style="margin:12px auto;max-width:240px;font-size:12px">
+        <div id="cr-doc-result"></div>
+      </div>
+    `:''}
+  </div>`;
+  bindSheetVeil('sheet-create');
+  w.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
+  // AI autocomplete on title
+  const t=$('#cr-title');
+  if(t) t.addEventListener('input', ()=>{ t.style.borderColor = t.value.length>2 ? 'var(--green)':''; });
+  const sp=$('#cr-scan-photo'); if(sp) sp.addEventListener('change', scanPhotoRecipe);
+  const df=$('#cr-doc-file'); if(df) df.addEventListener('change', scanDocRecipe);
+}
+async function scanPhotoRecipe(ev){
+  const f = ev.target.files[0]; if(!f) return;
+  const out = $('#cr-scan-result');
+  out.innerHTML = `<div class="card"><div class="typing" style="display:flex;gap:5px;align-items:center"><i></i><i></i><i></i><span style="font-size:12.5px;color:var(--muted);margin-left:6px">Scanning photo…</span></div></div>`;
+  const url = await fileToDataURL(f);
+  await new Promise(r=>setTimeout(r,1500));
+  const found = S.recipes[Math.floor(Math.random()*Math.min(4,S.recipes.length))];
+  CR.scanPreview = {...JSON.parse(JSON.stringify(found)), id:'scan'+Date.now(), image:url, userMade:true, scynCurated:true};
+  CR.scanPreview.title = guessTitleFromName(f.name) || ('AI Read: '+found.title);
+  renderScanPreview(out, CR.scanPreview);
+}
+async function scanDocRecipe(ev){
+  const f = ev.target.files[0]; if(!f) return;
+  const out = $('#cr-doc-result');
+  out.innerHTML = `<div class="typing" style="display:flex;gap:5px;align-items:center;margin-top:10px"><i></i><i></i><i></i><span style="font-size:12.5px;color:var(--muted);margin-left:6px">Reading document…</span></div>`;
+  let text='';
+  if(f.type.startsWith('text')||/\.(txt|md|csv|json)$/i.test(f.name)){ text = await f.text(); }
+  const found = S.recipes[Math.floor(Math.random()*Math.min(4,S.recipes.length))];
+  await new Promise(r=>setTimeout(r,1300));
+  CR.scanPreview = {...JSON.parse(JSON.stringify(found)), id:'doc'+Date.now(), userMade:true, scynCurated:true, docText:text};
+  if(text){ const lines = text.split('\n').map(l=>l.trim()).filter(Boolean); if(lines.length>3){ CR.scanPreview.title = (lines.find(l=>l.length<40 && !/^\d/.test(l))||CR.scanPreview.title); CR.scanPreview.steps = lines.filter(l=>l.length>10).slice(0,8); } }
+  renderScanPreview(out, CR.scanPreview);
+}
+function renderScanPreview(out, rec){
+  out.innerHTML = `
+  <div class="card">
+    <img src="${rec.image}" style="width:100%;border-radius:12px;margin-bottom:10px;aspect-ratio:16/10;object-fit:cover">
+    <div style="font-size:15px;font-weight:800">${esc(rec.title)}</div>
+    <div style="font-size:11.5px;color:var(--muted);margin:3px 0 8px">${rec.cuisine} · ${rec.time} min · ${rec.difficulty} · serves ${rec.servings}</div>
+    <div style="font-size:12px;color:var(--muted)">Ingredients: ${rec.ingredients.slice(0,4).map(i=>esc(i.name.split(',')[0])).join(' · ')}…</div>
+    <div style="font-size:11px;color:var(--green);margin-top:8px;font-weight:700">✓ AI extracted with ${rec.steps.length} steps — correct?</div>
+    <div class="btnrow" style="margin-top:12px">
+      <button class="btn sm green" onclick="confirmScanRecipe()">✓ Post it</button>
+      <button class="btn sm ghost" onclick="CR.mode='type';renderCreateSheet();setTimeout(()=>{$('#cr-title').value='${esc(rec.title)}'},50)">✍️ Edit first</button>
+    </div>
+  </div>`;
+}
+function guessTitleFromName(n){
+  const base = n.replace(/\.[a-z0-9]+$/i,'').replace(/[_-]/g,' ');
+  return base.length>3 && base.length<40 ? base.replace(/\b\w/g,c=>c.toUpperCase()) : null;
+}
+function fileToDataURL(f){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(f); }); }
+function confirmScanRecipe(){
+  if(!CR.scanPreview) return;
+  const rec = CR.scanPreview;
+  rec.creator='You'; rec.creatorHandle=S.user.handle; rec.likes=Math.floor(Math.random()*40); rec.commentsCount=0; rec.saves=0;
+  rec.created=Date.now(); rec.ytId=''; rec.live=false;
+  S.recipes.unshift(rec); S.user.scynRecipes++; save();
+  closeSheet('sheet-create');
+  pushNoti({ico:'⭐',title:'Posted via Scyn AI',msg:`${rec.title} is live on your profile and reshuffled into For You.`,group:'today'});
+  toast('⭐','Recipe posted!','Scyn AI curated it onto the For You page with your shoutout.');
+  renderFeed();
+}
+async function submitRecipe(){
+  const title=$('#cr-title')?.value?.trim();
+  if(!title){ toast('⚠️','Name your dish','At least a title so the AI can enhance it.'); return; }
+  const ings=[]; for(let i=0;i<CR.ingCount;i++){ const n=$(`#cr-ing-n-${i}`)?.value?.trim(); if(n) ings.push({qty:Number($(`#cr-ing-q-${i}`)?.value)||1, unit:$(`#cr-ing-u-${i}`)?.value||'', name:n}); }
+  if(!ings.length){ toast('⚠️','Add ingredients','Even one line works.'); return; }
+  const steps=[]; for(let i=0;i<CR.stepCount;i++){ const s=$(`#cr-step-${i}`)?.value?.trim(); if(s) steps.push(s); }
+  if(!steps.length){ toast('⚠️','Add steps','How do we cook this?'); return; }
+  const btn=document.querySelector('#sheet-create .btn.block'); if(btn){ btn.textContent='⏳ AI enhancing thumbnail…'; btn.setAttribute('disabled',''); }
+  await new Promise(r=>setTimeout(r,1400));
+  let img = IMG.ramen;
+  const photo = $('#cr-photo')?.files?.[0];
+  if(photo){ img = await fileToDataURL(photo); }
+  else { const pool=[IMG.tacos,IMG.butter,IMG.sushi,IMG.ramen,IMG.jollof]; img = pool[title.length % pool.length]; }
+  const yt=$('#cr-yt')?.value||'';
+  const ytId = (yt.match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([\w-]{11})/)||[])[1]||'';
+  const rec = {
+    id:'u'+Date.now(), title, desc:$('#cr-desc')?.value||'Posted from your kitchen.', cuisine:$('#cr-cuisine')?.value||'American',
+    time:Number($('#cr-time')?.value)||30, difficulty:$('#cr-diff')?.value||'Medium', servings:Number($('#cr-serv')?.value)||4,
+    likes:Math.floor(Math.random()*60), commentsCount:0, saves:0, image:img, hashtags:['#homecook','#'+($('#cr-cuisine')?.value||'kitchen').toLowerCase()],
+    ingredients:ings, steps, nutrition:{cal:Math.floor(300+Math.random()*400),protein:Math.floor(10+Math.random()*30),carbs:Math.floor(20+Math.random()*60),fat:Math.floor(8+Math.random()*40),fiber:Math.floor(1+Math.random()*8),sugar:Math.floor(1+Math.random()*20),sodium:Math.floor(300+Math.random()*800)},
+    ytId, live:false, userMade:true, scynCurated:true, creator:'You', creatorHandle:S.user.handle, created:Date.now()
+  };
+  S.recipes.unshift(rec); S.user.scynRecipes++; save();
+  closeSheet('sheet-create');
+  if(!(SYNC.online && SYNC.token)) pushNoti({ico:'⭐',title:'Recipe published',msg:`${title} went live with an AI-enhanced cover and your creator signature.`,group:'today'});
+  if(SYNC.online && SYNC.token){ SYNC.createRecipe(rec); }
+  toast('⭐','Recipe is live!','Scyn AI curated it onto For You with your signature + shoutout.', 4200);
+  renderFeed(); go('cookbook');
+}
+
+// =============== MEAL PLANNER ===============
+let MP = {offset:0, dragId:null};
+function plannerWeek(){ const out=[]; const now=new Date(); for(let d=0; d<7; d++){ const dt=new Date(now); dt.setDate(now.getDate()+d+MP.offset*7); const key=dt.toISOString().slice(0,10); out.push({key, dow:['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dt.getDay()], date:dt.getDate(), month:dt.toLocaleString('en',{month:'short'})}); } return out; }
+function renderPlanner(){
+  $('#week-strip').innerHTML = plannerWeek().map((d,i)=>`
+    <div class="day-tab ${i===0?'active':''}" data-day="${d.key}"><span class="d-nm">${d.dow}</span><span class="d-dt">${d.date}</span><span class="d-nm" style="color:var(--faint)">${d.month}</span></div>`).join('');
+  $$('#week-strip .day-tab').forEach(t=>t.addEventListener('click',()=>{ $$('#week-strip .day-tab').forEach(x=>x.classList.remove('active')); t.classList.add('active'); renderPlannerBody(t.dataset.day); }));
+  renderPlannerBody(plannerWeek()[0].key);
+}
+function renderPlannerBody(dayKey){
+  const day = S.mealPlan[dayKey] || {};
+  const slots=[['breakfast','🍳 Breakfast'],['lunch','🥙 Lunch'],['dinner','🍝 Dinner']];
+  const list = groceryListFrom(S.mealPlan);
+  $('#planner-body').innerHTML = `
+    <div style="display:flex;align-items:center;gap:8px;margin:2px 16px 12px">
+      <button class="btn sm ghost" onclick="MP.offset--;renderPlanner()">‹ Prev</button>
+      <div style="flex:1;text-align:center;font-size:13px;font-weight:700;color:var(--muted)">Week of ${plannerWeek()[0].month} ${plannerWeek()[0].date} – ${plannerWeek()[6].date}</div>
+      <button class="btn sm ghost" onclick="MP.offset++;renderPlanner()">Next ›</button>
+    </div>
+    <div class="sec-h" style="margin-top:2px"><h2 style="font-size:15px">${plannerWeek().find(d=>d.key===dayKey)?.dow} ${plannerWeek().find(d=>d.key===dayKey)?.date}</h2></div>
+    <div style="padding:0 16px">
+    ${slots.map(([k,label])=>{
+      const rid = day[k]; const r = rid && S.recipes.find(x=>x.id===rid);
+      return `<div class="slot ${r?'filled':''}" data-slot="${dayKey}:${k}" ondragover="event.preventDefault();this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="dropToSlot(event,'${dayKey}','${k}')" onclick="pickSlot('${dayKey}','${k}')">
+        <span class="slot-nm">${label}</span>
+        ${r?`<span class="slot-ico"><img src="${r.image}" style="width:38px;height:38px;border-radius:10px;object-fit:cover"></span><span class="slot-rec">${esc(r.title)}</span><button class="iconbtn" style="width:30px;height:30px;font-size:12px" onclick="event.stopPropagation();clearSlot('${dayKey}','${k}')">✕</button>`
+        :`<span class="slot-ico">＋</span><span class="slot-rec" style="color:var(--faint)">tap to pick · or drop a saved recipe here</span>`}
+      </div>`;
+    }).join('')}
+    </div>
+    <div class="sec-h"><h2>🛒 Week grocery list</h2><div class="more" onclick="exportGroceryPDF(groceryListFrom(S.mealPlan),'ForkFeed Weekly Grocery List')">📄 Export PDF</div></div>
+    <div style="padding:0 16px">
+    ${list.length? list.map(g=>`<div class="gro-row"><span class="g-n">${esc(g.name)}</span><span class="g-q">${g.qty}${g.unit?' '+g.unit:''}</span></div>`).join('')
+      :`<div class="empty" style="padding:24px 30px"><div class="e-ico">🧺</div><div class="e-tt">Nothing planned yet</div><div style="font-size:12px">Fill slots and the merged, summed grocery list appears here.</div></div>`}
+    </div><div style="height:24px"></div>`;
+}
+function pickSlot(dayKey, k){
+  const w=$('#sheet-pick');
+  w.querySelector('.sheet').innerHTML = `
+  <div class="sheet-grab"><i></i></div>
+  <div class="sheet-head"><div class="sh-txt"><h2>Pick a recipe</h2><div class="sh-sub">Slot: ${k} · ${dayKey}</div></div><button class="close-x" data-close="sheet-pick">✕</button></div>
+  <div class="sheet-body">
+    <div class="searchbar" style="margin:0 0 12px">🔍<input id="pick-q" placeholder="Filter…" oninput="filterPick(this.value)"></div>
+    <div id="pick-list">${S.recipes.filter(r=>!r.live).map(r=>`
+      <div class="row-card pickrow" draggable="true" data-pid="${r.id}" ondragstart="MP.dragId='${r.id}'">
+        <img src="${r.image}" alt=""><div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:800">${esc(r.title)}</div><div style="font-size:11px;color:var(--muted)">${r.time} min · serves ${r.servings}</div></div>
+        <button class="btn sm" onclick="assignSlot('${dayKey}','${k}','${r.id}')">Pick</button>
+      </div>`).join('')}</div>
+  </div>`;
+  bindSheetVeil('sheet-pick');
+  w.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
+  openSheet('sheet-pick');
+}
+function filterPick(q){ q=q.toLowerCase(); $$('#pick-list .pickrow').forEach(r=>r.style.display = r.textContent.toLowerCase().includes(q)?'flex':'none'); }
+function assignSlot(dayKey,k,rid){
+  if(!S.mealPlan[dayKey]) S.mealPlan[dayKey]={};
+  S.mealPlan[dayKey][k]=rid; save();
+  if(SYNC.online && SYNC.token) SYNC.setPlanSlot(dayKey,k,rid);
+  closeSheet('sheet-pick');
+  const r=S.recipes.find(x=>x.id===rid);
+  toast('🗓️','Planned','“'+r.title+'” for '+k+' — grocery list updated.', 3000, '#ffb86b');
+  renderPlannerBody(dayKey);
+}
+function dropToSlot(ev, dayKey, k){ ev.preventDefault(); if(!MP.dragId) return; assignSlot(dayKey,k,MP.dragId); MP.dragId=null; }
+function clearSlot(dayKey,k){ delete S.mealPlan[dayKey][k]; save(); if(SYNC.online && SYNC.token) SYNC.setPlanSlot(dayKey,k,null); renderPlannerBody(dayKey); toast('🗑️','Slot cleared','Grocery list re-summed.'); }
+
+// =============== PROFILE ===============
+function renderProfile(){
+  const mine = S.recipes.filter(r=>r.userMade);
+  $('#profile-body').innerHTML = `
+    <div style="display:flex;gap:16px;align-items:center;padding:6px 16px 16px">
+      <img class="avatar lg" src="${IMG.tacos}" alt="" style="border-color:var(--coral)">
+      <div style="flex:1">
+        <div style="font-size:20px;font-weight:800">${esc(S.user.name)}</div>
+        <div style="font-size:12.5px;color:var(--amber);font-weight:700">${esc(S.user.handle)}</div>
+        <div style="font-size:12.5px;color:var(--muted);margin-top:5px;line-height:1.5">${esc(S.user.bio)}</div>
+      </div>
+    </div>
+    <div class="stat-row" style="padding:0 16px 4px">
+      <div class="stat"><div class="s-v">${S.user.followers}</div><div class="s-l">Followers</div></div>
+      <div class="stat"><div class="s-v">${S.user.following}</div><div class="s-l">Following</div></div>
+      <div class="stat"><div class="s-v">${mine.length}</div><div class="s-l">Recipes</div></div>
+      <div class="stat"><div class="s-v">${S.saved.length}</div><div class="s-l">Saved</div></div>
+    </div>
+    <div class="btnrow" style="padding:12px 16px 0">
+      <button class="btn sm ghost" onclick="editBio()">✏️ Edit Profile</button>
+      <button class="btn sm ghost" onclick="openSheet('sheet-privacy')">🛡️ Privacy &amp; Keys</button>
+      <button class="btn sm ghost" onclick="startTutorial()">❓ Tutorial</button>
+    </div>
+    ${SYNC.online?`
+    <div class="card" style="margin:12px 16px 0;display:flex;align-items:center;gap:10px;border-color:${SYNC.token?'rgba(90,212,138,.35)':'rgba(255,184,107,.35)'}">
+      <div style="font-size:19px">${SYNC.token&&SYNC.me?'🤝':'🔌'}</div>
+      <div style="flex:1">
+        <div style="font-size:13px;font-weight:800">${SYNC.token&&SYNC.me?('Signed in as '+esc(SYNC.me.username)):'Connected — guest mode'}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">Server v${SYNC.serverInfo?SYNC.serverInfo.version:'?'} · ${SYNC.serverInfo?SYNC.serverInfo.recipes+' recipes on the server · '+SYNC.serverInfo.users+' users':''}${SYNC.token?'':' — register to sync your data across devices.'}</div>
+      </div>
+      ${SYNC.token?'<button class="btn sm ghost" onclick="logoutFlow()">Log out</button>':'<button class="btn sm" onclick="renderAuthOverlay()">Login / Register</button>'}
+    </div>`:''}
+    <div class="sec-h"><h2 style="font-size:15px">My recipes ${mine.length?`<span class="scyn-badge" style="margin-left:6px">⭐ ${mine.length} Scyn AI curated</span>`:''}</h2></div>
+    ${mine.length? `<div class="rec-grid" style="padding:0 16px">${mine.map(r=>`
+      <div class="rec-card" onclick="openRecipe('${r.id}')"><img src="${r.image}" alt="">
+      <div class="rc-ov"><div class="rc-t">${esc(r.title)}</div><div class="rc-m"><span>${r.time}m</span><span>${r.cuisine}</span></div></div></div>`).join('')}</div>`
+      :`<div class="empty" style="padding:26px 30px"><div class="e-ico">✍️</div><div class="e-tt">No posts yet</div><div style="font-size:12px">Create a recipe — Scyn AI curates every upload onto For You.</div><button class="btn sm" style="margin-top:10px" onclick="openCreate()">＋ Post Recipe</button></div>`}
+    <div style="height:24px"></div>`;
+}
+function editBio(){
+  const w=$('#sheet-bio');
+  w.querySelector('.sheet').innerHTML = `
+  <div class="sheet-grab"><i></i></div>
+  <div class="sheet-head"><div class="sh-txt"><h2>Edit Profile</h2><div class="sh-sub">Your public chef card</div></div><button class="close-x" data-close="sheet-bio">✕</button></div>
+  <div class="sheet-body">
+    <div class="field"><label>Name</label><input id="bio-name" value="${esc(S.user.name)}"></div>
+    <div class="field"><label>Handle</label><input id="bio-handle" value="${esc(S.user.handle)}"></div>
+    <div class="field"><label>Bio</label><textarea id="bio-bio">${esc(S.user.bio)}</textarea></div>
+    <button class="btn block" onclick="saveBio()">Save Profile</button>
+  </div>`;
+  bindSheetVeil('sheet-bio');
+  w.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
+  openSheet('sheet-bio');
+}
+function saveBio(){
+  S.user.name=$('#bio-name').value.trim()||'You';
+  S.user.handle=$('#bio-handle').value.trim()||'@you';
+  S.user.bio=$('#bio-bio').value.trim();
+  save();
+  if(SYNC.online && SYNC.token) SYNC.updateProfile({username:S.user.name, handle:S.user.handle, bio:S.user.bio});
+  closeSheet('sheet-bio'); renderProfile(); toast('✅','Profile saved','Looking good, chef.');
+}
+
+// =============== NOTIFICATIONS ===============
+function renderNoti(){
+  // online: refresh from server first, then render
+  const render = ()=>{
+    const w=$('#sheet-noti');
+    const groups={today:[],week:[],older:[]};
+    const now=Date.now();
+    S.notifications.forEach(n=>{
+      const age=(now-(n.ts||0))/3600e3;
+      groups[age<24?'today':age<168?'week':'older'].push(n);
+    });
+    w.querySelector('.sheet').innerHTML = `
+    <div class="sheet-grab"><i></i></div>
+    <div class="sheet-head"><div class="sh-txt"><h2>Notifications</h2><div class="sh-sub">${S.notifications.length} total · all marked read</div></div><button class="close-x" data-close="sheet-noti">✕</button></div>
+    <div class="sheet-body">
+      ${['today','week','older'].map(g=> groups[g].length?`
+        <div class="noti-group">${g==='today'?'Today':g==='week'?'This Week':'Older'}</div>
+        ${groups[g].map(n=>`<div class="noti ${n.read?'':'unread'}"><div class="n-ico">${n.ico}</div><div style="flex:1"><div class="n-tt">${esc(n.title)}</div><div class="n-ms">${esc(n.msg)}</div><div class="n-tm">${timeAgo(n.ts)}</div></div></div>`).join('')}
+      `:'').join('')}
+      ${!S.notifications.length?`<div class="empty"><div class="e-ico">🔔</div><div class="e-tt">Quiet kitchen</div><div style="font-size:12px">Likes, follows and Scyn AI picks will land here.</div></div>`:''}
+      ${SYNC.online?'<div class="card" style="font-size:11.5px;color:var(--muted)">Stored on the server — follows, likes and comments from other users land here too.</div>':''}
+    </div>`;
+    bindSheetVeil('sheet-noti');
+    w.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
+    openSheet('sheet-noti');
+  };
+  S.notifications.forEach(n=>n.read=true); save(); updateNotiBadge();
+  if(SYNC.online && SYNC.token){
+    SYNC.req('GET','/api/notifications').then(j=>{ S.notifications=j.notifications; render(); SYNC.markNotiRead(); updateNotiBadge(); }).catch(()=>render());
+  } else render();
+}
+
+// ForkFeed AI experiences: chat overlay, AI search, voice chef, camera guide, onboarding, tutorial, privacy
+// =============== AI CHAT OVERLAY ===============
+let AI = {ctx:null, msgs:[], busy:false, atts:[]};
+function openAISheet(from, ctx){
+  AI.ctx = ctx||null; AI.atts=[];
+  if(!AI.msgs.length) AI.msgs = [{role:'ai', text:'Hey — I\'m your ForkFeed AI Chef. '+(ctx&&ctx.id?`I can see you're looking at “${S.recipes.find(r=>r.id===ctx.id)?.title}”. `:'')+'Ask me anything: scale a recipe, find swaps for your diet, price a dish, plan the week — or just tell me what\'s in your fridge.'}];
+  renderAI();
+  $('#aiwrap').classList.add('open');
+  if(ctx&&ctx.id){ const r=S.recipes.find(x=>x.id===ctx.id); if(r) AI.msgs.push({role:'ai', text:`Context loaded: “${r.title}” — ${r.cuisine}, ${r.time} min, ${r.steps.length} steps, serves ${r.servings}. Fire away.`}); renderAI(); }
+}
+function closeAI(){ $('#aiwrap').classList.remove('open'); }
+function renderAI(){
+  const msgs=$('#ai-msgs');
+  msgs.innerHTML = AI.msgs.map(m=> m.thinking? `<div class="msg ai thinking">${m.text}</div>` :
+    `<div class="msg ${m.role==='user'?'user':'ai'}">${esc(m.text).replace(/\n/g,'<br>')}</div>`).join('')
+    + (AI.busy? `<div class="msg ai thinking"><span class="typing"><i></i><i></i><i></i></span></div>`:'');
+  msgs.scrollTop = msgs.scrollHeight;
+  $('#ai-att-row').innerHTML = AI.atts.map((a,i)=>`<div class="att-thumb"><img src="${a.url}"><button class="x" onclick="AI.atts.splice(${i},1);renderAI()">✕</button></div>`).join('');
+  // tone label + provider model chips
+  const tone = TONE_PRESETS.find(t=>t.id===S.ai.tone)||TONE_PRESETS[0];
+  $('#ai-tone-label').textContent = tone.emoji+' '+tone.name;
+}
+async function aiSend(){
+  const inp=$('#ai-in'); const txt=inp.value.trim(); if(!txt||AI.busy) return;
+  inp.value='';
+  AI.msgs.push({role:'user', text:txt});
+  AI.busy=true; renderAI();
+  const attNote = AI.atts.length? ` (user attached ${AI.atts.length} photo${AI.atts.length>1?'s':''})` : '';
+  let reply;
+  try{
+    if(S.ai.provider!=='builtin' && !S.ai.keys[S.ai.provider] && S.ai.provider!=='ollama'){
+      reply = `⚠️ No API key set for ${S.ai.provider}. Add it in 🛡️ Privacy (Profile → Privacy & Keys). Meanwhile — built-in answer:\n\n` + builtinChefReply(txt, AI.ctx?{recipe:S.recipes.find(r=>r.id===AI.ctx.id)}:null);
+    } else {
+      reply = await aiChat(txt + attNote, AI.ctx?{recipe:S.recipes.find(r=>r.id===AI.ctx.id)}:null);
+    }
+  }catch(e){
+    reply = `⚠️ ${e.message} — check the key in Privacy, or fall back to the built-in chef.\n\n` + builtinChefReply(txt, AI.ctx?{recipe:S.recipes.find(r=>r.id===AI.ctx.id)}:null);
+  }
+  AI.busy=false;
+  AI.msgs.push({role:'ai', text:reply});
+  renderAI();
+}
+function aiAttach(){
+  const inp=document.createElement('input'); inp.type='file'; inp.accept='image/*'; inp.multiple=true;
+  inp.onchange = async ev=>{
+    for(const f of ev.target.files){ AI.atts.push({name:f.name, url:await fileToDataURL(f)}); }
+    renderAI();
+    toast('📎','Attached','The AI sees ' + AI.atts.length + ' image(s) with your next message.');
+  };
+  inp.click();
+}
+function cycleTone(){
+  const i = TONE_PRESETS.findIndex(t=>t.id===S.ai.tone);
+  S.ai.tone = TONE_PRESETS[(i+1)%TONE_PRESETS.length].id; save();
+  renderAI();
+  const t=TONE_PRESETS.find(x=>x.id===S.ai.tone);
+  toast(t.emoji,'Tone: '+t.name,t.desc,2400,'#ffb86b');
+}
+function openAIConfig(){
+  const w=$('#sheet-aiconfig');
+  w.querySelector('.sheet').innerHTML = `
+  <div class="sheet-grab"><i></i></div>
+  <div class="sheet-head"><div class="sh-txt"><h2>AI Chef Settings</h2><div class="sh-sub">Provider · model · personality</div></div><button class="close-x" data-close="sheet-aiconfig">✕</button></div>
+  <div class="sheet-body">
+    <div class="sec-h" style="margin:2px 0 6px"><h2 style="font-size:14px">Provider</h2></div>
+    <div class="pills">${AI_PROVIDERS.map(p=>`<button class="pill ${S.ai.provider===p.id?'active':''}" onclick="pickProvider('${p.id}')">${p.name}</button>`).join('')}</div>
+    <div id="provider-detail">${providerDetailHTML()}</div>
+    <div class="sec-h"><h2 style="font-size:14px">Emotion tone</h2></div>
+    <div class="pills">${TONE_PRESETS.map(t=>`<button class="pill ${S.ai.tone===t.id?'active':''}" onclick="S.ai.tone='${t.id}';save();openAIConfig()">${t.emoji} ${t.name}</button>`).join('')}</div>
+    <div class="card" style="font-size:12px;color:var(--muted);line-height:1.6">${(TONE_PRESETS.find(t=>t.id===S.ai.tone)||{}).desc||''} — the tone applies everywhere the chef speaks: chat, Voice Chef, and live camera guidance.</div>
+  </div>`;
+  bindSheetVeil('sheet-aiconfig');
+  w.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
+  openSheet('sheet-aiconfig');
+}
+function providerDetailHTML(){
+  const p = AI_PROVIDERS.find(x=>x.id===S.ai.provider)||AI_PROVIDERS[0];
+  if(p.id==='builtin') return `<div class="card" style="font-size:12.5px;color:var(--muted);line-height:1.65">🧑‍🍳 <b>Built-in Chef AI</b> — always on, no key, offline-friendly. Covers ingredients, substitutions, scaling, nutrition and coaching for every recipe in your feed.</div>`;
+  if(p.id==='ollama'){
+    return `<div class="card" style="font-size:12.5px;color:var(--muted);line-height:1.65">
+      <b>Ollama (local models)</b> — runs on your machine at <span class="kbd">localhost:11434</span>. Free and private, but needs a machine with some RAM.<br><br>
+      Pick a model you've pulled, or type one: <span class="kbd">ollama pull llama3.2</span>.<br>
+      No models yet? Advantages of local: no cost, privacy, works offline. Disadvantages: slower on small machines, weaker recipe reasoning — you can switch provider anytime to a cloud option.
+      <div class="modelpick">${p.models.map(m=>`<button class="mp ${S.ai.model===m.id?'active':''}" onclick="pickModel('${m.id}')">${m.name}</button>`).join('')}</div>
+      ${S.ai.model==='custom'?`<div class="field"><label>Model name</label><input id="ollama-custom" value="${esc(S.ai.keys.ollamaModel||'')}" placeholder="mistral-nemo"></div>`:''}
+    </div>`;
+  }
+  if(p.id==='openrouter'){
+    return `<div class="card" style="font-size:12.5px;color:var(--muted);line-height:1.65">
+      <b>OpenRouter free models</b> — this provider is locked to <b>:free</b> models only so you never get billed.<br>
+      <div class="field" style="margin-top:8px"><label>API key</label><input id="prov-key" value="${esc(S.ai.keys.openrouter||'')}" placeholder="sk-or-v1-…" oninput="S.ai.keys.openrouter=this.value;save()"><div class="hint">Paste a specific favourite instead? Ask for it in chat and I\'ll try it if it\'s free.</div></div>
+      <div class="modelpick">${p.models.map(m=>`<button class="mp ${S.ai.model===m.id?'active':''}" onclick="pickModel('${m.id}')">${m.name}</button>`).join('')}</div>
+    </div>`;
+  }
+  return `<div class="card" style="font-size:12.5px;color:var(--muted);line-height:1.65">
+    <b>${p.name}</b>${p.id==='openai'?' — the system auto-selects the best current models; these are the safest picks.':''}${p.id==='gemini'?' — also powers the 📷 AI Live camera guide when a key is present.':''}
+    <div class="field" style="margin-top:8px"><label>API key</label><input id="prov-key" value="${esc(S.ai.keys[p.id]||'')}" placeholder="${p.keyHint}" oninput="S.ai.keys['${p.id}']=this.value;save()"></div>
+    <div class="modelpick">${p.models.map(m=>`<button class="mp ${S.ai.model===m.id?'active':''}" onclick="pickModel('${m.id}')">${m.name}</button>`).join('')}</div>
+  </div>`;
+}
+function pickProvider(id){
+  S.ai.provider=id;
+  const p=AI_PROVIDERS.find(x=>x.id===id);
+  S.ai.model = p.models[0].id;
+  save(); openAIConfig();
+}
+function pickModel(m){ S.ai.model=m; save(); openAIConfig(); }
+
+// =============== AI SEARCH (thumbnail narrowing) ===============
+let AS = {q:'', scoring:false, scores:{}, urlResult:null};
+function openAISearch(){
+  AS={q:'', scoring:false, scores:{}, urlResult:null};
+  renderAISearch();
+  openSheet('sheet-aisearch');
+}
+function renderAISearch(){
+  const w=$('#sheet-aisearch');
+  const recs=S.recipes.filter(r=>!r.live);
+  w.querySelector('.sheet').innerHTML = `
+  <div class="sheet-grab"><i></i></div>
+  <div class="sheet-head"><div class="sh-txt"><h2>✨ AI Chef Search</h2><div class="sh-sub">Describe a craving, or paste any recipe/YouTube URL</div></div><button class="close-x" data-close="sheet-aisearch">✕</button></div>
+  <div class="sheet-body">
+    <div class="searchbar" style="margin:0 0 12px">💬<input id="as-q" placeholder="e.g. something creamy, under 30 min, no cream…" value="${esc(AS.q)}" onkeydown="if(event.key==='Enter')aiSearchGo()"><button class="btn sm" onclick="aiSearchGo()">Go</button></div>
+    ${AS.urlResult?`
+      <div class="card" style="border-color:rgba(110,195,255,.4)">
+        <div style="font-size:11px;font-weight:800;color:var(--blue);letter-spacing:1px">🔗 EXTRACTED FROM URL</div>
+        <div style="font-size:16px;font-weight:800;margin:5px 0 2px">${esc(AS.urlResult.title)}</div>
+        <div style="font-size:11.5px;color:var(--muted)">${AS.urlResult.cuisine} · ${AS.urlResult.time} min · ${AS.urlResult.difficulty} · serves ${AS.urlResult.servings}</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:7px;line-height:1.5">${esc(AS.urlResult.desc)}</div>
+        <div style="font-size:11.5px;color:var(--muted);margin-top:7px">🥕 ${AS.urlResult.ingredients.length} ingredients · 📝 ${AS.urlResult.steps.length} steps</div>
+        <div class="btnrow" style="margin-top:11px">
+          <button class="btn sm green" onclick="saveURLRecipe()">💾 Save &amp; Enhance</button>
+          <button class="btn sm ghost" onclick="openRecipe(JSON.parse(JSON.stringify(AS.urlResult)).id||'')">👁️ View</button>
+        </div>
+      </div>`:''}
+    <div id="as-hint" style="font-size:11.5px;color:var(--faint);margin:4px 2px 10px">${AS.q?'AI is scoring every thumbnail…':'All recipes shown — type a craving and watch non-matches fade away bit by bit.'}</div>
+    <div class="rec-grid" id="as-grid">
+      ${recs.map(r=>`<div class="rec-card" id="as-${r.id}" style="transition:all .6s cubic-bezier(.22,.9,.3,1)" onclick="openRecipe('${r.id}')">
+        <img src="${r.image}" alt="${esc(r.title)}">
+        <div class="rc-ov"><div class="rc-t">${esc(r.title)}</div><div class="rc-m"><span>${r.time}m</span><span>${r.cuisine}</span>${AS.scores[r.id]!==undefined&&AS.scores[r.id]>70?'<span>✨</span>':''}</div></div>
+      </div>`).join('')}
+    </div>
+    <div class="divider"></div>
+    <div style="font-size:12px;color:var(--muted);line-height:1.6;padding-bottom:6px">Paste a link (YouTube, blog, anything) in the search box and the AI extracts the whole recipe — title, ingredients, steps, nutrition — ready to save.</div>
+    <div class="pills">${PRESET_PROMPTS.filter(p=>p.emoji!==' substitutions').slice(0,4).map(p=>`<button class="pill" onclick="AS.q='${p.label.replace(/'/g,"\\'")}';renderAISearch();aiSearchGo()">${p.emoji+' '+p.label}</button>`).join('')}</div>
+  </div>`;
+  bindSheetVeil('sheet-aisearch');
+  w.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
+}
+async function aiSearchGo(){
+  const q = $('#as-q').value.trim(); if(!q) return;
+  AS.q=q;
+  if(/^https?:\/\//i.test(q)){
+    toast('🔗','Fetching link…','Reading the page for recipe data.',1800,'#6ec3ff');
+    const rec = await extractRecipeFromURL(q);
+    AS.urlResult = rec; renderAISearch();
+    toast('✨','Recipe extracted','“'+rec.title+'” — tap Save & Enhance to keep it.');
+    return;
+  }
+  // bit-by-bit narrowing
+  const recs=S.recipes.filter(r=>!r.live);
+  renderAISearch();
+  for(let i=0;i<recs.length;i++){
+    const r=recs[i];
+    await new Promise(res=>setTimeout(res,260));
+    const text=(r.title+' '+r.desc+' '+r.cuisine+' '+r.hashtags.join(' ')+' '+r.ingredients.map(x=>x.name).join(' ')+' '+r.steps.join(' ')).toLowerCase();
+    const terms=q.toLowerCase().split(/[\s,]+/).filter(t=>t.length>2 && !['the','and','for','with','something','under','without','no'].includes(t));
+    let score=0;
+    terms.forEach(t=>{ if(text.includes(t)) score+=22; });
+    if(/quick|fast|20|15|10/.test(q.toLowerCase()) && r.time<=30) score+=30;
+    if(/creamy/.test(q.toLowerCase()) && /cream|cheese|butter/.test(text)) score+=25;
+    score = Math.min(97, score + (i*7)%23);
+    AS.scores[r.id]=score;
+    const el=document.getElementById('as-'+r.id);
+    if(el){
+      el.style.opacity = score>45? 1 : .18;
+      el.style.transform = score>45? 'scale(1)' : 'scale(.88)';
+      el.style.filter = score>45? 'saturate(1.15)' : 'grayscale(1)';
+      if(score>45 && !el.querySelector('.rc-t').textContent.includes('✨')){
+        el.querySelector('.rc-m').insertAdjacentHTML('beforeend','<span>✨ '+score+'%</span>');
+      }
+    }
+  }
+  toast('✨','AI narrowed your feed',Object.values(AS.scores).filter(s=>s>45).length+' strong matches lit up.');
+}
+async function saveURLRecipe(){
+  if(!AS.urlResult) return;
+  toast('🎨','Enhancing thumbnail…','AI is generating a cover shot.',1600,'#6ec3ff');
+  await new Promise(r=>setTimeout(r,1200));
+  const rec = AS.urlResult;
+  rec.creator = 'Extracted · via '+(S.user.name);
+  rec.creatorHandle = S.user.handle;
+  rec.scynCurated=true;
+  S.recipes.unshift(rec); save();
+  AS.urlResult=null;
+  renderAISearch(); renderFeed();
+  pushNoti({ico:'🔗',title:'Recipe saved from link',msg:`${rec.title} extracted, thumbnail AI-enhanced, posted to your profile.`,group:'today'});
+  toast('⭐','Saved & posted','“'+rec.title+'” is in your Cookbook with an AI-enhanced cover.');
+}
+
+// =============== VOICE CHEF ===============
+let VC = {rid:null, step:0, playing:false, timer:null, listening:false, recog:null};
+function startVoiceChef(rid){
+  VC.rid=rid; VC.step=0; VC.playing=false;
+  renderVC();
+  $('#voicewrap').classList.add('open');
+  if(window.speechSynthesis) speechSynthesis.cancel();
+}
+function endVoiceChef(){
+  if(window.speechSynthesis) speechSynthesis.cancel();
+  if(VC.recog){ try{VC.recog.abort();}catch(e){} }
+  clearInterval(VC.timer);
+  VC.playing=false; VC.listening=false;
+  $('#voicewrap').classList.remove('open');
+  const r=S.recipes.find(x=>x.id===VC.rid);
+  if(r && VC.step>0){ pushNoti({ico:'🍳',title:'Cooking session ended',msg:`You stopped at step ${Math.min(VC.step+1,r.steps.length)} of ${r.title}.`,group:'today'}); toast('🍳','Session saved','Resume anytime from the same step.'); }
+}
+function renderVC(){
+  const r=S.recipes.find(x=>x.id===VC.rid); if(!r) return;
+  const p = Math.round((VC.step)/r.steps.length*100);
+  $('#vc-ring').style.setProperty('--p',p);
+  $('#vc-ring span').textContent = ['🍳','🔥','🥘','🧂','✨'][VC.step%5];
+  $('#vc-title').textContent = r.title;
+  $('#vc-step').innerHTML = `Step ${VC.step+1} / ${r.steps.length}`;
+  $('#vc-ins').textContent = r.steps[VC.step];
+  $('#vc-fb').textContent = VC.step===0? 'Tap ▶ to begin — I\'ll read each step aloud and wait for you.' : 'Say or tap: next · repeat · back · what does it mean?';
+}
+function vcSpeak(txt){
+  if(!window.speechSynthesis) { toast('🔇','No voice on this device','Text guidance still works.'); return; }
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(txt);
+  u.rate=.95; u.pitch=1.02;
+  const tone=S.ai.tone||'warm';
+  if(tone==='gordon'){u.rate=1.18;u.pitch=.82;}
+  if(tone==='sensei'){u.rate=.82;u.pitch=.9;}
+  if(tone==='hype'){u.rate=1.28;u.pitch=1.24;}
+  if(tone==='grandma'){u.rate=.88;u.pitch=1.12;}
+  speechSynthesis.speak(u);
+}
+function vcPlayPause(){
+  const r=S.recipes.find(x=>x.id===VC.rid); if(!r) return;
+  if(VC.playing){ VC.playing=false; if(window.speechSynthesis)speechSynthesis.cancel(); clearInterval(VC.timer); $('#vc-play').textContent='▶'; renderVC(); return; }
+  VC.playing=true; $('#vc-play').textContent='⏸';
+  const tone=GREET_TONE();
+  vcSpeak(tone + ' Step '+(VC.step+1)+'. '+r.steps[VC.step]);
+  renderVC();
+}
+function GREET_TONE(){
+  const t=S.ai.tone||'warm';
+  return {warm:'Right, chef.', gordon:'Let\'s GO. Focus.', sensei:'Observe. Begin.', hype:'Here we GO! ', grandma:'Follow me, darling.'}[t]||'';
+}
+function vcNext(){
+  const r=S.recipes.find(x=>x.id===VC.rid); if(!r) return;
+  if(VC.step>=r.steps.length-1){
+    vcSpeak(GREET_TONE()+' That\'s the final step — plate it and take a photo. You cooked it!');
+    $('#vc-ins').textContent='🎉 Done — plated! Tap end to save the session.';
+    $('#vc-fb').textContent='Chef congratulates you — session complete.';
+    clearInterval(VC.timer);
+    return;
+  }
+  VC.step++; renderVC();
+  if(VC.playing) vcSpeak(GREET_TONE()+' Step '+(VC.step+1)+'. '+r.steps[VC.step]);
+}
+function vcRepeat(){ const r=S.recipes.find(x=>x.id===VC.rid); if(r){ vcSpeak(GREET_TONE()+' Step '+(VC.step+1)+'. '+r.steps[VC.step]); } }
+function vcBack(){ if(VC.step>0){ VC.step--; renderVC(); if(VC.playing){const r=S.recipes.find(x=>x.id===VC.rid); vcSpeak(r.steps[VC.step]);} } }
+function vcDefine(){
+  const r=S.recipes.find(x=>x.id===VC.rid); if(!r) return;
+  const s=r.steps[VC.step];
+  const term = (s.match(/\b(saut[eé]|simmer|sear|braise|fold|whisk|emulsion|char|deglaze|marinate|flamb[eé]|reduce)\b/i)||[])[0];
+  const defs={
+    sauté:'Sauté = cook fast in hot fat, keep it moving.',
+    simmer:'Simmer = gentle bubbles, just below a boil.',
+    sear:'Sear = hard, dry heat to brown the surface fast.',
+    braise:'Braise = sear first, then slow-cook in liquid.',
+    fold:'Fold = combine gently with a spatula, top to bottom.',
+    whisk:'Whisk = beat fast with a whisk to emulsify or aerate.',
+    emulsion:'Emulsion = fat + water held together, like your carbonara sauce.',
+    char:'Char = let it blacken slightly in spots for smoky flavour.',
+    deglaze:'Deglaze = add liquid and scrape the brown bits into a sauce.',
+    marinate:'Marinate = soak in seasoned liquid to tenderise and flavour.',
+    flambé:'Flambé = burn off alcohol for flavour (careful!).',
+    reduce:'Reduce = boil off water to concentrate the sauce.'
+  };
+  const ans = term? defs[term.toLowerCase()] : 'Ask me about any word in the step — e.g. “what does sauté mean?”';
+  $('#vc-fb').textContent = ans;
+  vcSpeak(ans);
+}
+function vcListen(){
+  if(!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)){ toast('🔇','Voice input unsupported','This browser can\'t do mic capture — use the buttons instead.'); return; }
+  const SR = window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(VC.recog){ try{VC.recog.abort();}catch(e){} }
+  const rec = new SR(); rec.lang='en-US'; rec.continuous=false; rec.interimResults=false;
+  VC.recog=rec;
+  $('#vc-ring').classList.add('listening');
+  rec.onresult = e=>{
+    const said = e.results[0][0].transcript.toLowerCase();
+    $('#vc-fb').textContent = '🗣️ “'+said+'”';
+    if(/next|done|continue|finished/.test(said)) vcNext();
+    else if(/repeat|again|say that/.test(said)) vcRepeat();
+    else if(/back|previous/.test(said)) vcBack();
+    else if(/mean|what is|what's|define|explain/.test(said)) vcDefine();
+    else if(/stop|cancel|quit|end/.test(said)) endVoiceChef();
+    else { vcSpeak('I heard: '+said+'. Say next, repeat, back, or ask what a word means.'); }
+  };
+  rec.onend = ()=> $('#vc-ring')?.classList.remove('listening');
+  rec.onerror = ()=> { $('#vc-ring')?.classList.remove('listening'); };
+  rec.start();
+}
+
+// =============== AI LIVE CAMERA GUIDE ===============
+let CAM = {rid:null, step:0, conf:0, stream:null, timer:null, uncertain:0, img:null};
+async function startCameraGuide(rid){
+  CAM.rid=rid; CAM.step=0; CAM.conf=0; CAM.uncertain=0;
+  $('#camwrap').classList.add('open');
+  $('#cam-fb').textContent='Requesting camera…';
+  try{
+    CAM.stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});
+    $('#cam-video').srcObject = CAM.stream;
+    $('#cam-fb').textContent='Camera on. Point it at your prep area.';
+    camRenderStep();
+    CAM.timer = setInterval(camAnalyze, 2500);
+  }catch(e){
+    $('#cam-fb').textContent='⚠️ Camera blocked or unavailable — you can still follow the steps manually below.';
+    camRenderStep();
+  }
+}
+function camRenderStep(){
+  const r=S.recipes.find(x=>x.id===CAM.rid); if(!r) return;
+  $('#cam-step').textContent = 'Step '+(CAM.step+1)+' of '+r.steps.length;
+  $('#cam-ins').textContent = r.steps[CAM.step];
+  $('#cam-prog i').style.width = (CAM.step/r.steps.length*100)+'%';
+  $('#cam-conf').textContent = CAM.conf+'/2 confirmations';
+}
+async function camAnalyze(){
+  const r=S.recipes.find(x=>x.id===CAM.rid); if(!r) return;
+  const v=$('#cam-video');
+  if(!v || !v.videoWidth){ // no frames — count as uncertain
+    CAM.uncertain+=2.5;
+  } else {
+    // fake vision progress: brightness/motion heuristic on real frames
+    try{
+      const c=document.createElement('canvas'); c.width=64; c.height=36;
+      c.getContext('2d').drawImage(v,0,0,64,36);
+      const d=c.getContext('2d').getImageData(0,0,64,36).data;
+      let lum=0; for(let i=0;i<d.length;i+=4){ lum+=d[i]*.299+d[i+1]*.587+d[i+2]*.114; }
+      lum/=(d.length/4);
+      const active = lum>28; // something visible in frame
+      if(active){ CAM.conf++; CAM.uncertain=0; } else { CAM.uncertain+=2.5; }
+    }catch(e){ CAM.uncertain+=2.5; }
+  }
+  $('#cam-fb').textContent = CAM.uncertain>10 ? 'I can\'t see the cooking area — point the camera at your work.' :
+    CAM.conf>=2 ? '✅ Confirmed — advancing to the next step.' :
+    CAM.conf===1 ? 'Looking good — hold steady, one more confirmation…' : 'Watching… show me the pan.';
+  $('#cam-conf').textContent = Math.min(CAM.conf,2)+'/2 confirmations';
+  // skip option after 30s uncertainty
+  $('#cam-skip').style.display = CAM.uncertain>=30? 'inline-flex':'none';
+  if(CAM.conf>=2){
+    if(CAM.step < r.steps.length-1){ CAM.step++; CAM.conf=0; camRenderStep(); if(window.speechSynthesis) vcSpeak('Step '+(CAM.step+1)+'. '+r.steps[CAM.step]); }
+    else { clearInterval(CAM.timer); $('#cam-ins').textContent='🎉 All steps confirmed — beautifully done!'; $('#cam-fb').textContent='Session complete. Chef is proud.'; $('#cam-prog i').style.width='100%'; if(window.speechSynthesis) vcSpeak('Every step confirmed. Plate it up — you earned it.'); }
+  }
+}
+function camSkip(){ const r=S.recipes.find(x=>x.id===CAM.rid); if(r&&CAM.step<r.steps.length-1){ CAM.step++; CAM.conf=0; CAM.uncertain=0; camRenderStep(); } else endCameraGuide(); }
+function camNarrate(el){ if(window.speechSynthesis){ const r=S.recipes.find(x=>x.id===CAM.rid); if(r) vcSpeak(r.steps[CAM.step]); } toast('🔊','Narrating','Reading the current step aloud.'); }
+function endCameraGuide(){
+  if(CAM.stream){ CAM.stream.getTracks().forEach(t=>t.stop()); }
+  clearInterval(CAM.timer);
+  $('#camwrap').classList.remove('open');
+}
+
+// =============== ONBOARDING ===============
+let OB = {step:0, picks:{}};
+function startOnboarding(){
+  OB={step:0, picks:{cuisines:S.taste.cuisines, difficulty:S.taste.difficulty, diet:S.taste.diet||[], provider:S.ai.provider, apikey:'', model:S.ai.model, sync:null}};
+  renderOB();
+  $('#onboard').classList.add('open');
+}
+function obSteps(){ return ['welcome','taste','diet','difficulty','ai','done']; }
+function renderOB(){
+  const steps=obSteps(); const key=steps[OB.step];
+  $('#ob-bar').style.width = ((OB.step+1)/steps.length*100)+'%';
+  const P = OB.picks;
+  $('#ob-body').innerHTML = `
+  <div class="ob-step active">
+    ${key==='welcome'?`
+      <div class="ob-logo">🍳</div>
+      <div class="ob-title">Welcome to <em>ForkFeed</em></div>
+      <div class="ob-desc">TikTok for your kitchen. Swipe a vertical feed of real recipes, cook along with an AI chef that talks and listens, scale servings in one tap, and get a grocery list that shops itself in your country.</div>
+      <div class="ob-desc" style="margin:0 0 6px;font-size:12.5px">We'll set up your taste in 30 seconds.</div>`:''}
+    ${key==='taste'?`
+      <div class="ob-title">What do you <em>crave?</em></div>
+      <div class="ob-desc">Pick the cuisines you want to dominate your feed. Tap multiple.</div>
+      <div class="optlist">${CUISINES.slice(1).map(c=>`<button class="opt ${P.cuisines.includes(c)?'sel':''}" onclick="obToggle('cuisines','${c}')"><span class="o-ico">${({Mexican:'🌮',Italian:'🍝',Indian:'🍛',American:'🍔',Japanese:'🍣',Nigerian:'🍚',French:'🥐'})[c]||'🍽️'}</span><span class="o-tt">${c}</span></button>`).join('')}</div>`:''}
+    ${key==='diet'?`
+      <div class="ob-title">Any <em>rules?</em></div>
+      <div class="ob-desc">I'll auto-suggest substitutions on every ingredient list — gluten-free, dairy-free, vegan, keto, or nothing.</div>
+      <div class="optlist">${DIET_PILLS.map(d=>`<button class="opt ${P.diet.includes(d.key)?'sel':''}" onclick="obToggle('diet','${d.key}')"><span class="o-ico">${d.label.split(' ')[0]}</span><span class="o-tt">${d.label.replace(/^\S+\s/,'')}</span></button>`).join('')}
+      <button class="opt ${P.diet.length===0?'sel':''}" onclick="OB.picks.diet=[];renderOB()"><span class="o-ico">🚫</span><span class="o-tt">No restrictions</span></button></div>`:''}
+    ${key==='difficulty'?`
+      <div class="ob-title">How <em>brave</em> are you feeling?</div>
+      <div class="ob-desc">I'll weight the feed's difficulty accordingly.</div>
+      <div class="optlist">${['Any','Easy','Medium','Hard'].map(d=>`<button class="opt ${P.difficulty===d?'sel':''}" onclick="OB.picks.difficulty='${d}';renderOB()"><span class="o-ico">${({Any:'🎲',Easy:'😊',Medium:'🧑‍🍳',Hard:'🔥'})[d]}</span><span class="o-tt">${d}</span></button>`).join('')}</div>`:''}
+    ${key==='ai'?`
+      <div class="ob-title">Power your <em>AI Chef</em></div>
+      <div class="ob-desc">Choose a provider and paste its key now — or skip and use the built-in chef. You can change it anytime in 🛡️ Privacy. YouTube key optional, powers the ▶️ YouTube feed side.</div>
+      <div class="optlist">${AI_PROVIDERS.map(p=>`<button class="opt ${P.provider===p.id?'sel':''}" onclick="OB.picks.provider='${p.id}';OB.picks.model='${p.models[0].id}';renderOB();setTimeout(()=>{const k=$('#ob-key');if(k)k.placeholder='${p.keyHint||'no key needed'}'},30)"><span class="o-ico">${({builtin:'🧑‍🍳',openai:'🟢','openrouter':'🆓',ollama:'🦙',gemini:'✦'})[p.id]||'🔌'}</span><span><span class="o-tt">${p.name}</span><span class="o-sub">${p.models[0].name}${p.needsKey?' · needs key':''}</span></span></button>`).join('')}</div>
+      ${(()=>{const p=AI_PROVIDERS.find(x=>x.id===P.provider); return p? (p.needsKey?`<div class="field" style="margin-top:12px"><label>${p.name} API key</label><input id="ob-key" value="${esc(OB.picks.apikey)}" placeholder="${p.keyHint}" oninput="OB.picks.apikey=this.value"><div class="hint">Keys are stored only on your device (localStorage). Never sent to ForkFeed servers.</div></div>`:'') :'';})()}
+      <div class="field" style="margin-top:12px"><label>YouTube Data key (optional)</label><input id="ob-ytkey" value="${esc(OB.picks.ytkey||'')}" placeholder="AIza…" oninput="OB.picks.ytkey=this.value"><div class="hint">Powers real YouTube search in the ▶️ feed. Get one free at console.cloud.google.com.</div></div>
+      <div class="card" style="font-size:11.5px;color:var(--muted);line-height:1.6">⚠️ YouTube API consequences, explained honestly: your key's quota (10k units/day) is shared across this app's searches; API calls are billed/limited by Google; keys pasted here stay client-side and are visible to anyone using your browser profile — so use a restricted, browser-lock key.</div>
+      <div class="optlist" style="margin-top:10px">
+        <button class="opt ${P.sync==='sync'?'sel':''}" onclick="OB.picks.sync='sync'"><span class="o-ico">🔗</span><span><span class="o-tt">Sync my YouTube channel</span><span class="o-sub">Your uploads appear in your feed (OAuth on first use)</span></span></button>
+        <button class="opt ${P.sync==='fresh'?'sel':''}" onclick="OB.picks.sync='fresh'"><span class="o-ico">🌱</span><span><span class="o-tt">Start fresh</span><span class="o-sub">The API key is used only to show YouTube videos in search</span></span></button>
+      </div>`:''}
+    ${key==='done'?`
+      <div class="ob-logo" style="font-size:52px">🚀</div>
+      <div class="ob-title">You're set, <em>chef.</em></div>
+      <div class="ob-desc">Your feed is tailored to ${P.cuisines.length?P.cuisines.slice(0,3).join(', '):'everything'}${P.difficulty!=='Any'? ' · '+P.difficulty+' difficulty':''}${P.diet.length? ' · '+P.diet.join('/')+' swaps':''}. The AI Chef is standing by — tap any ✨ button. One more thing: a quick tour?</div>
+      <button class="btn block amber" onclick="finishOnboarding(true)">🎬 Take the 60-second tour</button>
+      <button class="btn ghost block" style="margin-top:10px" onclick="finishOnboarding(false)">Skip — just let me cook</button>`:''}
+  </div>`;
+  $('#ob-back').style.visibility = OB.step>0?'visible':'hidden';
+  $('#ob-next').textContent = key==='ai'? 'Finish' : 'Next';
+}
+function obToggle(list, v){
+  const arr = OB.picks[list];
+  const i = arr.indexOf(v);
+  if(i>=0) arr.splice(i,1); else if(list==='cuisines'||list==='diet') arr.push(v);
+  renderOB();
+}
+function obNext(){
+  const steps=obSteps();
+  if(OB.step<steps.length-1){ OB.step++; renderOB(); }
+  else finishOnboarding(false);
+}
+function obBack(){ if(OB.step>0){ OB.step--; renderOB(); } }
+function finishOnboarding(withTour){
+  const P=OB.picks;
+  S.taste.cuisines=P.cuisines; S.taste.difficulty=P.difficulty; S.taste.diet=P.diet;
+  S.ai.provider=P.provider; S.ai.model=P.model;
+  if(P.apikey) S.ai.keys[P.provider]=P.apikey;
+  if(P.ytkey) S.ai.keys.youtube=P.ytkey;
+  S.onboarded=true; save();
+  $('#onboard').classList.remove('open');
+  renderFeed();
+  if(withTour) setTimeout(startTutorial, 420); 
+  else toast('🍳','Welcome to ForkFeed','Swipe up to start the feed. Tap any ✨ for the AI Chef.');
+}
+
+// =============== TUTORIAL ===============
+const TUT_STEPS = [
+  {t:'Your For You feed', d:'Swipe up to move between full-screen recipe cards, just like your favourite video app. Double-tap anything to like it — try it, it bursts.', target:'#feed', pos:'center'},
+  {t:'Recipes ⇄ YouTube', d:'Top tabs flip the same vertical feed between curated recipe cards and embedded YouTube cooking videos. Your choice is remembered next launch.', target:'.fd-tabs', pos:'top'},
+  {t:'The action rail', d:'Every card packs save-to-cookbook 🔖, full recipe 📋, AI chat ✨ about that dish, one-tap PDF 📄, and share 📤 which builds a social image card.', target:'.rail', pos:'right'},
+  {t:'Full recipe sheet', d:'Tap a card for ingredients with check-off, numbered steps, a nutrition tab with a health score, and a video tab. Serving +/− rescales every quantity live.', target:'.tabbar', pos:'bottom'},
+  {t:'Diet substitutions', d:'In the recipe sheet, tap 🌾 Gluten-Free, 🥛 Dairy-Free, 🌿 Vegan or 🥩 Keto — ingredients with a swap show an inline green suggestion.', target:'.tabbar', pos:'bottom'},
+  {t:'Shop in your country', d:'“Shop these ingredients” opens 16 grocery platforms across 🇺🇸🇬🇧🇦🇺🇰🇪🇳🇬🇮🇳… — your scaled list is copied to the clipboard for instant paste.', target:'.tabbar', pos:'bottom'},
+  {t:'Voice Chef', d:'The big gradient button starts a hands-free session: steps read aloud, mic on — say “next”, “repeat”, or “what does sauté mean?” and it obeys.', target:'.tabbar', pos:'bottom'},
+  {t:'AI Chef chat', d:'The ✨ AI button anywhere opens a Gemini-style overlay. Pick a provider (OpenAI, free OpenRouter models, local Ollama, Gemini) and an emotion tone from Warm Chef to Grandma.', target:'.tabbar', pos:'bottom'},
+  {t:'Discover', d:'Search by keyword or hashtag, filter 8 cuisines, and flip Trending / New / Top Saved tabs. Empty search? The AI recommends a match itself.', target:'#tabbar .tabbtn[data-tab="discover"]', pos:'bottom'},
+  {t:'Meal Planner', d:'Drag a saved recipe onto any day slot — or tap the slot. Breakfast, lunch and dinner for a whole week, with the merged grocery list auto-summed and exportable as PDF.', target:'#tabbar .tabbtn[data-tab="planner"]', pos:'bottom'},
+  {t:'Create & post', d:'＋ in Cookbook posts your own recipe — typed, scanned from a photo, or extracted from a document. The AI enhances the thumbnail and Scyn AI curates it onto For You with your signature.', target:'#tabbar .tabbtn[data-tab="cookbook"]', pos:'bottom'},
+  {t:'Privacy & keys', d:'Profile 🛡️ holds every API key (show/hide, clear, replace), notification toggles, and the big red Reset — wipes the whole app back to day zero.', target:'#tabbar .tabbtn[data-tab="profile"]', pos:'bottom'}
+];
+let TUT={i:0};
+function startTutorial(){ TUT.i=0; renderTut(); $('#tutorial').classList.add('open'); }
+function renderTut(){
+  const st = TUT_STEPS[TUT.i];
+  $('#tut-dots').innerHTML = TUT_STEPS.map((_,i)=>`<i class="${i===TUT.i?'on':''}"></i>`).join('');
+  $('#tut-title').textContent = st.t;
+  $('#tut-desc').innerHTML = st.d + (TUT.i<TUT_STEPS.length-1?'':'<br><br>That\'s everything — enjoy the feed, chef. 🍳');
+  $('#tut-next').textContent = TUT.i>=TUT_STEPS.length-1? 'Done ✓' : 'Next';
+  // spotlight
+  const el = document.querySelector(st.target);
+  const spot=$('#tut-spot'); const card=$('#tut-card');
+  if(el){
+    const r = el.getBoundingClientRect();
+    const pad=10;
+    spot.style.cssText = `position:absolute;border-radius:18px;box-shadow:0 0 0 3000px rgba(0,0,0,.72);transition:all .45s cubic-bezier(.22,.9,.3,1);pointer-events:none;left:${r.left-pad}px;top:${r.top-pad}px;width:${r.width+pad*2}px;height:${r.height+pad*2}px;`;
+    const isBottom = r.top > window.innerHeight*0.55;
+    card.style.top = isBottom? 'auto':'';
+    card.style.bottom = isBottom? (window.innerHeight - r.top + 22)+'px':'';
+    if(!isBottom) card.style.top = Math.min(r.bottom+22, window.innerHeight-190)+'px';
+    if(st.pos==='center'){ card.style.top='50%'; card.style.bottom='auto'; card.style.transform='translateY(-50%)'; }
+  }
+  S.tutDone=true; save();
+}
+function tutNext(){ if(TUT.i<TUT_STEPS.length-1){ TUT.i++; renderTut(); } else endTutorial(); }
+function tutPrev(){ if(TUT.i>0){ TUT.i--; renderTut(); } }
+function endTutorial(){ $('#tutorial').classList.remove('open'); toast('🎓','Tour complete','Reopen it anytime: Profile → Tutorial.'); }
+
+// =============== PRIVACY / KEYS ===============
+function openPrivacy(){
+  const w=$('#sheet-privacy');
+  w.querySelector('.sheet').innerHTML = `
+  <div class="sheet-grab"><i></i></div>
+  <div class="sheet-head"><div class="sh-txt"><h2>🛡️ Privacy &amp; API Keys</h2><div class="sh-sub">${SYNC.online?'Server-managed keys + this device only':'All keys stay on this device only'}</div></div><button class="close-x" data-close="sheet-privacy">✕</button></div>
+  <div class="sheet-body">
+    ${SYNC.online?`
+    <div class="card" style="font-size:12px;color:var(--muted);line-height:1.6;border-color:rgba(90,212,138,.3)">
+      <b style="color:var(--green)">Connected to the ForkFeed server.</b> AI chat, YouTube search and link extraction run through the server with keys the admin configured — nothing private leaves your browser. ${(SYNC.serverKeysHint().length)?('Server keys present: '+SYNC.serverKeysHint().join(', ')+'.'):('No server keys yet — the built-in chef answers everything meanwhile.')}
+      <div style="margin-top:6px;font-size:11px;color:var(--faint)">Admin sets server keys: <span class="kbd">curl -X POST /admin/keys -H "Authorization: Bearer &lt;admin&gt;" -d '{"openai":"sk-…"}'</span></div>
+    </div>
+    <div class="divider"></div>
+    <div style="font-size:11.5px;font-weight:800;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin:2px 0 8px">This-device keys (used in guest/offline mode)</div>`:`
+    <div class="card" style="font-size:12px;color:var(--muted);line-height:1.6">Keys live in your browser's localStorage — never sent to any ForkFeed server. Show, hide, clear, replace, or wipe everything below.</div>`}
+    ${[['youtube','▶️ YouTube Data v3','AIza…','Powers the YouTube feed + search'],['openai','🟢 OpenAI','sk-…','AI chat'],['openrouter','🆓 OpenRouter','sk-or-v1-…','Free-model AI chat'],['gemini','✦ Gemini','AIza…','AI chat + live camera vision'],['ollamaModel','🦙 Ollama model name','llama3.2','Local model name at localhost:11434']].map(([k,name,ph,desc])=>`
+      <div class="field"><label>${name}</label>
+      <div style="display:flex;gap:8px"><input id="pk-${k}" type="password" value="${esc(S.ai.keys[k]||'')}" placeholder="${ph}" oninput="S.ai.keys['${k}']=this.value;save()"><button class="btn sm ghost" onclick="const i=document.getElementById('pk-${k}');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='password'?'👁':'🙈'">👁</button></div>
+      <div class="hint">${desc}</div></div>`).join('')}
+    <div class="field"><label>System notifications</label>
+      <div class="optlist"><button class="opt ${S.ai.notify?'sel':''}" onclick="S.ai.notify=!S.ai.notify;save();openPrivacy()"><span class="o-ico">🔔</span><span><span class="o-tt">In-app notifications ${S.ai.notify?'on':'off'}</span><span class="o-sub">Themed toasts — new likes, Scyn AI picks, stream alerts</span></span></button></div></div>
+    <div class="divider"></div>
+    <button class="btn block ghost" onclick="openYouTubeSetup()">▶️ YouTube key setup guide</button>
+    <button class="btn block" style="background:var(--red)" onclick="confirmReset()">⚠️ Reset the whole system</button>
+    <div class="hint" style="text-align:center;margin-top:8px">Wipes all keys, saved recipes, meal plans, notifications and profile — back to first launch.</div>
+  </div>`;
+  bindSheetVeil('sheet-privacy');
+  w.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
+  openSheet('sheet-privacy');
+}
+function confirmReset(){
+  const w=$('#sheet-reset');
+  w.querySelector('.sheet').innerHTML = `
+  <div class="sheet-grab"><i></i></div>
+  <div class="sheet-head"><div class="sh-txt"><h2>Reset everything?</h2><div class="sh-sub">This cannot be undone</div></div><button class="close-x" data-close="sheet-reset">✕</button></div>
+  <div class="sheet-body">
+    <div class="card" style="border-color:rgba(255,107,107,.4);font-size:13px;line-height:1.6">You will lose: <b>${S.saved.length}</b> saved recipes, <b>${S.recipes.filter(r=>r.userMade).length}</b> creations, your meal plan for the week, all notifications, your profile, and every stored API key.</div>
+    <div class="btnrow"><button class="btn ghost" onclick="closeSheet('sheet-reset')">Keep my data</button><button class="btn" style="background:var(--red)" onclick="doReset()">Wipe it all</button></div>
+  </div>`;
+  bindSheetVeil('sheet-reset');
+  w.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
+  openSheet('sheet-reset');
+}
+function doReset(){
+  resetAll();
+  closeSheet('sheet-reset'); closeSheet('sheet-privacy');
+  renderFeed(); renderProfile(); updateNotiBadge();
+  toast('🔄','System reset','Fresh install state — onboarding will greet you on reload.', 4200, '#ff6b6b');
+  setTimeout(()=>{ startOnboarding(); }, 1600);
+}
+// YouTube setup guide
+function openYouTubeSetup(){
+  const w=$('#sheet-ytsetup');
+  w.querySelector('.sheet').innerHTML = `
+  <div class="sheet-grab"><i></i></div>
+  <div class="sheet-head"><div class="sh-txt"><h2>▶️ YouTube Setup</h2><div class="sh-sub">From key to feed in 3 steps</div></div><button class="close-x" data-close="sheet-ytsetup">✕</button></div>
+  <div class="sheet-body">
+    ${[['1','Open console.cloud.google.com','Create a project (any name) and enable “YouTube Data API v3” under APIs & Services → Library.'],
+       ['2','Create an API key','Credentials → Create credentials → API key. Restrict it to the YouTube Data API for safety.'],
+       ['3','Paste it here, choose a mode','Sync my channel pulls your uploads into the feed (OAuth prompts on first use). Start fresh uses the key purely for video search.']]
+    .map(function(row){ var n=row[0], t=row[1], d=row[2]; return '<div class="card" style="display:flex;gap:12px"><div class="step-num">'+n+'</div><div style="flex:1"><div style="font-size:14px;font-weight:800">'+t+'</div><div style="font-size:12px;color:var(--muted);line-height:1.55;margin-top:3px">'+d+'</div></div></div>'; }).join('')}
+    <div class="field"><label>Your key</label><input id="yt-key-input" type="password" placeholder="AIza…" value="${esc(S.ai.keys.youtube||'')}" oninput="S.ai.keys.youtube=this.value;save()"></div>
+    <button class="btn block amber" onclick="S.ai.keys.youtube=document.getElementById('yt-key-input').value;save();closeSheet('sheet-ytsetup');toast('🔑','Key saved','Flip the feed to ▶️ YouTube and search anything.',3000,'#ffb86b')">Save &amp; use YouTube feed</button>
+    <div class="card" style="font-size:11.5px;color:var(--muted);line-height:1.6">Honest limits: the API can't trigger YouTube's own offline downloads, can't detect Premium/membership content before playback, and playing videos always happens in YouTube's official embedded player — your app is a discovery &amp; curation layer, which keeps it fully within the API terms.</div>
+  </div>`;
+  bindSheetVeil('sheet-ytsetup');
+  w.querySelectorAll('[data-close]').forEach(b=>b.addEventListener('click',()=>closeSheet(b.dataset.close)));
+  openSheet('sheet-ytsetup');
+}
+
+// =============== BOOT ===============
+function boot(){
+  document.getElementById('root').innerHTML = HTML_SKELETON + overlayHTML();
+  bindSheetVeil('sheet-recipe'); bindSheetVeil('sheet-shop'); bindSheetVeil('sheet-create'); bindSheetVeil('sheet-pick'); bindSheetVeil('sheet-bio'); bindSheetVeil('sheet-noti'); bindSheetVeil('sheet-aisearch'); bindSheetVeil('sheet-privacy'); bindSheetVeil('sheet-aiconfig'); bindSheetVeil('sheet-ytsetup'); bindSheetVeil('sheet-reset');
+  bindDiscoverInput();
+  const fab=$('#btn-create'); if(fab) fab.addEventListener('click', openCreate);
+  const aiBtn=$('#btn-open-ai'); if(aiBtn) aiBtn.addEventListener('click', openAISearch);
+  $('#btn-noti')?.addEventListener('click', renderNoti);
+  $('#btn-privacy')?.addEventListener('click', openPrivacy);
+  // feed input
+  const f=$('#feed');
+  renderFeed(); updateNotiBadge();
+  if(S.taste.remember && S.taste.mode) feedMode = S.taste.mode==='youtube'?'youtube':'recipes';
+  // ---- online path: probe server, restore session or show auth gate ----
+  SYNC.probe().then(online=>{
+    if(online){
+      if(SYNC.token){
+        SYNC.req('GET','/api/auth/me').then(()=>SYNC.pullAll()).then(()=>{
+          renderFeed(); renderProfile(); updateNotiBadge();
+          toast('🤝','Back online','Signed in as '+SYNC.me.username+' — server data loaded.', 3200, '#5ad48a');
+        }).catch(()=>{ SYNC.token=''; try{localStorage.removeItem('ff_token');}catch(e){} renderAuthOverlay(); });
+      } else {
+        renderAuthOverlay(); // server users pick: login, register, or guest
+      }
+      return;
+    }
+    // ---- offline path (file:// or no backend): classic local flow ----
+    if(!S.onboarded){ setTimeout(startOnboarding, 500); }
+    else if(!S.tutDone){ setTimeout(startTutorial, 600); }
+  });
+  // keyboard: enter sends AI chat
+  document.addEventListener('keydown', e=>{ if(e.key==='Enter' && $('#aiwrap').classList.contains('open') && document.activeElement===$('#ai-in')) aiSend(); });
+  // drag recipes from cookbook into planner: make cookbook rows draggable
+  setInterval(()=>{
+    $$('#cookbook-body .row-card').forEach(r=>{ r.draggable=true; r.ondragstart=()=>{MP.dragId=r.dataset.id||S.saved[0]}; });
+  }, 900);
+}
+function overlayHTML(){
+  return `
+  <!-- Recipe sheet -->
+  <div class="sheet-wrap" id="sheet-recipe"><div class="sheet-veil"></div><div class="sheet"></div></div>
+  <!-- Shop sheet -->
+  <div class="sheet-wrap" id="sheet-shop"><div class="sheet-veil"></div><div class="sheet"></div></div>
+  <!-- Create sheet -->
+  <div class="sheet-wrap" id="sheet-create"><div class="sheet-veil"></div><div class="sheet"></div></div>
+  <!-- Pick recipe sheet -->
+  <div class="sheet-wrap" id="sheet-pick"><div class="sheet-veil"></div><div class="sheet"></div></div>
+  <!-- Bio sheet -->
+  <div class="sheet-wrap" id="sheet-bio"><div class="sheet-veil"></div><div class="sheet"></div></div>
+  <!-- Notifications sheet -->
+  <div class="sheet-wrap" id="sheet-noti"><div class="sheet-veil"></div><div class="sheet"></div></div>
+  <!-- AI search sheet -->
+  <div class="sheet-wrap" id="sheet-aisearch"><div class="sheet-veil"></div><div class="sheet"></div></div>
+  <!-- Privacy sheet -->
+  <div class="sheet-wrap" id="sheet-privacy"><div class="sheet-veil"></div><div class="sheet"></div></div>
+  <!-- AI config sheet -->
+  <div class="sheet-wrap" id="sheet-aiconfig"><div class="sheet-veil"></div><div class="sheet"></div></div>
+  <!-- YT setup sheet -->
+  <div class="sheet-wrap" id="sheet-ytsetup"><div class="sheet-veil"></div><div class="sheet"></div></div>
+  <!-- Reset confirm -->
+  <div class="sheet-wrap" id="sheet-reset"><div class="sheet-veil"></div><div class="sheet"></div></div>
+
+  <!-- AI chat overlay -->
+  <div id="aiwrap">
+    <div class="ai-veil" onclick="closeAI()"></div>
+    <div class="ai-card">
+      <div class="ai-head">
+        <div class="ai-orb">🍳</div>
+        <div style="flex:1;min-width:0"><div class="ai-tt">AI Chef</div><div class="ai-sub" id="ai-tone-label">🧑‍🍳 Warm Chef</div></div>
+        <button class="iconbtn" style="width:34px;height:34px;font-size:13px" onclick="cycleTone()" title="Change emotion tone">🎭</button>
+        <button class="iconbtn" style="width:34px;height:34px;font-size:13px" onclick="openAIConfig()" title="Provider & model">⚙️</button>
+        <button class="close-x" onclick="closeAI()">✕</button>
+      </div>
+      <div class="ai-msgs" id="ai-msgs"></div>
+      <div class="ai-att" id="ai-att-row"></div>
+      <div class="ai-presets">
+        ${PRESET_PROMPTS.map(p=>`<button class="ai-preset" onclick="document.getElementById('ai-in').value='${p.label.replace(/'/g,"\\'")}';aiSend()">${p.emoji.replace(' substitutions','')} ${p.label}</button>`).join('')}
+      </div>
+      <div class="ai-input">
+        <button class="iconbtn" style="width:36px;height:36px;font-size:15px;flex:none" onclick="aiAttach()">📎</button>
+        <input id="ai-in" placeholder="Ask the chef anything…" autocomplete="off">
+        <button class="snd" onclick="aiSend()">↑</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Voice chef -->
+  <div id="voicewrap">
+    <div class="vc-center">
+      <div class="vc-ring" id="vc-ring" style="--p:0"><span>🍳</span></div>
+      <div>
+        <div style="text-align:center;font-size:11px;font-weight:800;color:var(--amber);text-transform:uppercase;letter-spacing:1px" id="vc-title">Recipe</div>
+        <div class="vc-txt" id="vc-step">Step 1</div>
+        <div class="vc-txt" id="vc-ins" style="font-size:16.5px">Instruction</div>
+        <div class="vc-sub" id="vc-fb">Feedback</div>
+        <div class="vc-sub" style="color:var(--faint);font-size:11px" id="vc-conf">0/2 confirmations</div>
+      </div>
+    </div>
+    <div class="vc-btns">
+      <button class="btn" id="vc-play" onclick="vcPlayPause()">▶</button>
+      <button class="btn ghost" onclick="vcBack()">‹ Back</button>
+      <button class="btn ghost" onclick="vcRepeat()">🔁 Repeat</button>
+      <button class="btn ghost" onclick="vcListen()">🎤 Listen</button>
+      <button class="btn ghost" onclick="vcDefine()">💬 Define</button>
+      <button class="btn green" onclick="vcNext()">Next ›</button>
+      <button class="btn ghost" onclick="endVoiceChef()">⏹ End</button>
+    </div>
+  </div>
+
+  <!-- Camera guide -->
+  <div id="camwrap">
+    <video id="cam-video" autoplay playsinline muted></video>
+    <div class="cam-top">
+      <button class="btn sm ghost" onclick="endCameraGuide()">✕ Exit</button>
+      <span class="chip live" style="margin-left:auto">● AI LIVE</span>
+    </div>
+    <div class="cam-ov">
+      <div class="cam-step" id="cam-step">STEP 1</div>
+      <div class="cam-ins" id="cam-ins">Instruction</div>
+      <div class="cam-fb" id="cam-fb">Feedback</div>
+      <div class="cam-prog"><i id="cam-prog-fill" style="width:0"></i></div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+        <span class="chip" id="cam-conf">0/2 confirmations</span>
+        <button class="btn sm ghost" onclick="camNarrate()">🔊 Narrate</button>
+        <button class="btn sm" id="cam-skip" style="display:none;background:var(--amber);color:#241505" onclick="camSkip()">Skip step</button>
+      </div>
+      <button class="btn ghost block sm" onclick="endCameraGuide()">⏹ End session</button>
+    </div>
+  </div>
+
+  <!-- Onboarding -->
+  <div id="onboard">
+    <div class="ob-progress"><i id="ob-bar" style="width:14%"></i></div>
+    <div class="ob-body" id="ob-body"></div>
+    <div class="ob-foot">
+      <button class="btn ghost" id="ob-back" onclick="obBack()">‹ Back</button>
+      <button class="btn" id="ob-next" onclick="obNext()">Next</button>
+    </div>
+  </div>
+
+  <!-- Tutorial -->
+  <div id="tutorial">
+    <div class="tut-spot" id="tut-spot"></div>
+    <div class="tut-card" id="tut-card">
+      <h3><span id="tut-title">Welcome</span></h3>
+      <div class="tut-dots" id="tut-dots"></div>
+      <p id="tut-desc"></p>
+      <div class="btnrow">
+        <button class="btn ghost sm" onclick="tutPrev()">‹ Back</button>
+        <button class="btn sm" onclick="endTutorial()">Skip</button>
+        <button class="btn sm" id="tut-next" onclick="tutNext()">Next</button>
+      </div>
+    </div>
+  </div>`;
+}
+document.addEventListener('DOMContentLoaded', boot);
+
+// ForkFeed online sync layer — talks to the backend when served by server.js, pure-local otherwise.
+const SYNC = {
+  online: false, base: '', token: '', me: null, lastErr: null,
+  probe() {
+    // When opened as file:// (no server) or a non-backend host, stay in local mode.
+    if (location.protocol === 'file:') return Promise.resolve(false);
+    return fetch('/api/health', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(j => {
+      SYNC.online = !!j; SYNC.serverInfo = j;
+      if (j) { try { SYNC.token = localStorage.getItem('ff_token') || ''; } catch {} }
+      return !!j;
+    }).catch(() => false);
+  },
+  req(method, path, body) {
+    const headers = { 'Content-Type': 'application/json' };
+    if (SYNC.token) headers['Authorization'] = 'Bearer ' + SYNC.token;
+    return fetch(path, { method, headers, body: body ? JSON.stringify(body) : undefined })
+      .then(async r => { const j = await r.json().catch(() => ({})); if (!r.ok) throw new Error(j.error || r.status); return j; });
+  },
+  register(username, password) {
+    return SYNC.req('POST', '/api/auth/register', { username, password }).then(j => { SYNC.token = j.token; SYNC.me = j.user; try { localStorage.setItem('ff_token', j.token); } catch {} return j; });
+  },
+  login(username, password) {
+    return SYNC.req('POST', '/api/auth/login', { username, password }).then(j => { SYNC.token = j.token; SYNC.me = j.user; try { localStorage.setItem('ff_token', j.token); } catch {} return j; });
+  },
+  logout() {
+    const p = SYNC.req('POST', '/api/auth/logout', {}).catch(() => {});
+    SYNC.token = ''; SYNC.me = null; try { localStorage.removeItem('ff_token'); } catch {}
+    return p;
+  },
+  // ---- data hydration ----
+  pullAll() {
+    return Promise.all([
+      SYNC.req('GET', '/api/recipes'),
+      SYNC.req('GET', '/api/notifications'),
+      SYNC.req('GET', '/api/mealplan'),
+      SYNC.req('GET', '/api/auth/me')
+    ]).then(([recs, noti, plan, me]) => {
+      S.recipes = recs.recipes.map(normalizeServerRecipe);
+      S.notifications = noti.notifications;
+      S.mealPlan = plan.plan;
+      S.user = { name: me.user.username, handle: me.user.handle, bio: me.user.bio, followers: me.user.stats.followers, following: me.user.stats.following, scynRecipes: me.user.stats.recipes };
+      S.saved = recs.recipes.filter(r => r.savedByMe).map(r => r.id).concat(
+        S.recipes.filter(r => r.savedByMe).map(r => r.id)).filter((v, i, a) => a.indexOf(v) === i);
+      S.liked = {}; S.recipes.forEach(r => { if (r.likedByMe) S.liked[r.id] = 1; });
+      S.onboarded = true; // server users skip local onboarding; taste prefs stay local
+      save();
+      return true;
+    });
+  },
+  // ---- write-through ----
+  like(id) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('POST', '/api/recipes/' + id + '/like', {}).then(j => { const r = S.recipes.find(x => x.id === id); if (r && j.likes !== undefined) r.likes = j.likes; save(); return j; }).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  saveRecipe(id) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('POST', '/api/recipes/' + id + '/save', {}).then(j => { const r = S.recipes.find(x => x.id === id); if (r && j.saves !== undefined) r.saves = j.saves; return j; }).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  follow(handle) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('POST', '/api/users/' + encodeURIComponent(handle) + '/follow', {}).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  comment(id, text) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('POST', '/api/recipes/' + id + '/comments', { text }).then(j => j.comment).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  recipeComments(id) { if (!SYNC.online || !SYNC.token) return Promise.resolve([]); return SYNC.req('GET', '/api/recipes/' + id).then(j => j.comments).catch(() => []); },
+  createRecipe(rec) {
+    if (!SYNC.online || !SYNC.token) return Promise.resolve(null);
+    return SYNC.req('POST', '/api/recipes', rec).then(j => { S.recipes.unshift(normalizeServerRecipe(j.recipe)); save(); renderFeed(); return j.recipe; }).catch(e => { SYNC.lastErr = e.message; return null; });
+  },
+  deleteRecipe(id) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('DELETE', '/api/recipes/' + id, {}).then(() => { S.recipes = S.recipes.filter(r => r.id !== id); save(); }).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  setPlanSlot(dayKey, slot, recipeId) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('PUT', '/api/mealplan', { dayKey, slot, recipeId }).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  updateProfile(patch) { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('PATCH', '/api/auth/me', patch).then(j => { SYNC.me = j.user; return j; }).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  markNotiRead() { if (!SYNC.online || !SYNC.token) return Promise.resolve(null); return SYNC.req('POST', '/api/notifications/read', {}).catch(() => null); },
+  // ---- AI / extraction / youtube through server ----
+  ai(message, ctx) {
+    if (!SYNC.online) return Promise.resolve(null);
+    return SYNC.req('POST', '/api/ai/chat', { message, provider: S.ai.provider, model: S.ai.model, tone: S.ai.tone, recipeId: ctx && ctx.id }).then(j => j.reply).catch(e => { SYNC.lastErr = e.message; return null; });
+  },
+  extract(url) { if (!SYNC.online) return Promise.resolve(null); return SYNC.req('POST', '/api/ai/extract', { url }).then(j => j.recipe).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  ytSearch(q) { if (!SYNC.online) return Promise.resolve(null); return SYNC.req('GET', '/api/youtube/search?q=' + encodeURIComponent(q)).then(j => j.videos).catch(e => { SYNC.lastErr = e.message; return null; }); },
+  serverKeysHint() {
+    // which providers have server-side keys (admin-configured) — shown in UI
+    if (!SYNC.online || !SYNC.serverInfo) return [];
+    return (SYNC.serverInfo.providerKeys || []).map(k => ({ openai: 'OpenAI', openrouter: 'OpenRouter', gemini: 'Gemini', ollamaModel: 'Ollama', youtube: 'YouTube' }[k] || k));
+  }
+};
+function normalizeServerRecipe(r) {
+  return {
+    id: r.id, title: r.title, creator: r.creator, creatorHandle: r.creatorHandle, cuisine: r.cuisine,
+    time: r.time, difficulty: r.difficulty, servings: r.servings, likes: r.likes, commentsCount: r.commentsCount,
+    saves: r.saves, image: r.image || IMG.ramen, hashtags: r.hashtags || [], desc: r.desc || '',
+    ingredients: r.ingredients || [], steps: r.steps || [], nutrition: r.nutrition || {},
+    ytId: r.ytId || '', live: !!r.live, viewers: r.viewers || 0, userMade: !!r.userMade,
+    scynCurated: !!r.scynCurated, created: r.created || 0
+  };
+}
+
+// ---------- login / register overlay ----------
+function renderAuthOverlay() {
+  const w = document.createElement('div');
+  w.id = 'authwrap';
+  w.style.cssText = 'position:absolute;inset:0;z-index:650;background:linear-gradient(175deg,#16100e,#0a0808 60%,#0d0708);display:flex;flex-direction:column;';
+  w.innerHTML = `
+  <div style="flex:1;overflow-y:auto;padding:74px 26px 20px;display:flex;flex-direction:column">
+    <div style="font-size:42px">🍳</div>
+    <div style="font-size:26px;font-weight:800;margin:6px 0 4px">ForkFeed <span style="font-size:13px;font-weight:700;color:var(--amber);vertical-align:middle">server</span></div>
+    <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:18px">Connected to the ForkFeed backend — accounts, recipes, likes and meal plans are stored on the server. ${SYNC.serverInfo ? 'Server v' + SYNC.serverInfo.version + ' · ' + SYNC.serverInfo.recipes + ' recipes · ' + SYNC.serverInfo.users + ' users.' : ''}</div>
+    <div class="seg" id="auth-tabs"><button class="active" data-m="login">Login</button><button data-m="register">Register</button></div>
+    <div class="field"><label>Username</label><input id="auth-user" autocomplete="username" placeholder="chef_amara"></div>
+    <div class="field"><label>Password</label><input id="auth-pass" type="password" autocomplete="current-password" placeholder="6+ characters"></div>
+    <div id="auth-err" style="font-size:12px;color:var(--red);min-height:16px;margin-bottom:8px"></div>
+    <button class="btn block" id="auth-go">Login</button>
+    <button class="btn ghost block" style="margin-top:10px" id="auth-guest">Continue as guest (local only)</button>
+    <div style="font-size:11px;color:var(--faint);margin-top:14px;line-height:1.5">Guest mode works exactly like the offline file: everything stored in this browser only. Register to sync across devices.</div>
+  </div>`;
+  document.getElementById('phone').appendChild(w);
+  let mode = 'login';
+  w.querySelectorAll('#auth-tabs button').forEach(b => b.addEventListener('click', () => {
+    mode = b.dataset.m;
+    w.querySelectorAll('#auth-tabs button').forEach(x => x.classList.toggle('active', x === b));
+    document.getElementById('auth-go').textContent = mode === 'login' ? 'Login' : 'Create account';
+  }));
+  const go = async () => {
+    const u = document.getElementById('auth-user').value.trim();
+    const p = document.getElementById('auth-pass').value;
+    const err = document.getElementById('auth-err');
+    err.textContent = '';
+    if (!u || !p) { err.textContent = 'Username and password, please.'; return; }
+    document.getElementById('auth-go').textContent = '⏳';
+    try {
+      await (mode === 'login' ? SYNC.login(u, p) : SYNC.register(u, p));
+      await SYNC.pullAll();
+      w.remove();
+      renderFeed(); renderProfile(); updateNotiBadge();
+      toast('🤝', 'Welcome, ' + SYNC.me.username, 'Your kitchen now syncs to the server.', 3600, '#5ad48a');
+    } catch (e) { err.textContent = e.message; document.getElementById('auth-go').textContent = mode === 'login' ? 'Login' : 'Create account'; }
+  };
+  document.getElementById('auth-go').addEventListener('click', go);
+  document.getElementById('auth-pass').addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+  document.getElementById('auth-guest').addEventListener('click', () => { w.remove(); toast('👤', 'Guest mode', 'Local data only — register anytime from Profile.'); });
+}
+function ensureAuthUI() {
+  if (!SYNC.online || !SYNC.token || !SYNC.me) return false;
+  return true;
+}
+function logoutFlow() {
+  SYNC.logout().then(() => {
+    // reset local state, return to auth overlay
+    localStorage.removeItem('ff_token');
+    resetAllSoft();
+    renderAuthOverlay();
+  });
+}
+function resetAllSoft() {
+  const keep = { ai: S.ai, taste: S.taste };
+  S = freshState(); S.ai = keep.ai; S.taste = keep.taste;
+  save(); renderFeed(); renderProfile(); updateNotiBadge();
+}
+
+</script>
+</body>
+</html>

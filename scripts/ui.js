@@ -492,9 +492,16 @@ function openPrivacy(){
   const w=$('#sheet-privacy');
   w.querySelector('.sheet').innerHTML = `
   <div class="sheet-grab"><i></i></div>
-  <div class="sheet-head"><div class="sh-txt"><h2>🛡️ Privacy &amp; API Keys</h2><div class="sh-sub">All keys stay on this device only</div></div><button class="close-x" data-close="sheet-privacy">✕</button></div>
+  <div class="sheet-head"><div class="sh-txt"><h2>🛡️ Privacy &amp; API Keys</h2><div class="sh-sub">${SYNC.online?'Server-managed keys + this device only':'All keys stay on this device only'}</div></div><button class="close-x" data-close="sheet-privacy">✕</button></div>
   <div class="sheet-body">
-    <div class="card" style="font-size:12px;color:var(--muted);line-height:1.6">Keys live in your browser's localStorage — never sent to any ForkFeed server. Show, hide, clear, replace, or wipe everything below.</div>
+    ${SYNC.online?`
+    <div class="card" style="font-size:12px;color:var(--muted);line-height:1.6;border-color:rgba(90,212,138,.3)">
+      <b style="color:var(--green)">Connected to the ForkFeed server.</b> AI chat, YouTube search and link extraction run through the server with keys the admin configured — nothing private leaves your browser. ${(SYNC.serverKeysHint().length)?('Server keys present: '+SYNC.serverKeysHint().join(', ')+'.'):('No server keys yet — the built-in chef answers everything meanwhile.')}
+      <div style="margin-top:6px;font-size:11px;color:var(--faint)">Admin sets server keys: <span class="kbd">curl -X POST /admin/keys -H "Authorization: Bearer &lt;admin&gt;" -d '{"openai":"sk-…"}'</span></div>
+    </div>
+    <div class="divider"></div>
+    <div style="font-size:11.5px;font-weight:800;color:var(--faint);text-transform:uppercase;letter-spacing:1px;margin:2px 0 8px">This-device keys (used in guest/offline mode)</div>`:`
+    <div class="card" style="font-size:12px;color:var(--muted);line-height:1.6">Keys live in your browser's localStorage — never sent to any ForkFeed server. Show, hide, clear, replace, or wipe everything below.</div>`}
     ${[['youtube','▶️ YouTube Data v3','AIza…','Powers the YouTube feed + search'],['openai','🟢 OpenAI','sk-…','AI chat'],['openrouter','🆓 OpenRouter','sk-or-v1-…','Free-model AI chat'],['gemini','✦ Gemini','AIza…','AI chat + live camera vision'],['ollamaModel','🦙 Ollama model name','llama3.2','Local model name at localhost:11434']].map(([k,name,ph,desc])=>`
       <div class="field"><label>${name}</label>
       <div style="display:flex;gap:8px"><input id="pk-${k}" type="password" value="${esc(S.ai.keys[k]||'')}" placeholder="${ph}" oninput="S.ai.keys['${k}']=this.value;save()"><button class="btn sm ghost" onclick="const i=document.getElementById('pk-${k}');i.type=i.type==='password'?'text':'password';this.textContent=i.type==='password'?'👁':'🙈'">👁</button></div>
@@ -561,10 +568,25 @@ function boot(){
   $('#btn-privacy')?.addEventListener('click', openPrivacy);
   // feed input
   const f=$('#feed');
-  if(!S.onboarded){ setTimeout(startOnboarding, 500); }
-  else if(!S.tutDone){ setTimeout(startTutorial, 600); }
   renderFeed(); updateNotiBadge();
   if(S.taste.remember && S.taste.mode) feedMode = S.taste.mode==='youtube'?'youtube':'recipes';
+  // ---- online path: probe server, restore session or show auth gate ----
+  SYNC.probe().then(online=>{
+    if(online){
+      if(SYNC.token){
+        SYNC.req('GET','/api/auth/me').then(()=>SYNC.pullAll()).then(()=>{
+          renderFeed(); renderProfile(); updateNotiBadge();
+          toast('🤝','Back online','Signed in as '+SYNC.me.username+' — server data loaded.', 3200, '#5ad48a');
+        }).catch(()=>{ SYNC.token=''; try{localStorage.removeItem('ff_token');}catch(e){} renderAuthOverlay(); });
+      } else {
+        renderAuthOverlay(); // server users pick: login, register, or guest
+      }
+      return;
+    }
+    // ---- offline path (file:// or no backend): classic local flow ----
+    if(!S.onboarded){ setTimeout(startOnboarding, 500); }
+    else if(!S.tutDone){ setTimeout(startTutorial, 600); }
+  });
   // keyboard: enter sends AI chat
   document.addEventListener('keydown', e=>{ if(e.key==='Enter' && $('#aiwrap').classList.contains('open') && document.activeElement===$('#ai-in')) aiSend(); });
   // drag recipes from cookbook into planner: make cookbook rows draggable
